@@ -1,0 +1,7 @@
+.venv
+.csv
+.mat
+.pth
+.pt
+__pycache__/
+.ipynb_checkpoints/
