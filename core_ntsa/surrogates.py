@@ -143,3 +143,56 @@ def generate_iid_surrogates(data, num_surrogates=1, random_seed=None):
         surrogates[i, :] = np.random.permutation(data_array)
         
     return surrogates
+
+def generate_ornstein_uhlenbeck_surrogates(data, num_surrogates=1, burn_in=500, random_seed=None):
+    """
+    Sinh dữ liệu Surrogate theo giả thuyết Null quá trình Ornstein-Uhlenbeck (AR(1)).
+    
+    Args:
+        data (array-like): Chuỗi dữ liệu gốc.
+        num_surrogates (int): Số lượng chuỗi Surrogate cần sinh.
+        burn_in (int): Số lượng mẫu ban đầu bị loại bỏ để triệt tiêu giai đoạn quá độ.
+        random_seed (int, optional): Hạt giống ngẫu nhiên để tái lập kết quả.
+        
+    Returns:
+        numpy.ndarray: Ma trận kích thước (num_surrogates, len(data)) chứa Surrogate.
+    """
+    if random_seed is not None:
+        np.random.seed(random_seed)
+        
+    data_array = np.asarray(data).flatten()
+    n_samples = len(data_array)
+    
+    # Bước 1: Trích xuất các đặc trưng thống kê từ dữ liệu gốc
+    mu = np.mean(data_array)
+    v = np.var(data_array)
+    
+    # Tính hệ số tự tương quan ở bước trễ 1 (A(1))
+    data_centered = data_array - mu
+    # Sử dụng công thức Pearson cho độ trễ 1
+    a1 = np.sum(data_centered[:-1] * data_centered[1:]) / np.sum(data_centered**2)
+    
+    # Bước 2: Khớp hệ số cho phương trình mô hình Surrogate
+    a0 = mu * (1.0 - a1)
+    # Đảm bảo biểu thức trong căn không bị âm do sai số dấu phẩy động
+    variance_term = max(0.0, v * (1.0 - a1**2)) 
+    sigma = np.sqrt(variance_term)
+    
+    # Bước 3: Lặp đệ quy để sinh chuỗi Surrogate
+    total_length = n_samples + burn_in
+    
+    # Sinh ma trận nhiễu trắng Gaussian chuẩn (mean=0, var=1)
+    e_t = np.random.normal(0, 1, size=(num_surrogates, total_length))
+    x = np.zeros((num_surrogates, total_length))
+    
+    # Khởi tạo giá trị đầu tiên bằng giá trị trung bình để giảm thiểu quá độ
+    x[:, 0] = mu 
+    
+    for t in range(1, total_length):
+        x[:, t] = a0 + a1 * x[:, t-1] + sigma * e_t[:, t]
+        
+    # Loại bỏ phần dữ liệu burn-in để trả về chuỗi có độ dài bằng dữ liệu gốc
+    surrogates = x[:, burn_in:]
+    
+    return surrogates
+
