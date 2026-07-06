@@ -242,3 +242,58 @@ def generate_ft_surrogates(data, num_surrogates=1, random_seed=None):
         surrogates[i, :] = np.fft.irfft(fft_surr, n=n_samples)
         
     return surrogates
+
+
+
+def generate_wft_surrogates(data, num_surrogates=1, random_seed=None):
+    """
+    Sinh dữ liệu Surrogate theo thuật toán Windowed Fourier Transform (WFT).
+    
+    Args:
+        data (array-like): Chuỗi dữ liệu gốc.
+        num_surrogates (int): Số lượng chuỗi Surrogate cần sinh.
+        random_seed (int, optional): Hạt giống ngẫu nhiên để tái lập kết quả.
+        
+    Returns:
+        numpy.ndarray: Ma trận kích thước (num_surrogates, len(data)) chứa Surrogate.
+    """
+    if random_seed is not None:
+        np.random.seed(random_seed)
+        
+    data_array = np.asarray(data).flatten()
+    n_samples = len(data_array)
+    surrogates = np.zeros((num_surrogates, n_samples))
+    
+    # Bước 1: Áp dụng hàm cửa sổ Windowing
+    # w(t) = sin(pi * t / N)
+    t = np.arange(n_samples)
+    window = np.sin(np.pi * t / n_samples)
+    windowed_data = data_array * window
+    
+    # Bước 2: Biến đổi Fourier sang miền tần số
+    # rfft tự động trích xuất nửa phổ dương, loại bỏ thành phần đối xứng dư thừa
+    fft_coeffs = np.fft.rfft(windowed_data)
+    amplitudes = np.abs(fft_coeffs)
+    
+    # Bước 4: Vá điểm mù "Nhiễu tần số thấp"
+    # Tần số f = 1/N tương ứng với bin thứ 1 trong mảng biến đổi rời rạc
+    if len(amplitudes) > 1:
+        amplitudes[1] = 0.0
+        
+    for i in range(num_surrogates):
+        # Bước 3: Ngẫu nhiên hóa góc pha và đối xứng hóa
+        random_phases = np.random.uniform(0, 2 * np.pi, size=len(fft_coeffs))
+        
+        # Ép pha bằng 0 tại tần số 0 (DC) và tần số Nyquist
+        # để đảm bảo thuật toán rfft khôi phục ra chuỗi số thực 100%
+        random_phases[0] = 0.0
+        if n_samples % 2 == 0:
+            random_phases[-1] = 0.0
+            
+        # Tổ hợp lại thành biên độ phức: X = |X| * e^(i*phi)
+        fft_surr = amplitudes * np.exp(1j * random_phases)
+        
+        # Bước 5: Biến đổi Fourier ngược (IFFT)
+        surrogates[i, :] = np.fft.irfft(fft_surr, n=n_samples)
+        
+    return surrogates
