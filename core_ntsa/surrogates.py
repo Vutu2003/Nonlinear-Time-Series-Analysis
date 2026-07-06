@@ -196,3 +196,49 @@ def generate_ornstein_uhlenbeck_surrogates(data, num_surrogates=1, burn_in=500, 
     
     return surrogates
 
+def generate_ft_surrogates(data, num_surrogates=1, random_seed=None):
+    """
+    Sinh dữ liệu Surrogate theo thuật toán Fourier Transform (FT) 
+    dựa trên quy trình 4 bước của Theiler (1992).
+    
+    Args:
+        data (array-like): Chuỗi dữ liệu gốc.
+        num_surrogates (int): Số lượng chuỗi Surrogate cần sinh.
+        random_seed (int, optional): Hạt giống ngẫu nhiên.
+        
+    Returns:
+        numpy.ndarray: Ma trận kích thước (num_surrogates, len(data)).
+    """
+    if random_seed is not None:
+        np.random.seed(random_seed)
+        
+    data_array = np.asarray(data).flatten()
+    n_samples = len(data_array)
+    surrogates = np.zeros((num_surrogates, n_samples))
+    
+    # Bước 1: Chuyển sang miền tần số
+    # Sử dụng rfft để trích xuất nửa phổ dương (tránh dư thừa tính toán)
+    fft_coeffs = np.fft.rfft(data_array)
+    
+    # Lấy phổ biên độ (bảo toàn hoàn toàn năng lượng Fourier)
+    amplitudes = np.abs(fft_coeffs)
+    
+    for i in range(num_surrogates):
+        # Bước 2: Ngẫu nhiên hóa pha
+        # Sinh mảng góc pha ngẫu nhiên phân bố đều từ 0 đến 2*pi
+        random_phases = np.random.uniform(0, 2 * np.pi, size=len(fft_coeffs))
+        
+        # Bước 3: Đối xứng hóa (Được xử lý ngầm qua rfft)
+        # Tuy nhiên, bắt buộc phải ép pha tại tần số 0 (DC) bằng 0
+        # và tần số Nyquist (nếu độ dài chẵn) bằng 0 để dữ liệu xuất ra là số thực
+        random_phases[0] = 0.0
+        if n_samples % 2 == 0:
+            random_phases[-1] = 0.0
+            
+        # Tổ hợp biên độ gốc và pha ngẫu nhiên: X = |X| * e^(i*phi)
+        fft_surr = amplitudes * np.exp(1j * random_phases)
+        
+        # Bước 4: Khôi phục về miền thời gian bằng biến đổi Fourier ngược
+        surrogates[i, :] = np.fft.irfft(fft_surr, n=n_samples)
+        
+    return surrogates
