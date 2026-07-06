@@ -7,19 +7,144 @@ from scipy.spatial import cKDTree
 from scipy.spatial.distance import euclidean
 
 # Correlation Dimension: Grassberger 1983
-def calculate_correlation_dimension(signal, tau, min_d, max_d, w=None, n_radii=50):
+# def calculate_correlation_dimension(signal, tau, min_d, max_d, w=None, n_radii=50):
+#     """
+#     Tính toán và trực quan hóa Chiều tương quan (Correlation Dimension - D2) 
+#     bằng thuật toán Grassberger-Procaccia có tích hợp cửa sổ Theiler.
+
+#     Parameters:
+#     -----------
+#     signal  : array_like, chuỗi tín hiệu 1D (ví dụ: PPG_clean).
+#     tau     : int, độ trễ thời gian (Time delay).
+#     min_d   : int, số chiều nhúng tối thiểu.
+#     max_d   : int, số chiều nhúng tối đa.
+#     w       : int, kích thước cửa sổ Theiler. Mặc định là w = tau.
+#     n_radii : int, số lượng điểm bán kính l khảo sát.
+
+#     Returns:
+#     --------
+#     dimensions : list, mảng chứa các giá trị v(d) tương ứng với từng chiều nhúng.
+#     """
+#     signal = np.asarray(signal)
+#     N = len(signal)
+    
+#     if w is None:
+#         w = tau  # Khuyến nghị chuẩn: Cửa sổ Theiler bằng với độ trễ tau
+        
+#     dimensions = []
+    
+#     # Thiết lập đồ thị (2 Subplots)
+#     fig, axes = plt.subplots(1, 2, figsize=(14, 6))
+    
+#     colors = plt.cm.viridis(np.linspace(0, 1, max_d - min_d + 1))
+    
+#     for idx, d in enumerate(range(min_d, max_d + 1)):
+#         # 1. Tái tạo không gian pha (Phase Space Reconstruction)
+#         Nm = N - (d - 1) * tau
+#         if Nm <= 0:
+#             raise ValueError(f"Dữ liệu quá ngắn để nhúng vào không gian {d} chiều với tau={tau}.")
+            
+#         # Tạo ma trận vector trạng thái (Nm x d)
+#         X = np.array([signal[i : i + (d - 1) * tau + 1 : tau] for i in range(Nm)])
+        
+#         # 2. Tính ma trận khoảng cách Chebyshev (Maximum norm)
+#         # pdist trả về mảng nén 1D, squareform bung nó thành ma trận đối xứng 2D
+#         dist_matrix = squareform(pdist(X, metric='chebyshev'))
+        
+#         # 3. Áp dụng Cửa sổ Theiler
+#         # Tạo một mask tam giác trên (triu) bỏ qua đường chéo chính và vùng lân cận Theiler (k = w + 1)
+#         mask = np.triu(np.ones((Nm, Nm), dtype=bool), k=w + 1)
+#         valid_distances = dist_matrix[mask]
+        
+#         # Lọc bỏ các khoảng cách bằng 0 (nếu có) để tránh lỗi log(0)
+#         valid_distances = valid_distances[valid_distances > 0]
+        
+#         if len(valid_distances) == 0:
+#             dimensions.append(np.nan)
+#             continue
+            
+#         # 4. Xác định dải bán kính l (log-spaced)
+#         # Loại bỏ 1% nhiễu ở hai đầu để dải l tập trung vào vùng phân bố chính
+#         r_min = np.percentile(valid_distances, 1)
+#         r_max = np.percentile(valid_distances, 99)
+#         radii = np.logspace(np.log10(r_min), np.log10(r_max), n_radii)
+        
+#         # 5. Tính Tích phân tương quan C(l) cực nhanh bằng Binary Search
+#         sorted_dists = np.sort(valid_distances)
+#         # searchsorted đếm xem có bao nhiêu khoảng cách nhỏ hơn từng giá trị trong radii
+#         C_l = np.searchsorted(sorted_dists, radii) / len(valid_distances)
+        
+#         # Loại bỏ các giá trị C(l) = 0 để có thể tính log
+#         valid_idx = C_l > 0
+#         r_valid = radii[valid_idx]
+#         C_valid = C_l[valid_idx]
+        
+#         log_r = np.log10(r_valid)
+#         log_C = np.log10(C_valid)
+        
+#         # 6. Ước lượng tự động Vùng tuyến tính (Scaling Region)
+#         # Heuristic: Thường vùng tuyến tính nằm ở 30% - 70% của đồ thị log-log
+#         start_idx = int(len(log_r) * 0.3)
+#         end_idx = int(len(log_r) * 0.7)
+        
+#         if end_idx > start_idx + 2:
+#             # Hồi quy tuyến tính trên vùng đã chọn
+#             slope, intercept, r_value, p_value, std_err = linregress(
+#                 log_r[start_idx:end_idx], log_C[start_idx:end_idx]
+#             )
+#         else:
+#             slope = np.nan
+            
+#         dimensions.append(slope)
+        
+#         # --- Trực quan hóa Subplot 1: log(C(l)) vs log(l) ---
+#         axes[0].plot(log_r, log_C, marker='.', markersize=4, linestyle='-', 
+#                      color=colors[idx], label=f'd={d} (v={slope:.2f})')
+        
+#         # Vẽ đoạn thẳng tiếp tuyến mô tả độ dốc (Slope)
+#         if not np.isnan(slope):
+#             fit_r = log_r[start_idx:end_idx]
+#             fit_C = slope * fit_r + intercept
+#             axes[0].plot(fit_r, fit_C, color='black', linewidth=2, linestyle='--')
+
+#     # Thiết lập hiển thị cho Subplot 1
+#     axes[0].set_title(r"1. Tích phân tương quan: $\log C(l)$ vs $\log l$")
+#     axes[0].set_xlabel(r"$\log_{10} l$ (Bán kính)")
+#     axes[0].set_ylabel(r"$\log_{10} C(l)$ (Xác suất láng giềng)")
+#     axes[0].grid(True, linestyle='--', alpha=0.6)
+#     axes[0].legend(loc='upper left', fontsize='small')
+    
+#     # --- Trực quan hóa Subplot 2: Chiều tương quan v(d) vs d ---
+#     d_range = range(min_d, max_d + 1)
+#     axes[1].plot(d_range, dimensions, marker='o', linestyle='-', color='red', linewidth=2, label=r'Ước lượng $\nu(d)$')
+#     axes[1].plot(d_range, d_range, linestyle='--', color='gray', alpha=0.7, label='Nhiễu lý tưởng (v = d)')
+    
+#     axes[1].set_title(r"2. Sự bão hòa Chiều tương quan: $\nu(d)$ vs $d$")
+#     axes[1].set_xlabel(r"Số chiều nhúng $d$")
+#     axes[1].set_ylabel(r"Chiều tương quan $\nu(d)$")
+#     axes[1].set_xticks(d_range)
+#     axes[1].grid(True, linestyle='--', alpha=0.6)
+#     axes[1].legend()
+    
+#     plt.tight_layout()
+#     plt.show()
+    
+#     return dimensions
+
+def calculate_correlation_dimension(signal, tau, min_d, max_d, w=None, n_radii=50, plot_true=1):
     """
     Tính toán và trực quan hóa Chiều tương quan (Correlation Dimension - D2) 
     bằng thuật toán Grassberger-Procaccia có tích hợp cửa sổ Theiler.
 
     Parameters:
     -----------
-    signal  : array_like, chuỗi tín hiệu 1D (ví dụ: PPG_clean).
-    tau     : int, độ trễ thời gian (Time delay).
-    min_d   : int, số chiều nhúng tối thiểu.
-    max_d   : int, số chiều nhúng tối đa.
-    w       : int, kích thước cửa sổ Theiler. Mặc định là w = tau.
-    n_radii : int, số lượng điểm bán kính l khảo sát.
+    signal    : array_like, chuỗi tín hiệu 1D (ví dụ: PPG_clean).
+    tau       : int, độ trễ thời gian (Time delay).
+    min_d     : int, số chiều nhúng tối thiểu.
+    max_d     : int, số chiều nhúng tối đa.
+    w         : int, kích thước cửa sổ Theiler. Mặc định là w = tau.
+    n_radii   : int, số lượng điểm bán kính l khảo sát.
+    plot_true : int, 1 để hiển thị đồ thị, 0 để ẩn đồ thị và chỉ trả về mảng.
 
     Returns:
     --------
@@ -33,11 +158,11 @@ def calculate_correlation_dimension(signal, tau, min_d, max_d, w=None, n_radii=5
         
     dimensions = []
     
-    # Thiết lập đồ thị (2 Subplots)
-    fig, axes = plt.subplots(1, 2, figsize=(14, 6))
-    
-    colors = plt.cm.viridis(np.linspace(0, 1, max_d - min_d + 1))
-    
+    # Thiết lập đồ thị nếu plot_true = 1
+    if plot_true:
+        fig, axes = plt.subplots(1, 2, figsize=(14, 6))
+        colors = plt.cm.viridis(np.linspace(0, 1, max_d - min_d + 1))
+        
     for idx, d in enumerate(range(min_d, max_d + 1)):
         # 1. Tái tạo không gian pha (Phase Space Reconstruction)
         Nm = N - (d - 1) * tau
@@ -48,11 +173,9 @@ def calculate_correlation_dimension(signal, tau, min_d, max_d, w=None, n_radii=5
         X = np.array([signal[i : i + (d - 1) * tau + 1 : tau] for i in range(Nm)])
         
         # 2. Tính ma trận khoảng cách Chebyshev (Maximum norm)
-        # pdist trả về mảng nén 1D, squareform bung nó thành ma trận đối xứng 2D
         dist_matrix = squareform(pdist(X, metric='chebyshev'))
         
         # 3. Áp dụng Cửa sổ Theiler
-        # Tạo một mask tam giác trên (triu) bỏ qua đường chéo chính và vùng lân cận Theiler (k = w + 1)
         mask = np.triu(np.ones((Nm, Nm), dtype=bool), k=w + 1)
         valid_distances = dist_matrix[mask]
         
@@ -64,14 +187,12 @@ def calculate_correlation_dimension(signal, tau, min_d, max_d, w=None, n_radii=5
             continue
             
         # 4. Xác định dải bán kính l (log-spaced)
-        # Loại bỏ 1% nhiễu ở hai đầu để dải l tập trung vào vùng phân bố chính
         r_min = np.percentile(valid_distances, 1)
         r_max = np.percentile(valid_distances, 99)
         radii = np.logspace(np.log10(r_min), np.log10(r_max), n_radii)
         
         # 5. Tính Tích phân tương quan C(l) cực nhanh bằng Binary Search
         sorted_dists = np.sort(valid_distances)
-        # searchsorted đếm xem có bao nhiêu khoảng cách nhỏ hơn từng giá trị trong radii
         C_l = np.searchsorted(sorted_dists, radii) / len(valid_distances)
         
         # Loại bỏ các giá trị C(l) = 0 để có thể tính log
@@ -83,7 +204,6 @@ def calculate_correlation_dimension(signal, tau, min_d, max_d, w=None, n_radii=5
         log_C = np.log10(C_valid)
         
         # 6. Ước lượng tự động Vùng tuyến tính (Scaling Region)
-        # Heuristic: Thường vùng tuyến tính nằm ở 30% - 70% của đồ thị log-log
         start_idx = int(len(log_r) * 0.3)
         end_idx = int(len(log_r) * 0.7)
         
@@ -97,38 +217,40 @@ def calculate_correlation_dimension(signal, tau, min_d, max_d, w=None, n_radii=5
             
         dimensions.append(slope)
         
-        # --- Trực quan hóa Subplot 1: log(C(l)) vs log(l) ---
-        axes[0].plot(log_r, log_C, marker='.', markersize=4, linestyle='-', 
-                     color=colors[idx], label=f'd={d} (v={slope:.2f})')
-        
-        # Vẽ đoạn thẳng tiếp tuyến mô tả độ dốc (Slope)
-        if not np.isnan(slope):
-            fit_r = log_r[start_idx:end_idx]
-            fit_C = slope * fit_r + intercept
-            axes[0].plot(fit_r, fit_C, color='black', linewidth=2, linestyle='--')
+        # --- Trực quan hóa Subplot 1 nếu plot_true = 1 ---
+        if plot_true:
+            axes[0].plot(log_r, log_C, marker='.', markersize=4, linestyle='-', 
+                         color=colors[idx], label=f'd={d} (v={slope:.2f})')
+            
+            # Vẽ đoạn thẳng tiếp tuyến mô tả độ dốc (Slope)
+            if not np.isnan(slope):
+                fit_r = log_r[start_idx:end_idx]
+                fit_C = slope * fit_r + intercept
+                axes[0].plot(fit_r, fit_C, color='black', linewidth=2, linestyle='--')
 
-    # Thiết lập hiển thị cho Subplot 1
-    axes[0].set_title(r"1. Tích phân tương quan: $\log C(l)$ vs $\log l$")
-    axes[0].set_xlabel(r"$\log_{10} l$ (Bán kính)")
-    axes[0].set_ylabel(r"$\log_{10} C(l)$ (Xác suất láng giềng)")
-    axes[0].grid(True, linestyle='--', alpha=0.6)
-    axes[0].legend(loc='upper left', fontsize='small')
-    
-    # --- Trực quan hóa Subplot 2: Chiều tương quan v(d) vs d ---
-    d_range = range(min_d, max_d + 1)
-    axes[1].plot(d_range, dimensions, marker='o', linestyle='-', color='red', linewidth=2, label=r'Ước lượng $\nu(d)$')
-    axes[1].plot(d_range, d_range, linestyle='--', color='gray', alpha=0.7, label='Nhiễu lý tưởng (v = d)')
-    
-    axes[1].set_title(r"2. Sự bão hòa Chiều tương quan: $\nu(d)$ vs $d$")
-    axes[1].set_xlabel(r"Số chiều nhúng $d$")
-    axes[1].set_ylabel(r"Chiều tương quan $\nu(d)$")
-    axes[1].set_xticks(d_range)
-    axes[1].grid(True, linestyle='--', alpha=0.6)
-    axes[1].legend()
-    
-    plt.tight_layout()
-    plt.show()
-    
+    # Thiết lập hiển thị cho các Subplots nếu plot_true = 1
+    if plot_true:
+        axes[0].set_title(r"1. Tích phân tương quan: $\log C(l)$ vs $\log l$")
+        axes[0].set_xlabel(r"$\log_{10} l$ (Bán kính)")
+        axes[0].set_ylabel(r"$\log_{10} C(l)$ (Xác suất láng giềng)")
+        axes[0].grid(True, linestyle='--', alpha=0.6)
+        axes[0].legend(loc='upper left', fontsize='small')
+        
+        # --- Trực quan hóa Subplot 2: Chiều tương quan v(d) vs d ---
+        d_range = range(min_d, max_d + 1)
+        axes[1].plot(d_range, dimensions, marker='o', linestyle='-', color='red', linewidth=2, label=r'Ước lượng $\nu(d)$')
+        axes[1].plot(d_range, d_range, linestyle='--', color='gray', alpha=0.7, label='Nhiễu lý tưởng (v = d)')
+        
+        axes[1].set_title(r"2. Sự bão hòa Chiều tương quan: $\nu(d)$ vs $d$")
+        axes[1].set_xlabel(r"Số chiều nhúng $d$")
+        axes[1].set_ylabel(r"Chiều tương quan $\nu(d)$")
+        axes[1].set_xticks(list(d_range))
+        axes[1].grid(True, linestyle='--', alpha=0.6)
+        axes[1].legend()
+        
+        plt.tight_layout()
+        plt.show()
+        
     return dimensions
 
 # Largest Lyapunov Exponent: Rosenstein 1993
