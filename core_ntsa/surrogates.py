@@ -114,3 +114,32 @@ def generate_iaaft_surrogates(signal, M=10, max_iter=100, random_seed=None):
         surrogates[m_idx, :] = s_curr
         
     return surrogates
+
+
+def generate_iid_surrogates(data, num_surrogates=1, random_seed=None):
+    """
+    Sinh dữ liệu Surrogate cho giả thuyết Null IID bằng thuật toán Shuffling.
+    
+    Args:
+        data (array-like): Chuỗi thời gian gốc (1D).
+        num_surrogates (int): Số lượng chuỗi Surrogate cần sinh (mặc định là 1).
+        random_seed (int, optional): Hạt giống ngẫu nhiên để tái lập kết quả.
+        
+    Returns:
+        numpy.ndarray: Ma trận kích thước (num_surrogates, len(data)) chứa các chuỗi Surrogate.
+    """
+    if random_seed is not None:
+        np.random.seed(random_seed)
+        
+    # Chuẩn hóa đầu vào thành mảng numpy 1 chiều
+    data_array = np.asarray(data).flatten()
+    n_samples = len(data_array)
+    
+    # Khởi tạo ma trận chứa các chuỗi Surrogate
+    surrogates = np.zeros((num_surrogates, n_samples))
+    
+    # Thực hiện xáo trộn độc lập cho từng chuỗi
+    for i in range(num_surrogates):
+        surrogates[i, :] = np.random.permutation(data_array)
+        
+    return surrogates
