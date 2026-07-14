@@ -30,3 +30,16 @@ Tác giả đã áp dụng thành công bộ khung này lên các hệ thống t
 ## 5. Ý nghĩa & Ứng dụng (Significance)
 *   **Về mặt lý luận:** Khẳng định rằng phải dùng một **phổ liên tục $f(\alpha)$** mới thấy được trọn vẹn sự phức tạp (full complexity) của cấu trúc fractal, thay vì chỉ dùng các số chiều $D_q$ tĩnh lặng [3].
 *   **Về mặt ứng dụng:** Đồ thị $f(\alpha)$ phơi bày mọi cấu trúc từ vùng thưa thớt nhất (rìa phải $D_{-\infty}$) đến vùng đậm đặc nhất (rìa trái $D_\infty$) [7]. Khung hình thức này có thể đo lường trực tiếp trong thực nghiệm, mở đường cho các thuật toán đánh giá chuỗi thời gian sinh lý phức tạp (như tín hiệu PPG/HRV thông qua MF-DFA sau này) [1, 3].
+*   
+
+### TỬ HUYỆT CỦA THUẬT TOÁN HALSEY (1986)
+
+#### 1. Rào cản bủa lưới (Box-counting) trong tính toán $D_q$
+* **Bản chất:** Phân chia không gian pha thành các ô nhỏ kích thước $l$, tính xác suất viếng thăm $p_i$ để giải hàm phân hoạch $\chi(q) = \sum p_i^q$.
+* **Sự bùng nổ ở vùng $q < 0$:** Tại vùng rìa Attractor, mật độ dữ liệu cực kỳ thưa thớt khiến $p_i$ xấp xỉ $0$. Khi $q$ mang giá trị âm sâu (ví dụ $q = -40$), số hạng $p_i^q$ bùng nổ thành giá trị khổng lồ. Điều này lập tức gây tràn bộ nhớ (Overflow) hoặc bẻ cong hoàn toàn kết quả hồi quy tuyến tính ở bước ước lượng $D_q$.
+* **Lời nguyền số chiều (Curse of Dimensionality):** Phương pháp bủa lưới chỉ hoạt động trơn tru ở $2D$ hoặc $3D$. Khi phân tích các tín hiệu thực nghiệm đòi hỏi số chiều nhúng không gian pha cao ($d \ge 4$), bộ nhớ ma trận cần thiết để tạo lưới $d$-chiều sẽ phình to theo cấp số mũ, khiến thuật toán gần như tê liệt về mặt tính toán.
+
+#### 2. Sự sụp đổ của Phép biến đổi Legendre trong tính toán $f(\alpha)$
+* **Bản chất:** Tính $\alpha$ và $f(\alpha)$ một cách gián tiếp thông qua đạo hàm số trị của $D_q$: $\alpha(q) = \frac{d}{dq} [(q-1)D_q]$.
+* **Sự nhạy cảm với nhiễu:** Về mặt toán học, phép đạo hàm số trị là một bộ lọc khuếch đại nhiễu cực mạnh.
+* **Hậu quả thực tiễn:** Đối với các hệ động lực thuần toán học (phi nhiễu) như Lorenz, đường cong $D_q$ trơn láng nên phép đạo hàm cho ra đồ thị $f(\alpha)$ hình nắp chuông hoàn hảo. Tuy nhiên, khi áp dụng lên dữ liệu sinh lý chứa nhiễu đo lường, đường cong $D_q$ bắt buộc sẽ có các vi dao động (gợn sóng). Phép biến đổi Legendre ngay lập tức xé toạc các gợn sóng này, làm phổ kỳ dị $f(\alpha)$ bị vỡ vụn, xuất hiện các điểm âm phi vật lý và hoàn toàn mất đi giá trị thống kê.
