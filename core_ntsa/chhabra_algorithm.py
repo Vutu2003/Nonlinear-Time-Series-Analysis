@@ -1,9 +1,6 @@
 import numpy as np
 from scipy.stats import linregress
 
-import numpy as np
-from scipy.stats import linregress
-
 def chhabra_jensen_spectrum(probabilities_dict, q_range, scale_slice=None):
     """
     Tính toán trực tiếp phổ kỳ dị đa phân dạng f(alpha) 
