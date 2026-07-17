@@ -6,21 +6,11 @@ import matplotlib.pyplot as plt
 def compute_dfa_core(signal, scales, order=1):
     """
     Core computation for Detrended Fluctuation Analysis (DFA) based on Peng (1994).
-    
-    Parameters:
-        signal (np.ndarray): 1D array of the original time series.
-        scales (array-like): Array of window sizes (n).
-        order (int): Polynomial order for local detrending (default is 1 for DFA-1).
-        
-    Returns:
-        valid_scales (np.ndarray): The scales that were actually processed.
-        F_values (np.ndarray): The RMS fluctuation for each scale.
     """
     signal = np.asarray(signal)
     N = len(signal)
     
     # Step 1: Create Profile (Integration)
-    # y(k) = sum(x(i) - mean(x))
     y = np.cumsum(signal - np.mean(signal))
     
     valid_scales = []
@@ -34,31 +24,28 @@ def compute_dfa_core(signal, scales, order=1):
             continue
             
         # Step 2: Windowing (Forward segmentation)
-        # Truncate profile to be an exact multiple of n
         n_windows = N // n
         y_trunc = y[:n_windows * n]
         
-        # Reshape into (n_windows, n) for vectorized processing without explicit loops
+        # Reshape into (n_windows, n)
         y_reshaped = y_trunc.reshape(n_windows, n)
         
         # Create a local time axis for the window
         t = np.arange(n)
         
         # Step 3: Local Detrending
-        # Fit polynomial to each window simultaneously using BLAS/LAPACK under the hood
         coeffs = np.polyfit(t, y_reshaped.T, order)
         
-        # Evaluate the polynomial trends for all windows simultaneously
-        trend = np.polyval(coeffs, t).T
+        # BẢN VÁ LỖI BROADCASTING:
+        # Ép t thành vector cột (n, 1) để broadcast chính xác với coeffs (order+1, n_windows)
+        trend = np.polyval(coeffs, t.reshape(-1, 1)).T
         
         # Extract the intrinsic residual
         residual = y_reshaped - trend
         
         # Step 4: Fluctuation (RMS)
-        # Calculate the Root Mean Square of the residual energy across all windows
         rms = np.sqrt(np.mean(residual ** 2))
         
-        # Store valid results dynamically to prevent indexing offset errors
         valid_scales.append(n)
         F_values.append(rms)
         
