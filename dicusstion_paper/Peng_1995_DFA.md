@@ -22,12 +22,15 @@ DFA không trực tiếp đo lường bản thân tín hiệu. Thay vào đó, D
     *   **Peng hỏi:** *Sau khi trừ bỏ xu hướng chậm, Profile còn giữ lại bao nhiêu năng lượng dao động nhanh? (Residual energy)*
     Đại lượng $F(n)$ không phải là phương sai thống kê thông thường, mà chính là **biên độ trung bình của phần dao động không thể giải thích được bởi xu hướng cục bộ**. 
 
-#### Bước 5: Khám phá Quy luật Scaling
-*   **Toán học:** Đánh giá mối quan hệ $F(n) \propto n^\alpha$ qua nhiều thang thời gian $n$.
-*   **Ý nghĩa Vật lý:** Số mũ $\alpha$ mô tả cách các dao động nội tại phát triển và giãn nở khi mở rộng cửa sổ quan sát. 
-    *   $\alpha = 0.5$: Dao động tăng theo đúng tính chất ngẫu nhiên của bước đi Brownian (Không có bộ nhớ).
-    *   $\alpha > 0.5$: Dao động ở các thang đo khác nhau có sự liên kết chặt chẽ (Long-range dependence / Persistence). Giá trị quá khứ có sức ảnh hưởng mạnh mẽ tới tương lai.
-    *   $\alpha < 0.5$: Các dao động có xu hướng tự triệt tiêu lẫn nhau (Anti-persistence). Một giá trị lớn thường bị theo ngay sau bởi một giá trị nhỏ để kéo hệ thống giật ngược lại.
+#### Bước 5: Khám phá Quy luật Scaling và Trạng thái Sinh lý
+*   **Toán học:** Đánh giá mối quan hệ $F(n) \propto n^\alpha$ qua nhiều thang thời gian $n$. Sự phụ thuộc tuyến tính trên đồ thị $\log F(n)$ theo $\log n$ sẽ xác định số mũ $\alpha$ (hệ số góc của đường thẳng).
+*   **Ý nghĩa Vật lý (Cảnh quan "Độ gồ ghề"):** Số mũ $\alpha$ mô tả cách các dao động nội tại phát triển và giãn nở, đồng thời đóng vai trò như một chỉ báo về độ gồ ghề (roughness) của chuỗi thời gian (giá trị $\alpha$ càng lớn, tín hiệu càng mượt).
+    *   $0 < \alpha < 0.5$: **Tương quan nghịch (Anti-persistence).** Các giá trị lớn và nhỏ có xu hướng luân phiên nhau liên tục để tự triệt tiêu. Một giá trị lớn thường bị theo ngay sau bởi một giá trị nhỏ để kéo hệ thống giật ngược lại (cảnh quan cực kỳ gồ ghề).
+    *   $\alpha = 0.5$: **Nhiễu trắng (White noise).** Quá trình hoàn toàn ngẫu nhiên, không có bộ nhớ (hành xử như một bước đi ngẫu nhiên - random walk).
+    *   $0.5 < \alpha < 1.0$: **Tương quan dài hạn kiên định (Persistent power-law).** Các dao động ở các thang đo khác nhau có sự liên kết chặt chẽ. Giá trị quá khứ có sức ảnh hưởng mạnh mẽ tới tương lai (khoảng thời gian lớn dễ được nối tiếp bởi khoảng thời gian lớn).
+    *   $\alpha = 1.0$: **Nhiễu $1/f$ (Trạng thái khỏe mạnh lý tưởng).** Sự "thỏa hiệp" hoàn hảo giữa tính khó lường của nhiễu trắng và sự trơn tru của nhiễu Brown. Dữ liệu nhịp tim từ người khỏe mạnh thường hội tụ sát mốc này.
+    *   $\alpha > 1.0$: **Tương quan phi lũy thừa.** Hệ thống vẫn có tương quan nhưng ngừng tuân theo định luật tỷ lệ lũy thừa chuẩn.
+    *   $\alpha = 1.5$: **Nhiễu Brown (Brownian noise).** Tín hiệu cực kỳ mượt mà (kết quả của tích phân nhiễu trắng). Trong y sinh, khi $\alpha$ tiến xa khỏi $1.0$ và tiệm cận về mức này, nó phản ánh một trạng thái bệnh lý nghiêm trọng, nơi hệ thống mất đi tính phức tạp thích nghi và trở nên mượt mà một cách giả tạo.
 
 ---
 
