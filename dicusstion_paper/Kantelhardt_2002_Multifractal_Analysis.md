@@ -102,3 +102,20 @@ Hàm $F_q(s)$ chỉ được định nghĩa hợp lệ khi kích thước cửa 
 *   **Hệ thức cốt lõi:** 
     **$h(q) = h_{shuf}(q) + h_{cor}(q)$**
 *   **Kết luận:** Số mũ $h_{cor}(q)$ chính là chỉ số thuần khiết nhất đại diện cho độ mạnh yếu của "trí nhớ" tương quan dài hạn trong hệ thống.
+*   
+# QUY TRÌNH BÓC TÁCH VÀ KIỂM ĐỊNH TÍN HIỆU PPG (Dựa trên Mục 4)
+
+**Bước 1: Đo lường cơ bản (MF-DFA gốc)**
+Chạy thuật toán MF-DFA trên đoạn PPG 5 phút ($N \approx 8192$ điểm) để tính độ rộng phổ $\Delta h_{PPG}$ ban đầu.
+
+**Bước 2: Lọc "ảo giác" dữ liệu ngắn (Mục 4.2)**
+Tạo các chuỗi đơn phân dạng giả lập (Surrogate) có cùng độ dài 8192 điểm để đo mức độ sai số thống kê tự nhiên $\Delta h_{error}$.
+
+**Bước 3: Chẩn đoán ý nghĩa thống kê (Significance)**
+Nếu $\Delta h_{PPG}$ nhỏ hơn hoặc bằng $\Delta h_{error}$: Độ cong của phổ chỉ là nhiễu ngẫu nhiên. Kết luận nhịp tim đang ở trạng thái đơn phân dạng (mất độ phức tạp/buồn ngủ).
+
+**Bước 4: Chiết xuất đặc trưng thần kinh (Mục 4.1)**
+Nếu $\Delta h_{PPG}$ lớn hơn $\Delta h_{error}$ (đa phân dạng thực sự): Tiến hành xáo trộn chuỗi PPG (Shuffling) để phá hủy trí nhớ thời gian của hệ thần kinh.
+Tính đồ thị tỷ số: $\frac{F_q(s)}{F_q^{shuf}(s)} \sim s^{h_{cor}(q)}$ nhằm triệt tiêu toàn bộ nhiễu do biên độ hô hấp/cử động.
+
+**Đầu ra:** Chỉ số $h_{cor}(q)$ thu được chính là đặc trưng thuần khiết nhất của hệ thần kinh, sẵn sàng làm input cho Machine Learning.
