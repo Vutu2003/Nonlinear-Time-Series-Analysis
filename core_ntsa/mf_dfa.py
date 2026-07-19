@@ -240,138 +240,59 @@ def mf_dfa(data, s_array, q_array, m=1, min_scale=10, max_scale_ratio=4, calc_sp
         m (int): Bậc của đa thức khử xu hướng (m=1 là tuyến tính).
         min_scale (int): Ngưỡng dưới của s để hồi quy.
         max_scale_ratio (int): Tỷ lệ xác định ngưỡng trên của s (N / max_scale_ratio).
-        calc_spectrum (bool): Cờ (flag) quyết định có tính phổ kỳ dị hay không.
+        calc_spectrum (bool): Flag quyết định có tính phổ kỳ dị hay không.
         
     Returns:
-        dict: Bộ kết quả toàn diện chứa toàn bộ dữ liệu từ Fit đến Spectrum (nếu có).
+        dict: Bộ kết quả toàn diện, chứa metadata, raw data, fit data và đặc trưng phân dạng.
     """
     data = np.asarray(data)
+    q_array = np.asarray(q_array)
     N = len(data)
     
-    # 1. Tính toán hàm thăng giáng cốt lõi
-    F_q_s, used_s = compute_mf_dfa_core(data, s_array, q_array, m=m)
+    # Validation: Kiểm tra đầu vào cho phổ đa phân dạng
+    if calc_spectrum and len(q_array) < 2:
+        raise ValueError("Cần ít nhất 2 giá trị q để tính đạo hàm số trong biến đổi Legendre.")
+        
+    # 1. Tính toán hàm thăng giáng cốt lõi (Raw data)
+    raw_F_q_s, raw_scales = compute_mf_dfa_core(data, s_array, q_array, m=m)
     
-    # 2. Lọc vùng scaling hợp lệ
-    valid_s, mask = select_scaling_region(used_s, N, min_scale=min_scale, max_scale_ratio=max_scale_ratio)
+    # 2. Lọc vùng scaling hợp lệ (Fit data)
+    fit_scales, mask = select_scaling_region(raw_scales, N, min_scale=min_scale, max_scale_ratio=max_scale_ratio)
+    fit_F_q_s = raw_F_q_s[mask, :]
     
-    # Cắt ma trận F_q_s theo vùng hợp lệ
-    F_q_s_filtered = F_q_s[mask, :]
+    # 3. Hồi quy tìm số mũ h(q)
+    fit_results = mf_dfa_fit(fit_scales, fit_F_q_s, q_array)
     
-    # 3. Hồi quy tuyến tính log-log để tìm h(q)
-    fit_results = mf_dfa_fit(valid_s, F_q_s_filtered, q_array)
-    hq = fit_results["hq"]
-    
-    # 4. Khởi tạo dictionary kết quả cơ bản
+    # 4. Đóng gói Dictionary kết quả (API chuẩn)
     result = {
+        # Metadata
+        "method": "MF-DFA",
+        "order": m,
+        "N": N,
         "q_array": q_array,
-        "valid_s": valid_s,
-        "F_q_s": F_q_s_filtered,
-        "hq": hq,
-        "R_squared": fit_results.get("R_squared", None), # Giả sử mf_dfa_fit có trả về R^2
-        "log_s": np.log2(valid_s) if fit_results.get("log_s") is None else fit_results["log_s"],
-        "log_F_q_s": np.log2(F_q_s_filtered) if fit_results.get("log_F_q_s") is None else fit_results["log_F_q_s"]
+        
+        # Raw Data (Dùng để visualize toàn cảnh)
+        "raw_scales": raw_scales,
+        "raw_F_q_s": raw_F_q_s,
+        
+        # Fit Data (Dùng cho mô hình)
+        "fit_scales": fit_scales,
+        "fit_F_q_s": fit_F_q_s,
+        
+        # Nested Fit Results (Chứa hq, R2, intercept, stderr...)
+        "fit": fit_results
     }
     
-    # 5. Tính toán các thành phần Optional (Tau & Singularity Spectrum)
+    # 5. Các thành phần Optional
     if calc_spectrum:
         # Tính số mũ khối lượng tau(q)
-        tau = compute_tau(q_array, hq)
+        tau = compute_tau(q_array, fit_results["hq"])
         
-        # Tính phổ kỳ dị f(alpha)
+        # Tính phổ kỳ dị f(alpha) và các đặc trưng hình học
         spectrum_results = compute_singularity_spectrum(q_array, tau)
         
-        # Đóng gói kết quả phổ vào dict chính
         result["tau"] = tau
         result["spectrum"] = spectrum_results
         
     return result
 
-def plot_scaling(result, num_lines=5):
-    """
-    Vẽ đồ thị Log-Log của hàm thăng giáng F_q(s) theo s với một vài giá trị q đại diện.
-    """
-    q_array = result["q_array"]
-    log_s = result["log_s"]
-    log_F_q_s = result["log_F_q_s"]
-    hq = result["hq"]
-    
-    # Tự động chọn 4-5 chỉ số (index) dàn đều trong mảng q
-    # Ví dụ mảng có 21 phần tử, num_lines=5 -> indices sẽ là [0, 5, 10, 15, 20]
-    num_q = len(q_array)
-    indices = np.linspace(0, num_q - 1, min(num_lines, num_q), dtype=int)
-    
-    plt.figure(figsize=(8, 6))
-    
-    # Sử dụng colormap để tạo dải màu đẹp từ lạnh (q âm) sang nóng (q dương)
-    colors = plt.cm.viridis(np.linspace(0, 1, len(indices)))
-    
-    for i, idx in enumerate(indices):
-        q = q_array[idx]
-        h_val = hq[idx]
-        y_actual = log_F_q_s[:, idx]
-        
-        # 1. Vẽ điểm dữ liệu thực tế
-        plt.plot(log_s, y_actual, 'o', color=colors[i], markersize=5)
-        
-        # 2. Dựng lại đường thẳng Fit (y = ax + b) để vẽ
-        # Vì hq là độ dốc (a), ta tính lại tung độ gốc (b) = mean(y) - a * mean(x)
-        intercept = np.mean(y_actual) - h_val * np.mean(log_s)
-        y_fit = h_val * log_s + intercept
-        
-        # Vẽ đường thẳng và gán label chứa h(q) cho Legend
-        plt.plot(log_s, y_fit, '-', color=colors[i], 
-                 label=r"$q = %.1f, h(q) = %.2f$" % (q, h_val))
-                 
-    plt.xlabel(r"$\log_2(s)$", fontsize=12)
-    plt.ylabel(r"$\log_2(F_q(s))$", fontsize=12)
-    plt.title("MF-DFA: Scaling Behavior", fontsize=14)
-    plt.legend(loc='best', fontsize=10)
-    plt.grid(True, linestyle='--', alpha=0.6)
-    plt.tight_layout()
-    plt.show()
-
-def plot_singularity(result):
-    """
-    Vẽ phổ kỳ dị f(alpha) theo alpha và hiển thị các đặc trưng hình học.
-    """
-    if "spectrum" not in result:
-        print("Lỗi: Không tìm thấy dữ liệu phổ. Hãy đảm bảo mf_dfa() chạy với calc_spectrum=True.")
-        return
-        
-    spectrum = result["spectrum"]
-    alpha = spectrum["alpha"]
-    f_alpha = spectrum["f_alpha"]
-    
-    width = spectrum["width"]
-    peak = spectrum["peak_alpha"]
-    asym = spectrum.get("asymmetry", 0.0) # Lấy asymmetry nếu có
-    
-    plt.figure(figsize=(8, 6))
-    
-    # Vẽ đường phổ kỳ dị hình parabol
-    plt.plot(alpha, f_alpha, 'o-', color='crimson', linewidth=2, markersize=5)
-    
-    # Đánh dấu sao vàng tại đỉnh phổ
-    plt.plot(peak, np.max(f_alpha), '*', color='gold', markersize=15, 
-             markeredgecolor='black', label='Peak')
-    
-    # Khởi tạo Text Box chứa các chỉ số đặc trưng
-    textstr = '\n'.join((
-        r'$\Delta\alpha \ (Width) = %.3f$' % (width, ),
-        r'$\alpha_0 \ (Peak) = %.3f$' % (peak, ),
-        r'$B \ (Asymmetry) = %.3f$' % (asym, )
-    ))
-    
-    # Định dạng hộp thoại text
-    props = dict(boxstyle='round,pad=0.5', facecolor='ivory', edgecolor='gray', alpha=0.8)
-    
-    # Đặt Text Box ở góc trên bên trái (x=0.05, y=0.95 của hệ tọa độ Axis)
-    plt.gca().text(0.05, 0.95, textstr, transform=plt.gca().transAxes, fontsize=12,
-                   verticalalignment='top', bbox=props)
-    
-    plt.xlabel(r"$\alpha$ (Singularity Strength)", fontsize=12)
-    plt.ylabel(r"$f(\alpha)$ (Fractal Dimension)", fontsize=12)
-    plt.title("Multifractal Singularity Spectrum", fontsize=14)
-    plt.grid(True, linestyle='--', alpha=0.6)
-    plt.tight_layout()
-    plt.show()
