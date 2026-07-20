@@ -563,13 +563,14 @@ def plot_singularity(result, figsize=(8, 6), **kwargs):
 
 def plot_summary(result, figsize=(14, 10)):
     """
-    Vẽ bảng điều khiển tổng hợp 2x2 thể hiện toàn cảnh kết quả MF-DFA.
+    Vẽ bảng điều khiển tổng hợp 2x2 thể hiện toàn cảnh kết quả MF-DFA (Version 0).
+    Tương thích trực tiếp với API trả về từ mf_dfa().
     
     Bố cục:
-    - [0, 0]: Hàm thăng giáng F_q(s) trên thang đo log-log (Scaling).
-    - [0, 1]: Số mũ Hurst tổng quát h(q).
-    - [1, 0]: Số mũ khối lượng tau(q).
-    - [1, 1]: Phổ kỳ dị f(alpha) và các đặc trưng hình học.
+    - [0, 0]: Fluctuation Function Scaling
+    - [0, 1]: Generalized Hurst Exponent
+    - [1, 0]: Mass Exponent
+    - [1, 1]: Singularity Spectrum
     
     Tham số:
         result (dict): Dictionary kết quả trả về từ hàm wrapper mf_dfa().
@@ -579,48 +580,54 @@ def plot_summary(result, figsize=(14, 10)):
     
     # --- 1. Góc trên bên trái (Subplot 0, 0): Scaling ---
     ax = axs[0, 0]
-    if all(k in result for k in ("scales", "fluctuations", "q_array")):
-        scales = result["scales"]
-        fluctuations = result["fluctuations"]
+    # Sửa 1: Đọc đúng key từ wrapper
+    if all(k in result for k in ("raw_scales", "raw_F_q_s", "q_array")):
+        raw_scales = result["raw_scales"]
+        raw_F_q_s = result["raw_F_q_s"]
         q_array = result["q_array"]
         
-        # Chọn 3 giá trị q đại diện: min, median, max để biểu diễn
+        # Chọn 3 giá trị q đại diện: min, median, max
         indices = [0, len(q_array) // 2, len(q_array) - 1]
         colors = ['#1f77b4', '#ff7f0e', '#9467bd']
         
         for i, idx in enumerate(indices):
             q_val = q_array[idx]
-            # Xử lý an toàn cho list/numpy array hoặc dictionary
-            fluc = fluctuations[idx] if isinstance(fluctuations, (list, np.ndarray)) else fluctuations[q_val]
+            # Sửa 2: Truy xuất đúng shape (n_scales, n_q)
+            fluc = raw_F_q_s[:, idx]
             
-            ax.loglog(scales, fluc, marker='o', linestyle='-', color=colors[i],
+            ax.loglog(raw_scales, fluc, marker='o', linestyle='-', color=colors[i],
                       markersize=4, label=rf"$q = {q_val:.1f}$")
             
         ax.set_xlabel(r"$s$", fontsize=12)
         ax.set_ylabel(r"$F_q(s)$", fontsize=12)
-        ax.set_title("MF-DFA: Fluctuation Functions", fontsize=14)
+        ax.set_title("Fluctuation Function Scaling", fontsize=14)  # Sửa 3: Cập nhật tên
         ax.legend(loc='best', fontsize=10)
         ax.grid(True, linestyle='--', alpha=0.5)
     else:
         ax.text(0.5, 0.5, "Thiếu dữ liệu Scaling", ha='center', va='center')
-        ax.set_title("MF-DFA: Fluctuation Functions", fontsize=14)
+        ax.set_title("Fluctuation Function Scaling", fontsize=14)
 
     # --- 2. Góc trên bên phải (Subplot 0, 1): h(q) ---
     ax = axs[0, 1]
-    if "q_array" in result and "hq" in result:
-        ax.plot(result["q_array"], result["hq"], marker='o', linestyle='-',
+    # Sửa 4: Lấy hq từ result["fit"]["hq"]
+    if "q_array" in result and "fit" in result and "hq" in result["fit"]:
+        fit = result["fit"]
+        hq = fit["hq"]
+        
+        ax.plot(result["q_array"], hq, marker='o', linestyle='-',
                 color='#1f77b4', markersize=5, markeredgecolor='w', markeredgewidth=0.8,
                 label=r"$h(q)$")
         ax.axhline(0.5, color='gray', linestyle='--', linewidth=1.5, label=r"$h=0.5$")
         
         ax.set_xlabel(r"$q$", fontsize=12)
         ax.set_ylabel(r"$h(q)$", fontsize=12)
-        ax.set_title("MF-DFA: Generalized Hurst Exponent", fontsize=14)
+        ax.set_title("Generalized Hurst Exponent", fontsize=14)
         ax.legend(loc='best', fontsize=10)
         ax.grid(True, linestyle='--', alpha=0.5)
         
     # --- 3. Góc dưới bên trái (Subplot 1, 0): tau(q) ---
     ax = axs[1, 0]
+    # Giữ nguyên do wrapper trực tiếp lưu result["tau"]
     if "q_array" in result and "tau" in result:
         ax.plot(result["q_array"], result["tau"], marker='s', linestyle='-',
                 color='#2ca02c', markersize=5, markeredgecolor='w', markeredgewidth=0.8,
@@ -628,7 +635,7 @@ def plot_summary(result, figsize=(14, 10)):
         
         ax.set_xlabel(r"$q$", fontsize=12)
         ax.set_ylabel(r"$\tau(q)$", fontsize=12)
-        ax.set_title("MF-DFA: Mass Exponent", fontsize=14)
+        ax.set_title("Mass Exponent", fontsize=14)
         ax.legend(loc='best', fontsize=10)
         ax.grid(True, linestyle='--', alpha=0.5)
 
@@ -647,6 +654,9 @@ def plot_summary(result, figsize=(14, 10)):
                 features.append(rf"$\Delta\alpha = {spectrum['width']:.3f}$")
             if "peak_alpha" in spectrum and not np.isnan(spectrum["peak_alpha"]):
                 features.append(rf"$\alpha_0 = {spectrum['peak_alpha']:.3f}$")
+            # Sửa 5: Thêm asymmetry (A) vào chú thích
+            if "asymmetry" in spectrum and not np.isnan(spectrum["asymmetry"]):
+                features.append(rf"$A = {spectrum['asymmetry']:.3f}$")
                 
             if features:
                 label_str += " (" + ", ".join(features) + ")"
@@ -654,7 +664,8 @@ def plot_summary(result, figsize=(14, 10)):
             ax.plot(alpha, f_alpha, marker='D', linestyle='-', color='#d62728',
                     markersize=5, markeredgecolor='w', markeredgewidth=0.8, label=label_str)
             
-            if "peak_alpha" in spectrum and not np.isnan(spectrum["peak_alpha"]):
+            # Giữ nguyên logic tìm đỉnh bằng np.nanargmax
+            if len(f_alpha) > 0:
                 peak_idx = np.nanargmax(f_alpha)
                 ax.plot(alpha[peak_idx], f_alpha[peak_idx], marker='*', color='gold',
                         markersize=12, markeredgecolor='black', markeredgewidth=0.8,
@@ -662,7 +673,7 @@ def plot_summary(result, figsize=(14, 10)):
             
             ax.set_xlabel(r"$\alpha$", fontsize=12)
             ax.set_ylabel(r"$f(\alpha)$", fontsize=12)
-            ax.set_title("MF-DFA: Singularity Spectrum", fontsize=14)
+            ax.set_title("Singularity Spectrum", fontsize=14)
             ax.legend(loc='best', fontsize=10)
             ax.grid(True, linestyle='--', alpha=0.5)
             
