@@ -238,19 +238,40 @@ Section 4 bổ sung các phép thử để xác định **nguồn gốc của đ
 - Hoặc sự kết hợp của cả hai.
 
 Đây là bước chuyển từ **đo lường (Measurement)** sang **giải thích cơ chế (Mechanism Identification)**.
-# QUY TRÌNH BÓC TÁCH VÀ KIỂM ĐỊNH TÍN HIỆU PPG (Dựa trên Mục 4)
 
-**Bước 1: Đo lường cơ bản (MF-DFA gốc)**
-Chạy thuật toán MF-DFA trên đoạn PPG 5 phút ($N \approx 8192$ điểm) để tính độ rộng phổ $\Delta h_{PPG}$ ban đầu.
 
-**Bước 2: Lọc "ảo giác" dữ liệu ngắn (Mục 4.2)**
-Tạo các chuỗi đơn phân dạng giả lập (Surrogate) có cùng độ dài 8192 điểm để đo mức độ sai số thống kê tự nhiên $\Delta h_{error}$.
+### 1. Hiệu ứng kích thước hữu hạn (Finite-size effect) là sai số nội tại của MF-DFA
 
-**Bước 3: Chẩn đoán ý nghĩa thống kê (Significance)**
-Nếu $\Delta h_{PPG}$ nhỏ hơn hoặc bằng $\Delta h_{error}$: Độ cong của phổ chỉ là nhiễu ngẫu nhiên. Kết luận nhịp tim đang ở trạng thái đơn phân dạng (mất độ phức tạp/buồn ngủ).
+Ngay cả đối với một chuỗi đơn phân dạng (monofractal) lý tưởng, sự phụ thuộc giả của $h(q)$ vào $q$ vẫn có thể xuất hiện khi chiều dài dữ liệu là hữu hạn [1, 2]. 
 
-**Bước 4: Chiết xuất đặc trưng thần kinh (Mục 4.1)**
-Nếu $\Delta h_{PPG}$ lớn hơn $\Delta h_{error}$ (đa phân dạng thực sự): Tiến hành xáo trộn chuỗi PPG (Shuffling) để phá hủy trí nhớ thời gian của hệ thần kinh.
-Tính đồ thị tỷ số: $\frac{F_q(s)}{F_q^{shuf}(s)} \sim s^{h_{cor}(q)}$ nhằm triệt tiêu toàn bộ nhiễu do biên độ hô hấp/cử động.
+*   **Lý thuyết:** Phổ số mũ phải là một hằng số $h(q) = H$ [3].
+*   **Thực tế đo đạc:** Với các chuỗi dữ liệu ngắn (ví dụ $N \approx 8192$), các thăng giáng nhỏ thường chịu nhiễu thống kê lớn, dẫn đến hiện tượng đo lố (overshoot) ở các moment âm. Hệ quả là $h(-10)$ luôn lớn hơn một chút so với $h(+10)$ [2].
+*   **Bản chất:** Sự chênh lệch này là sai lệch thống kê (statistical bias) tự nhiên của thuật toán trên tập dữ liệu ngắn, hoàn toàn không phải là bằng chứng của đa phân dạng [2].
 
-**Đầu ra:** Chỉ số $h_{cor}(q)$ thu được chính là đặc trưng thuần khiết nhất của hệ thần kinh, sẵn sàng làm input cho Machine Learning.
+> **💡 Take-away:** 
+> **Tuyệt đối không kết luận tín hiệu có tính đa phân dạng chỉ dựa vào một độ cong nhẹ của đồ thị phổ $h(q)$.**
+
+---
+
+### 2. Xáo trộn dữ liệu (Shuffling) giúp truy vết nguồn gốc đa phân dạng
+
+Phép so sánh phổ đa phân dạng trước và sau khi xáo trộn ngẫu nhiên là chìa khóa phân tích để bóc tách bản chất của hệ thống [4, 5]:
+
+*   **Nếu phổ sụp đổ về mức $h_{shuf}(q) \approx 0.5$:** Toàn bộ cấu trúc đa phân dạng chủ yếu sinh ra từ **"trí nhớ" tương quan dài hạn (long-range correlations)** của hệ thống, và đã bị phá hủy hoàn toàn sau khi xáo trộn [6, 7].
+*   **Nếu phổ gần như giữ nguyên hình dáng ($h_{shuf}(q) \approx h(q)$):** Tính đa phân dạng bắt nguồn từ những đột biến trong **phân phối xác suất biên độ rộng (broad probability distribution)**, vì phép xáo trộn không làm thay đổi hàm mật độ phân phối [6, 8].
+
+> **💡 Take-away:** 
+> **Shuffling là phép thử bắt buộc và hiệu quả nhất để phân biệt giữa đa phân dạng do tương quan (correlation-induced) và đa phân dạng do phân phối (distribution-induced).**
+
+---
+
+### 3. Luôn đối chiếu với ngưỡng sai số nền (Baseline Comparison)
+
+Kết quả đo lường từ MF-DFA chỉ thực sự có ý nghĩa khoa học khi độ lệch của các chỉ số vượt qua được sai số tự nhiên của chính thuật toán [2]. 
+
+Do đó, trước khi đưa ra kết luận khẳng định, người nghiên cứu bắt buộc phải:
+*   Xác định rõ mức độ sai số do hiệu ứng kích thước hữu hạn (finite-size effect) bằng cách sinh ra các chuỗi đơn phân dạng giả lập có cùng độ dài để so sánh [2].
+*   Sử dụng các chuỗi đối chứng (shuffled/surrogate series) để thiết lập hệ quy chiếu nền [9].
+
+> **💡 Take-away:** 
+> **MF-DFA không chỉ đơn thuần là việc tính ra một giá trị $h(q)$, mà cốt lõi là phải đánh giá được độ tin cậy, tính ngẫu nhiên và biên độ sai số của kết quả đó.**
