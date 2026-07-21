@@ -83,26 +83,161 @@ Hàm $F_q(s)$ chỉ được định nghĩa hợp lệ khi kích thước cửa 
 *   **Giải pháp:** Bắt buộc phải rẽ nhánh code (If/Else). Tại $q=0$, chuyển sang dùng công thức **trung bình logarit** (logarithmic averaging): 
     $F_0(s) \equiv \exp \left\{ \frac{1}{4N_s} \sum_{\nu=1}^{2N_s} \ln [F^2(s, \nu)] \right\}$ [4].
 
-# Tóm tat Mục 4.1: Phân biệt nguồn gốc Đa phân dạng (Shuffling & Ratio Test)
+# Tóm tắt Mục 4.1: Phân biệt nguồn gốc của Đa phân dạng (Shuffling & Ratio Test)
 
-**1. Hai nguồn gốc của Đa phân dạng:**
-*   **Loại (i) - Do phân phối (Distribution):** Biên độ dữ liệu có các bước nhảy vọt quá lớn (phân phối rộng).
-*   **Loại (ii) - Do tương quan (Correlation):** Dữ liệu có cấu trúc "trí nhớ" hoặc tương quan dài hạn giữa các dao động lớn/nhỏ.
+## 1. Hai nguồn gốc của tính đa phân dạng
 
-**2. Phép thử Xáo trộn (Shuffling Test):**
-*   **Cách làm:** Xáo trộn ngẫu nhiên dữ liệu gốc. Phép toán này **phá hủy hoàn toàn loại (ii)** nhưng **giữ nguyên loại (i)**.
-*   **Đánh giá qua số mũ $h_{shuf}(q)$:**
-    *   Nếu $h_{shuf}(q) = h(q)$: Đa phân dạng hoàn toàn do biên độ (Loại i).
-    *   Nếu $h_{shuf}(q) = 0.5$: Đa phân dạng hoàn toàn do tương quan (Loại ii - Trở về nhiễu trắng).
+Đa phân dạng của một chuỗi thời gian có thể xuất phát từ hai cơ chế độc lập.
 
-**3. Kiểm định Tỷ số (Ratio Test) - Bóc tách tương quan:**
-*   **Mục đích:** Triệt tiêu nhiễu biên độ, chỉ giữ lại phần đa phân dạng do cấu trúc tương quan/thần kinh.
-*   **Công thức đồ thị Tỷ số:** 
-    $\frac{F_q(s)}{F_q^{shuf}(s)} \sim s^{h_{cor}(q)}$
-*   **Hệ thức cốt lõi:** 
-    **$h(q) = h_{shuf}(q) + h_{cor}(q)$**
-*   **Kết luận:** Số mũ $h_{cor}(q)$ chính là chỉ số thuần khiết nhất đại diện cho độ mạnh yếu của "trí nhớ" tương quan dài hạn trong hệ thống.
-*   
+### (i) Do phân phối xác suất rộng (Distribution-induced Multifractality)
+
+- Phân phối xác suất có đuôi dày (heavy-tailed distribution).
+- Xuất hiện các dao động có biên độ rất lớn.
+- Không phụ thuộc vào thứ tự xuất hiện của dữ liệu.
+
+---
+
+### (ii) Do tương quan dài hạn (Correlation-induced Multifractality)
+
+- Các dao động nhỏ và lớn có cấu trúc tương quan khác nhau trên nhiều thang đo.
+- Thứ tự xuất hiện của dữ liệu mang thông tin (long-range correlation).
+- Đây là nguồn gốc động lực học của multifractality.
+
+---
+
+## 2. Phép thử Xáo trộn (Shuffling Test)
+
+### Ý tưởng
+
+Xáo trộn ngẫu nhiên toàn bộ chuỗi thời gian.
+
+Kết quả:
+
+- Phá hủy hoàn toàn cấu trúc tương quan dài hạn.
+- Giữ nguyên phân phối xác suất (PDF).
+
+Do đó:
+
+- Correlation $\rightarrow$ bị loại bỏ.
+- Distribution $\rightarrow$ được bảo toàn.
+
+---
+
+## 3. Đánh giá nguồn gốc bằng MF-DFA
+
+Sau khi chạy MF-DFA trên chuỗi đã xáo trộn, thu được số mũ
+
+$$
+h_{\mathrm{shuf}}(q)
+$$
+
+### Trường hợp 1
+
+$$
+h_{\mathrm{shuf}}(q)\approx h(q)
+$$
+
+→ Đa phân dạng chủ yếu do **phân phối xác suất rộng**.
+
+---
+
+### Trường hợp 2
+
+$$
+h_{\mathrm{shuf}}(q)\approx0.5
+$$
+
+→ Sau khi mất tương quan, chuỗi trở thành White Noise.
+
+→ Đa phân dạng chủ yếu do **Long-range Correlation**.
+
+---
+
+### Trường hợp 3 (phổ biến nhất)
+
+$$
+0.5<h_{\mathrm{shuf}}(q)<h(q)
+$$
+
+→ Đa phân dạng được tạo ra bởi **cả Distribution và Correlation**.
+
+---
+
+## 4. Ratio Test (Correlation-only Scaling)
+
+Để loại bỏ ảnh hưởng của phân phối xác suất và chỉ giữ lại phần scaling do tương quan:
+
+$$
+\frac{F_q(s)}{F_q^{\mathrm{shuf}}(s)}
+\sim
+s^{h_{\mathrm{cor}}(q)}
+$$
+
+Trong đó
+
+$$
+h_{\mathrm{cor}}(q)
+=
+h(q)-h_{\mathrm{shuf}}(q)
+$$
+
+hay
+
+$$
+h(q)
+=
+h_{\mathrm{shuf}}(q)
++
+h_{\mathrm{cor}}(q)
+$$
+
+---
+
+## 5. Ý nghĩa của $h_{\mathrm{cor}}(q)$
+
+### Nếu
+
+$$
+h_{\mathrm{cor}}(q)\approx0
+$$
+
+→ Hầu như không tồn tại Long-range Correlation.
+
+---
+
+### Nếu
+
+$$
+h_{\mathrm{cor}}(q)\neq0
+$$
+
+→ Hệ thống tồn tại Long-range Correlation.
+
+---
+
+### Nếu
+
+$$
+h_{\mathrm{cor}}(q)
+$$
+
+phụ thuộc vào $q$
+
+→ Chính cấu trúc tương quan cũng mang tính đa phân dạng (Correlation-induced Multifractality).
+
+---
+
+## Kết luận
+
+MF-DFA chỉ cho biết **chuỗi có đa phân dạng hay không**.
+
+Section 4 bổ sung các phép thử để xác định **nguồn gốc của đa phân dạng**:
+
+- Distribution-induced Multifractality.
+- Correlation-induced Multifractality.
+- Hoặc sự kết hợp của cả hai.
+
+Đây là bước chuyển từ **đo lường (Measurement)** sang **giải thích cơ chế (Mechanism Identification)**.
 # QUY TRÌNH BÓC TÁCH VÀ KIỂM ĐỊNH TÍN HIỆU PPG (Dựa trên Mục 4)
 
 **Bước 1: Đo lường cơ bản (MF-DFA gốc)**
