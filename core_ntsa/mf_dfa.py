@@ -680,3 +680,140 @@ def plot_summary(result, figsize=(14, 10)):
     # --- Căn chỉnh và hiển thị ---
     plt.tight_layout()
     plt.show()
+
+
+# Extensions
+def shuffle_signal(signal, rng=None):
+    """
+    Randomly shuffle a time series while preserving its value distribution.
+    Temporal correlations are destroyed.
+    """
+    signal = np.asarray(signal)
+
+    if rng is None:
+        shuffled = signal.copy()
+        np.random.shuffle(shuffled)
+    else:
+        shuffled = rng.permutation(signal)
+
+    return shuffled
+
+
+def mf_dfa_shuffle(
+    data,
+    s_array,
+    q_array,
+    m=1,
+    min_scale=10,
+    max_scale_ratio=4,
+    n_shuffle=50,
+    random_state=None,
+    calc_spectrum=True,
+    return_all=False,
+):
+    """
+    Perform MF-DFA on shuffled surrogate realizations.
+
+    The fluctuation functions F_q(s) are computed for each shuffled
+    realization and averaged before estimating h(q), tau(q), and
+    the singularity spectrum.
+
+    Returns
+    -------
+    dict
+        Dictionary with the same API as mf_dfa().
+    """
+    data = np.asarray(data)
+    q_array = np.asarray(q_array)
+    N = len(data)
+
+    if calc_spectrum and len(q_array) < 2:
+        raise ValueError("Cần ít nhất 2 giá trị q để tính phổ kỳ dị.")
+
+    # Independent random generator (recommended by NumPy)
+    rng = np.random.default_rng(random_state)
+
+    all_F_q = None
+    valid_s_final = None
+
+    for i in range(n_shuffle):
+        
+        # Đảm bảo hàm shuffle_signal nhận đối số rng
+        shuf_sig = shuffle_signal(data, rng=rng)
+
+        F_q_s, valid_s = compute_mf_dfa_core(
+            shuf_sig,
+            s_array,
+            q_array,
+            m=m,
+        )
+
+        if all_F_q is None:
+            valid_s_final = valid_s.copy()
+            all_F_q = np.zeros((n_shuffle, *F_q_s.shape))
+        else:
+            if not np.array_equal(valid_s, valid_s_final):
+                raise RuntimeError("Inconsistent valid scales across shuffled realizations.")
+
+        all_F_q[i] = F_q_s
+
+
+    F_q_avg = np.mean(all_F_q, axis=0)
+    F_q_std = np.std(all_F_q, axis=0)
+
+    fit_scales, mask = select_scaling_region(
+        valid_s_final,
+        N,
+        min_scale=min_scale,
+        max_scale_ratio=max_scale_ratio,
+    )
+
+    fit_F_q_s = F_q_avg[mask, :]
+
+    fit_results = mf_dfa_fit(
+        fit_scales,
+        fit_F_q_s,
+        q_array,
+    )
+
+    result = {
+        # Metadata
+        "method": "MF-DFA",
+        "analysis": "shuffle",
+        "order": m,
+        "N": N,
+        "q_array": q_array,
+        "n_shuffle": n_shuffle,
+        "random_state": random_state,
+
+        # Raw data
+        "raw_scales": valid_s_final,
+        "raw_F_q_s": F_q_avg,
+        "raw_F_q_std": F_q_std,
+
+        # Fit data
+        "fit_scales": fit_scales,
+        "fit_F_q_s": fit_F_q_s,
+
+        # Regression results
+        "fit": fit_results,
+    }
+
+    if return_all:
+        result["raw_F_q_all"] = all_F_q
+
+    if calc_spectrum:
+        tau = compute_tau(
+            q_array,
+            fit_results["hq"],
+        )
+
+        spectrum = compute_singularity_spectrum(
+            q_array,
+            tau,
+        )
+
+        result["tau"] = tau
+        result["spectrum"] = spectrum
+
+    return result
