@@ -1,0 +1,1 @@
+# Fraser_1989: Information and Entropy in Strange Attractor
