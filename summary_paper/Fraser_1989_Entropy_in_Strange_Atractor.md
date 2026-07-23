@@ -64,3 +64,54 @@ Lưới chia không gian cố định (fixed partition) luôn gặp bế tắc: 
 **4. Điểm yếu chí mạng:**
 *   Chỉ cung cấp **cận dưới (lower bounds)**: Do thuật toán sẽ tự động làm phẳng các đặc trưng nếu không có đủ số lượng mẫu, nó luôn ước lượng thấp (underestimating) độ dư thừa thực tế của hệ thống [2].
 *   **Lời nguyền số chiều:** Vô cùng "đói" dữ liệu; để thuật toán hội tụ khi xét các thành phần có số chiều nhúng lớn hơn 3 hoặc 4, số lượng mẫu yêu cầu có thể lên tới hàng triệu (millions) điểm [4].
+*   
+
+# BÁO CÁO TÓM TẮT: CẤU TRÚC PHÂN RÃ THÔNG TIN CỦA CHUỖI THỜI GIAN
+
+**Điểm xuất phát:** Giả sử ta quan sát một chuỗi thời gian gồm các mẫu $X_1, X_2, \ldots, X_n$. Khi quan sát thêm điểm dữ liệu $X_{n+1}$, câu hỏi đặt ra là: *Điểm mới này mang lại bao nhiêu lượng thông tin?* Đây là cơ sở để phân rã thông tin thành các thành phần động lực học[cite: 1].
+
+---
+
+## 1. $A$ — Average Information (Thông tin trung bình)
+Đại lượng $A$ thể hiện lượng thông tin trung bình trên mỗi mẫu quan sát (tương đương entropy của từng mẫu) khi hoàn toàn không biết gì về quá khứ[cite: 1]. 
+*   **Đặc điểm:** $A$ chỉ xét trên từng mẫu độc lập và bỏ qua cấu trúc thời gian (bộ nhớ) của chuỗi. 
+*   **Hạn chế:** Hai chuỗi có cùng biểu đồ tần suất (ví dụ: chuỗi tuần hoàn `ABCABC...` so với chuỗi ngẫu nhiên `QWERTY...`) sẽ có cùng giá trị $A$, mặc dù mức độ dự đoán được của chúng hoàn toàn khác nhau. Do đó, $A$ không đủ để phản ánh tính động lực học.
+
+## 2. $R_n$ — Redundancy (Độ dư thừa thông tin)
+$R_n$ là lượng thông tin của trạng thái hiện tại đã tồn tại sẵn trong $n$ mẫu quá khứ[cite: 1].
+*   **Bản chất:** Chính là Mutual Information (Thông tin tương hỗ) giữa điểm hiện tại và quá khứ: $R_n = I(X_{n+1}; X_n, \ldots, X_1)$.
+*   **Ý nghĩa:** Trả lời cho câu hỏi *"Bao nhiêu phần của hiện tại đã có thể dự đoán được từ quá khứ?"*. Dưới góc độ vật lý, $R_n$ đại diện cho **Memory (Ký ức)** của hệ thống.
+
+## 3. $L_n$ — New Information (Thông tin mới)
+Nếu $A$ là toàn bộ lượng thông tin và $R_n$ là phần thông tin cũ đã biết, thì phần còn lại chính là $L_n$[cite: 1].
+*   **Công thức:** $L_n = A - R_n$[cite: 1].
+*   **Bản chất:** Tương đương với Conditional Entropy (Entropy có điều kiện): $L_n = H(X_{n+1} \vert{} X_1, \ldots, X_n)$.
+*   **Ý nghĩa:** Đây là lượng thông tin hoàn toàn mới xuất hiện tại bước kế tiếp. Dưới góc độ vật lý, $L_n$ đại diện cho **Innovation (Sự kiến tạo thông tin mới)**.
+
+## 4. $H_n$ — Cumulative Entropy (Entropy tích lũy)
+$H_n$ không phải là entropy của một mẫu đơn lẻ, mà là entropy của toàn bộ một vector gồm $n$ điểm (ví dụ: $H_3 = H(X_1, X_2, X_3)$)[cite: 1].
+*   **Quy tắc chuỗi (Chain Rule):** Khi tăng độ dài quan sát $n$, lượng thông tin tích lũy tuân theo phương trình: $H_{n+1} = H_n + L_n$. Cấu trúc này nhấn mạnh rằng $L_n$ chính là lượng thông tin mới được cộng dồn vào hệ thống.
+
+## 5. $h_\mu$ — Entropy Rate (Tốc độ sinh thông tin)
+Khi chuỗi quan sát đủ dài ($n \rightarrow \infty$), lượng thông tin mới $L_n$ sẽ tiệm cận về một hằng số ổn định[cite: 1].
+*   **Công thức:** $h_\mu = \lim_{n \to \infty} L_n = \lim_{n \to \infty} (H_{n+1} - H_n)$[cite: 1].
+*   **Ý nghĩa:** Entropy rate chính là tốc độ sản sinh thông tin (Information Production) thực sự của hệ thống.
+
+---
+
+## 6. Sơ đồ Triết lý Động lực học
+Thông tin của hiện tại luôn bao gồm hai thành phần có ý nghĩa vật lý rõ rệt: **Current Information = Memory + Innovation**[cite: 1].
+
+```text
+                    Average Information (A)
+                              |
+             +----------------+----------------+
+             |                                 |
+             ▼                                 ▼
+       Redundancy (R_n)               New Information (L_n)
+          (Memory)                       (Innovation)
+             |                                 |
+             +----------------+----------------+
+                              |
+                              ▼
+                        A = R_n + L_n
