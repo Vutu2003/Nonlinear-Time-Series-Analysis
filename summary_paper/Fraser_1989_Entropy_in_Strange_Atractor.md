@@ -46,3 +46,21 @@ trong đó $A$ là độ chính xác của phép đo, $R_n$ là lượng thông 
 Khi khảo sát sự biến thiên của $R_n$ theo số chiều nhúng $n$, Fraser chỉ ra rằng đường cong redundancy sẽ tiến dần tới một miền tiệm cận tuyến tính. Chính miền tiệm cận này chứa đồng thời các thông tin động lực học quan trọng của hệ: giao điểm với trục tung phản ánh measurement accuracy $A$, độ dốc bằng $-h_\mu T$ cho phép suy ra entropy rate, điểm bắt đầu xuất hiện miền tuyến tính phản ánh embedding dimension, trong khi sự thay đổi của đường cong theo khoảng lấy mẫu $T$ được sử dụng để lựa chọn time delay thích hợp. Do đó, thay vì xây dựng nhiều thuật toán hình học độc lập, Fraser chứng minh rằng toàn bộ các đặc trưng quan trọng của một hệ động lực có thể được suy ra từ sự tiến hóa của một đại lượng thông tin duy nhất.
 
 Tư tưởng quan trọng nhất của Fraser có thể được tóm tắt bằng một câu: **Nonlinear Time Series Analysis không nhất thiết phải bắt đầu từ hình học của attractor; nó có thể bắt đầu từ sự tạo sinh, mất mát và dư thừa của thông tin trong chuỗi thời gian.** Đây chính là nền tảng khái niệm của trường phái Entropy trong NTSA và là động lực cho các phương pháp ước lượng thông tin hiện đại như KSG, k-nearest-neighbor estimators hay neural mutual information estimators phát triển sau này.
+
+# 1. Vấn đề của phương pháp cũ:**
+Lưới chia không gian cố định (fixed partition) luôn gặp bế tắc: ô chia quá to sẽ làm phẳng chi tiết (đánh giá thấp lượng thông tin), ô quá nhỏ sẽ thu nhầm nhiễu thống kê do cỡ mẫu nhỏ (đánh giá khống lượng thông tin) [1], [2].
+
+**2. Giải pháp cốt lõi:**
+**Thuật toán chia lưới thích nghi (Adaptive Partitioning)** - tự động điều chỉnh kích thước phần tử lưới chia cho phù hợp với điều kiện mật độ dữ liệu cục bộ [2].
+
+**3. Quy trình 4 bước:**
+*   **Bước 1 - Đổi hệ tọa độ:** Chuyển đổi các biến sang tọa độ đồng xác suất (equiprobable coordinates) để chuẩn hóa (san phẳng) các phân phối biên [3].
+*   **Bước 2 - Chia không gian:** Băm mặt phẳng không gian thành các phần tư (quarters đối với 2D), hoặc mở rộng chia thành $2^n$ vùng con đối với không gian $n$ chiều [3], [4].
+*   **Bước 3 - Kiểm định đệ quy (Trái tim thuật toán):** Dùng kiểm định thống kê (với mức tin cậy 20%) để đánh giá xem phân bố số đếm trong ô đó có "phẳng" (flat) hay không [3].
+    *   Nếu **chưa phẳng** $\rightarrow$ Tiếp tục băm nhỏ ô đó một cách đệ quy [3].
+    *   Nếu **đã phẳng** (hoặc phân bố mẫu không đủ để tự tin khẳng định) $\rightarrow$ Dừng băm nhỏ [3].
+*   **Bước 4 - Tính toán Tích phân:** Tại các ô đã chạm "đáy" (dừng băm), thuật toán sẽ tính toán đóng góp của ô đó vào tổng ước lượng của tích phân thông tin [3].
+
+**4. Điểm yếu chí mạng:**
+*   Chỉ cung cấp **cận dưới (lower bounds)**: Do thuật toán sẽ tự động làm phẳng các đặc trưng nếu không có đủ số lượng mẫu, nó luôn ước lượng thấp (underestimating) độ dư thừa thực tế của hệ thống [2].
+*   **Lời nguyền số chiều:** Vô cùng "đói" dữ liệu; để thuật toán hội tụ khi xét các thành phần có số chiều nhúng lớn hơn 3 hoặc 4, số lượng mẫu yêu cầu có thể lên tới hàng triệu (millions) điểm [4].
