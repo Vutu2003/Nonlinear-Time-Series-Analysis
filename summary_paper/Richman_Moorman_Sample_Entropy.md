@@ -92,4 +92,3 @@ Chỉ một sự thay đổi về đơn vị quan sát (từ State sang Pair) đ
 *   Gộp (pooling) toàn bộ dữ liệu giúp trung hòa nhiễu ngẫu nhiên.
 *   Tạo ra một estimator phương sai thấp, ít thiên lệch và ổn định tuyệt đối trên các chuỗi dữ liệu ngắn.
 
-*Ghi chú: Góc nhìn "Pair-centric" này chính là nền tảng thống nhất để lý giải tính hợp lý của toàn bộ họ Entropy thế hệ sau như Cross-SampEn, FuzzyEn, hay Distribution Entropy.*
