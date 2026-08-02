@@ -226,3 +226,27 @@ Dựa trên phân tích lý thuyết và thực hành, các giả định của 
 | **Sufficient Matches & CI** | Phương sai bùng nổ, biên độ lỗi phình to bất thường cảnh báo giới hạn tính toán của tham số. |
 | **Quasi-Stationarity** | Giá trị Entropy mất đi ý nghĩa đại diện nếu dữ liệu nhiễu loạn hoặc đổi pha liên tục. |
 | **Relative Consistency** | Đảo lộn kết luận so sánh lâm sàng (SampEn cực kỳ hiếm gặp, ApEn thường xuyên mắc phải). |
+
+# Tổng quan các Giới hạn của Sample Entropy (SampEn)
+
+Dựa trên nền tảng bài báo của Richman & Moorman (2000), các giới hạn của SampEn không phải là "lỗi thuật toán" mà là hệ quả của các **đánh đổi thống kê** (trade-offs) có chủ đích nhằm tối ưu hóa bộ ước lượng xác suất.
+
+**1. Các giới hạn cốt lõi theo Chuỗi nhân quả**
+
+*   **Sai số dư (Residual Bias):** Để tối ưu số lượng mẫu trên chuỗi dữ liệu ngắn, SampEn dùng các vector chồng lấp (overlapping templates). Việc này làm mất đi tính độc lập tuyệt đối giữa các phép thử, sinh ra sai số dư (dưới 3% khi $N \ge 100$). Tuy nhiên, đây là sự đánh đổi cần thiết để giữ phương sai (variance) ở mức thấp, thay vì dùng vector tách rời (disjoint) khiến phương sai bùng nổ.
+*   **Hiện tượng cắt chéo (Cross-over):** Tính nhất quán tương đối không tuyệt đối 100% trong điều kiện cực đoan. Nếu cross-over xảy ra ở SampEn, nguyên nhân cốt lõi là do **nhiễu mẫu (sampling error/variance)** khi số lượng cặp khớp quá ít, hoàn toàn khác với cross-over do **sai lệch cấu trúc (bias)** thường trực ở ApEn.
+*   **Vùng không xác định (Undefined Region):** Khi không có đủ mẫu lặp ($B=0$ hoặc $A=0$), thuật toán trả về giá trị `NaN`. Đây là sự "trung thực toán học", thà thừa nhận không đủ dữ liệu thay vì tự tạo ra các cặp khớp giả (self-matching) để lấp liếm như ApEn.
+*   **Phụ thuộc tham số & Bản chất bộ ước lượng:** SampEn không phi tham số; nó phụ thuộc chặt chẽ vào ($m$, $r$, $N$). Hơn nữa, nó chỉ là một bộ ước lượng (estimator) cho giá trị $-\ln\left(\frac{A}{B}\right)$, do đó bắt buộc phải mang các sai số thống kê hữu hạn bất biến.
+
+---
+
+**2. Bảng Tóm tắt Hệ quả Thực nghiệm**
+
+| Giới hạn (Limitation) | Nguồn gốc | Hệ quả & Ý nghĩa thực tiễn |
+| :--- | :--- | :--- |
+| **Residual Bias** | Các vector chồng lấp (Overlapping) | Sai số nhỏ khi $N$ lớn. Đánh đổi hoàn hảo để thu hẹp khoảng tin cậy (CI). |
+| **Mất Nhất quán tương đối** | Biến động nhiễu mẫu (Sampling fluctuation) | Đồ thị có thể cắt chéo ở vùng tham số cực đoan do phương sai bùng nổ. |
+| **Vùng không xác định** | Vắng bóng các mẫu lặp ($A=0$ hoặc $B=0$) | Thuật toán trả về `NaN`, đảm bảo tính minh bạch thống kê. |
+| **Giới hạn triết học** | Chỉ là một bộ ước lượng (Estimator) | Không tồn tại entropy hoàn hảo, luôn đi kèm Bias, Variance và Sampling Error. |
+
+> *"ApEn thất bại chủ yếu vì sai lệch hệ thống (systematic bias) do self-matching, còn SampEn chỉ còn chịu những giới hạn thống kê cơ bản mà mọi bộ ước lượng xác suất hữu hạn đều không thể tránh khỏi (sampling variability, residual bias và variance)."*
