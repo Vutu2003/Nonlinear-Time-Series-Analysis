@@ -6,6 +6,9 @@ def _validate_input(x: np.ndarray, m: int) -> Tuple[np.ndarray, int]:
     """
     Stage 1.1: Validate input data and length constraints.
     """
+    if m < 1:
+        raise ValueError("Embedding dimension m must be >= 1.")
+        
     x_array = np.asarray(x, dtype=np.float64)
     
     if x_array.ndim != 1:
@@ -35,18 +38,17 @@ def _compute_tolerance(x: np.ndarray, r: Union[float, None]) -> float:
     return float(r)
 
 
-def _embed_phase_space(x: np.ndarray, m: int, n_samples: int) -> Tuple[np.ndarray, np.ndarray]:
+def _embed_phase_space(x: np.ndarray, m: int) -> Tuple[np.ndarray, np.ndarray]:
     """
     Stage 2: State Space Embedding.
-    Ensures identical template counts (N - m) in both embedding dimensions.
+    Uses zero-copy sliding_window_view for high performance.
+    Ensures identical template counts in both embedding dimensions.
     """
-    n_templates = n_samples - m
+    # Dimension m: truncate the last window to match length of dimension m+1
+    templates_m = np.lib.stride_tricks.sliding_window_view(x, window_shape=m)[:-1]
     
-    # Create templates of dimension m
-    templates_m = np.array([x[i : i + m] for i in range(n_templates)])
-    
-    # Create templates of dimension m + 1 using the EXACT same start indices
-    templates_mp1 = np.array([x[i : i + m + 1] for i in range(n_templates)])
+    # Dimension m+1
+    templates_mp1 = np.lib.stride_tricks.sliding_window_view(x, window_shape=m + 1)
     
     return templates_m, templates_mp1
 
@@ -54,21 +56,18 @@ def _embed_phase_space(x: np.ndarray, m: int, n_samples: int) -> Tuple[np.ndarra
 def _compute_distance(templates_m: np.ndarray, templates_mp1: np.ndarray, metric: str) -> Tuple[np.ndarray, np.ndarray]:
     """
     Stage 3: Pairwise Distance Engine.
-    Computes distance matrix and rigorously removes self-matching (diagonal).
+    Computes full distance matrix. Self-matching and duplicate pairs 
+    will be filtered in Stage 4.
     """
     if metric != 'chebyshev':
         raise NotImplementedError("Currently only 'chebyshev' metric is supported.")
         
-    # Broadcasting to compute pairwise differences: shape (N-m, N-m, dim)
+    # Broadcasting to compute pairwise differences
     diff_m = np.abs(templates_m[:, None, :] - templates_m[None, :, :])
     dist_m = np.max(diff_m, axis=-1)
     
     diff_mp1 = np.abs(templates_mp1[:, None, :] - templates_mp1[None, :, :])
     dist_mp1 = np.max(diff_mp1, axis=-1)
-    
-    # Enforce zero self-matching constraint by setting diagonals to Infinity
-    np.fill_diagonal(dist_m, np.inf)
-    np.fill_diagonal(dist_mp1, np.inf)
     
     return dist_m, dist_mp1
 
@@ -76,10 +75,14 @@ def _compute_distance(templates_m: np.ndarray, templates_mp1: np.ndarray, metric
 def _count_matches(dist_m: np.ndarray, dist_mp1: np.ndarray, r: float) -> Tuple[int, int]:
     """
     Stage 4: Global Match Counter.
-    Independently counts valid matches (distance <= r) across the whole network.
+    Extracts strictly upper triangular elements (k=1) to count 
+    unique unordered pairs (j > i) and inherently ignores self-matching (k=0).
     """
-    b_matches = np.sum(dist_m <= r)
-    a_matches = np.sum(dist_mp1 <= r)
+    upper_m = np.triu(dist_m <= r, k=1)
+    b_matches = np.sum(upper_m)
+    
+    upper_mp1 = np.triu(dist_mp1 <= r, k=1)
+    a_matches = np.sum(upper_mp1)
     
     return int(a_matches), int(b_matches)
 
@@ -92,7 +95,8 @@ def _estimate_entropy(a_matches: int, b_matches: int, verbose: bool) -> Union[fl
     if b_matches == 0 or a_matches == 0:
         sampen_value = np.nan
     else:
-        sampen_value = -np.log(a_matches / b_matches)
+        ratio = a_matches / b_matches
+        sampen_value = -np.log(ratio)
         
     if verbose:
         return {
@@ -126,7 +130,7 @@ def sampen(x: Union[list, np.ndarray], m: int = 2, r: float = None, metric: str 
     r_val = _compute_tolerance(x_array, r)
     
     # Stage 2
-    templates_m, templates_mp1 = _embed_phase_space(x_array, m, n_samples)
+    templates_m, templates_mp1 = _embed_phase_space(x_array, m)
     
     # Stage 3
     dist_m, dist_mp1 = _compute_distance(templates_m, templates_mp1, metric)
