@@ -197,3 +197,32 @@ Các giả định khắt khe của Pincus chỉ dùng để **thiết lập ch�
 *   **Nguồn gốc Bất ổn (Tiền đề của SampEn):**
     *   **Self-matching Bias:** Việc tự đếm chính nó gây thiên lệch, làm giảm độ ổn định trên dữ liệu ngắn.
     *   **Thiếu nhất quán tương đối:** Cùng một dữ liệu, thứ tự độ phức tạp giữa hai hệ thống có thể bị đảo ngược chỉ vì thay đổi giá trị $r$.
+*   
+
+# Khung Giả định Cốt lõi của Sample Entropy (SampEn)
+
+Dựa trên phân tích lý thuyết và thực hành, các giả định của SampEn được phân loại thành 3 nhóm chính:
+
+**1. Nhóm Nền tảng Thuật toán (Bản chất Toán học)**
+*   **Ước lượng theo cặp (Pair-centric Estimation):** Đơn vị phân tích cốt lõi là *cặp vector* chứ không phải vector đơn lẻ. Điều này giúp loại bỏ self-matching và xây dựng ước lượng xác suất toàn cục.
+*   **Sự tồn tại của Mẫu lặp (Recurrence):** Bắt buộc hệ thống phải có các mẫu lặp lại (số cặp khớp ở chiều m và m+1 phải lớn hơn 0). Nếu không, thuật toán không thể tính toán và trả về giá trị vô hướng (NaN).
+
+**2. Nhóm Đánh đổi Thống kê (Thực hành Kỹ thuật)**
+*   **Vector chồng lấp (Overlapping Templates):** Chấp nhận một lượng nhỏ sai số dư (residual bias) do các vector chia sẻ điểm dữ liệu, để giữ lại lượng mẫu lớn giúp giảm thiểu tối đa phương sai (đặc biệt hữu ích với chuỗi ngắn như PPG).
+*   **Đủ số lượng khớp (Sufficient Matches):** Ngầm định vùng tham số (m, r) tạo ra đủ số lượng cặp khớp để định lý giới hạn trung tâm hoạt động, đảm bảo khoảng tin cậy (CI) được ước lượng chính xác theo phân phối chuẩn hoặc Student's t.
+
+**3. Nhóm Điều kiện Ứng dụng (Động lực học Dữ liệu)**
+*   **Tính dừng cục bộ (Quasi-Stationarity):** Đòi hỏi cấu trúc động lực học của chuỗi dữ liệu không biến đổi quá đột ngột trong giới hạn của cửa sổ phân tích.
+*   **Tính nhất quán tương đối (Relative Consistency):** Ngầm định trật tự độ phức tạp giữa các chuỗi tín hiệu được bảo toàn khi thay đổi tham số. SampEn thỏa mãn điều kiện này trên thực nghiệm vững chắc hơn hẳn ApEn.
+
+---
+
+**Bảng Tóm tắt Hệ quả Vi phạm**
+
+| Hạng mục Giả định | Hệ quả khi vi phạm trong phân tích thực tế |
+| :--- | :--- |
+| **Pair-centric & Recurrence** | Thuật toán dừng hoạt động, trả về NaN thay vì đưa ra kết quả sai lệch. |
+| **Overlapping Templates** | Gây ra sai số phụ thuộc (bias) rất nhỏ, hoàn toàn xứng đáng với mức giảm phương sai đạt được. |
+| **Sufficient Matches & CI** | Phương sai bùng nổ, biên độ lỗi phình to bất thường cảnh báo giới hạn tính toán của tham số. |
+| **Quasi-Stationarity** | Giá trị Entropy mất đi ý nghĩa đại diện nếu dữ liệu nhiễu loạn hoặc đổi pha liên tục. |
+| **Relative Consistency** | Đảo lộn kết luận so sánh lâm sàng (SampEn cực kỳ hiếm gặp, ApEn thường xuyên mắc phải). |
