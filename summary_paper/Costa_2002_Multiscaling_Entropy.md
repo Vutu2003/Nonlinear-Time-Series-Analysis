@@ -91,7 +91,13 @@ $$y^{(\tau)}_j = \frac{1}{\tau} \sum_{i=(j-1)\tau+1}^{j\tau} x_i \quad \text{v�
 $$\sum_{\tau=1}^{\tau_{max}} O\left(\frac{N^2}{\tau^2}\right)$$
 *   Vì chuỗi $\sum \frac{1}{\tau^2}$ hội tụ, tổng chi phí tính toán thực tế của toàn bộ quy trình MSE lớn hơn SampEn đơn thang đo không quá nhiều.
 *   **Chiến lược tối ưu hóa (Optimizations):** Tùy thuộc vào phần cứng và kích thước dữ liệu, lập trình viên không nên dùng vòng lặp thuần. Các lựa chọn thay thế mạnh mẽ bao gồm: NumPy Vectorization (Broadcasting), Numba JIT, KD-Tree/Ball-tree, hoặc tăng tốc tính toán song song bằng GPU.
-*   
+
+### 3.5. Tác động của Coarse-Graining lên White Noise và 1/f Noise
+
+- **White Noise:** White noise gồm các dao động hoàn toàn độc lập và không có tương quan theo thời gian. Khi thực hiện **coarse-graining**, phép lấy trung bình trên các cửa sổ không chồng lấp sẽ triệt tiêu dần các dao động ngẫu nhiên này, làm giảm phương sai và loại bỏ phần lớn thông tin tần số cao. Kết quả là tín hiệu trở nên ngày càng đều đặn hơn, khiến giá trị **Sample Entropy giảm nhanh** khi thang đo (scale) tăng.
+
+- **1/f Noise:** Ngược lại, 1/f noise chứa các **tương quan dài hạn (long-range correlations)** trải rộng trên nhiều thang thời gian. Quá trình coarse-graining chỉ loại bỏ các dao động tần số cao nhưng vẫn bảo toàn cấu trúc tương quan ở tần số thấp. Do đó, tín hiệu sau khi làm thô vẫn duy trì các mẫu động lực học phức tạp, khiến **Sample Entropy gần như không thay đổi** khi tăng thang đo. Đây chính là dấu hiệu của một hệ thống có **độ phức tạp đa thang đo (multiscale complexity)**. 
+-   
 # 4. Validation (Kiểm chứng Thống kê và Thực nghiệm)
 
 ### 4.1. Assumptions (Các giả định nền tảng)
