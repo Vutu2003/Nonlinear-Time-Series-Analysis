@@ -137,3 +137,58 @@ Dựa trên triết lý này, dự án hoàn toàn có thể được cấu trú
 *   **Phá vỡ giới hạn Entropy Đơn thang đo:** Bác bỏ phương pháp đánh giá "độ đều đặn" thô sơ (ApEn/SampEn tại scale 1). Chứng minh thông tin chẩn đoán cốt lõi nằm ở cấu trúc liên kết đa quy mô của PPG.
 *   **Mở rộng Thuyết "Complexity-Loss":** Tiên phong chứng minh sự sụp đổ độ phức tạp không chỉ xuất hiện ở bệnh lý/lão hóa mãn tính, mà còn xảy ra ở một trạng thái nhận thức chuyển tiếp, tạm thời (transient cognitive state) như sự mệt mỏi/thiếu ngủ.
 *   **Nâng tầm Tín hiệu PPG:** Hợp thức hóa PPG không chỉ là dao động cơ học để đếm nhịp tim, mà là một hệ thống mang cấu trúc thông tin phân tầng sinh học tinh vi.
+*   
+
+# 8. Cẩm nang Thực chiến Xử lý PPG: Tính Robustness của MSE (Appendix B)
+
+Phần này không liệt kê thuật toán theo hướng "hiện tượng $\rightarrow$ giải pháp", mà phân tích theo triết lý "nguyên nhân $\rightarrow$ cơ chế $\rightarrow$ hệ quả" để hiểu rõ *tại sao* mỗi quyết định trong pipeline lại được đưa ra. 
+
+## 8.1. Độ dài dữ liệu ($N$)
+*   **Core Insight:** Chuỗi coarse-grained không phải là một đoạn cắt ngắn (subset) của chuỗi gốc. Nó là chuỗi tổng hợp (aggregation) chứa thông tin tích lũy của toàn bộ tín hiệu. $\rightarrow$ Vì vậy, MSE ít nhạy cảm với việc giảm chiều dài dữ liệu hơn là thuật toán SampEn đơn thuần.
+*   **Practical Guideline:** Dữ liệu ngắn làm sai số thống kê tăng nhanh (đặc biệt với tín hiệu có tương quan dài hạn như $1/f$). Tuy nhiên, nhờ cơ chế bảo toàn thông tin của coarse-graining, bạn chỉ cần duy trì độ dài cửa sổ khoảng $N = 1000 - 2000$ điểm (15-30 phút PPG) là đủ để giữ vững tính nhất quán tương đối của đồ thị đến scale $\tau = 10$.
+
+## 8.2. Nhiễu trắng chồng chập (White Noise / ADC Noise)
+*   **Core Insight:** Nhiễu trắng ngẫu nhiên chỉ thống trị ở các scale nhỏ. Phép toán coarse-graining thực chất hoạt động như một bộ lọc thông thấp (low-pass filter) tự nhiên. $\rightarrow$ Khi scale tăng, ảnh hưởng của white noise giảm nhanh hơn rất nhiều so với ảnh hưởng của các tương quan dài hạn (động lực học bản chất).
+*   **Practical Guideline:** Nếu tín hiệu PPG có SNR (tỷ lệ tín hiệu/nhiễu) thấp, hãy ưu tiên trích xuất đặc trưng và phân tích ở các scale lớn, nơi nhiễu cao tần đã được coarse-graining làm suy giảm đáng kể.
+
+## 8.3. Điểm dị thường (Outliers / Motion Artifacts)
+*   **Core Insight:** Outlier (như nhiễu chuyển động biên độ lớn) *không* trực tiếp phá hỏng cấu trúc động lực học cốt lõi của chuỗi. Outlier chỉ phá hỏng việc ước lượng độ lệch chuẩn (SD), từ đó làm phình to tham số dung sai $r$. $\rightarrow$ Hệ quả là làm sai lệch hoàn toàn thống kê so khớp (matching statistics), kéo sụt đồ thị MSE một cách giả tạo.
+*   **The Trick (Costa Trick):** Không cần các thuật toán tái tạo/nội suy phức tạp, chỉ cần:
+    1.  Lọc ngưỡng (Artifact Detection) để tạo ra chuỗi sạch tạm thời.
+    2.  Estimate $r$ từ chuỗi sạch này ($r_{clean} = 0.15 \times SD_{clean}$).
+    3.  **Run MSE on Original Signal:** Áp dụng tham số $r_{clean}$ để chạy MSE trên *chính chuỗi PPG thô ban đầu*. Đồ thị sẽ tự hội tụ chuẩn xác.
+
+## 8.4. Tần số lấy mẫu hữu hạn (Sampling Frequency)
+*   **Core Insight:** Sai số định vị thời gian (do tần số lấy mẫu thấp tạo ra) thực chất chỉ nằm ở hai đầu mút của cửa sổ coarse-graining. Khi tính trung bình, sai số này được chia đều cho $\tau$. $\rightarrow$ Scale $\tau$ càng lớn, thuật toán càng ít nhạy cảm với giới hạn của tần số lấy mẫu.
+*   **Practical Guideline:** Sai số định vị sẽ khiến SampEn bị đánh giá thấp ở scale 1, nhưng độ chính xác sẽ tự động hội tụ và bù đắp ở các scale tiếp theo.
+
+---
+
+## 8.5. Robustness Summary
+Costa không chứng minh MSE hoàn toàn miễn nhiễm với nhiễu. Ông chứng minh một bức tranh thực tế hơn rất nhiều:
+*   **Noise** chỉ ảnh hưởng ở scale nhỏ.
+*   **Outlier** chủ yếu làm sai tham số $r$.
+*   **Sampling frequency** ảnh hưởng ít dần theo scale.
+*   **Coarse-graining** bảo toàn nhiều thông tin hơn việc chỉ cắt ngắn tín hiệu.
+$\rightarrow$ **Kết luận:** MSE là một framework có khả năng chống chịu (robust) cực tốt, hoàn toàn phù hợp để triển khai trên các điều kiện đo lường không lý tưởng của thiết bị đeo thực tế (wearables).
+
+---
+
+## 8.6. Pipeline Xử lý PPG Thực chiến
+
+Dựa trên các insight trên, kiến trúc xử lý tín hiệu hoàn chỉnh cho dự án được thiết kế như sau:
+
+```text
+[Raw PPG] 
+   │
+   ├──> Artifact Detection (Only estimate SD_clean)
+   │
+   ├──> Estimate r (r = 0.15 * SD_clean)
+   │
+   ├──> Run MSE on ORIGINAL SIGNAL (using estimated r)
+   │
+   ├──> Multiscale Curve (Bỏ qua nhiễu ở các scale nhỏ)
+   │
+   ├──> Dynamic Features (AUC, Slope, Plateau tại các scale lớn)
+   │
+   └──> Statistical Analysis / ML Classifier
