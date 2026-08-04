@@ -55,3 +55,29 @@
 *   **Darkness Histogram:** Công cụ đếm mật độ điểm lặp theo khoảng cách $|i-j|$ được đề xuất để định lượng hiện tượng trôi, khắc phục giới hạn của mắt người trong việc nhận biết các thay đổi sắc độ nhỏ[cite: 1].
 *   **Giới hạn:** Phụ thuộc vào quan sát mắt thường[cite: 1]. Việc phân định giữa cấu trúc vĩ mô và vi mô đôi khi khó khăn, điển hình như kết cấu bàn cờ có thể mở rộng ra quy mô lớn[cite: 1].
 *   **Kết luận:** RP chứng minh được giá trị cốt lõi là một công cụ chẩn đoán trực quan giúp bộc lộ các cấu trúc thời gian tinh tế, hoạt động hiệu quả ngay cả khi các giả định nền tảng không được thỏa mãn[cite: 1].
+*   
+
+
+## Ghi chú Độc lập: Diễn giải Vật lý các cấu trúc trong Recurrence Plot
+
+### 1. Nguyên lý phân cấp cốt lõi
+Ý nghĩa vật lý của RP không nằm ở từng điểm đen (một lần lặp), mà ở cách các sự kiện đó tạo thành các cấu trúc tương quan. 
+**Hệ phân cấp diễn giải:**
+State $\rightarrow$ Recurrence Event $\rightarrow$ Texture $\rightarrow$ Typology $\rightarrow$ Dynamics
+
+### 2. Ý nghĩa Động lực học & Vật lý của các Cấu trúc (Textures)
+
+| Cấu trúc | Ý nghĩa Toán học | Ý nghĩa Động lực học | Ý nghĩa Vật lý |
+| :--- | :--- | :--- | :--- |
+| **Single Point** | Hai trạng thái gần nhau ($x_i \approx x_j$). | Một recurrence. | Hệ tình cờ ghé lại một vùng trạng thái. |
+| **Diagonal Line** | Hai quỹ đạo tiến hóa song song ($x_{i+k} \approx x_{j+k}$). | Deterministic evolution. | Tính tất định: Hệ lặp lại một *quy luật tiến hóa*. Độ dài tỷ lệ nghịch với Lyapunov exponent. |
+| **Vertical / Horizontal Line** | Trạng thái gần như không đổi ($x_i \approx x_j \approx x_{j+1} \dots$). | Trapping. | Hệ bị "mắc kẹt" (laminar, metastable) ở một miền trạng thái. |
+| **Checkerboard** | Luân phiên quay lại nhiều vùng. | Structured oscillation. | Dao động có tổ chức quanh các điểm cân bằng. |
+| **Homogeneous Field** | Mật độ lặp ổn định. | Stationary dynamics. | Quy luật phân bố xác suất không đổi theo thời gian. |
+| **Fading Pattern** | Mật độ lặp giảm theo $|i-j|$. | Parameter drift. | Sự trôi/thay đổi chậm: Quỹ đạo dịch chuyển sang miền mới. |
+| **White Bands** | Không có sự kiện lặp. | Regime change. | Chuyển pha, rẽ nhánh (bifurcation), thay đổi động lực học đột ngột. |
+
+### 3. Góc nhìn tổng quát
+*   RP không vẽ hình dáng của attractor, mà vẽ **hình học của các sự kiện hồi quy**.
+*   Các điểm đen (recurrence event) $\rightarrow$ Đường chéo (evolution event) $\rightarrow$ Vùng đồng nhất (stationary process) $\rightarrow$ Vùng nhạt dần (drifting process).
+*   Góc nhìn này là cầu nối Topology $\rightarrow$ Dynamical Systems $\rightarrow$ Statistical Physics, tạo tiền đề để RQA (1992) lượng hóa các cấu trúc này.
