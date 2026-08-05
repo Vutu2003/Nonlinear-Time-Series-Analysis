@@ -458,8 +458,6 @@ def plot_heatmap(matrix: np.ndarray, title: str, x_labels: list, y_labels: list)
 # 6. PAPER WRAPPER MODULE (Executable Paper)
 # ==========================================
 
-from dataclasses import dataclass
-
 """
 This wrapper reproduces the experimental workflow reported in 
 Zbilut & Webber (1992). 
