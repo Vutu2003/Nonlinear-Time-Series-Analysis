@@ -172,49 +172,121 @@ def calculate_percent_recurrence(R: np.ndarray) -> float:
     return float((recurrence_points_upper / possible_points_upper) * 100.0)
 
 
-def _extract_diagonal_line_lengths(R: np.ndarray, min_length: int = 2) -> np.ndarray:
+# def _extract_diagonal_line_lengths(R: np.ndarray, min_length: int = 2) -> np.ndarray:
+#     """
+#     Extracts the lengths of all diagonal lines formed by recurrence points.
+#     Scans only the upper triangle (k > 0) due to matrix symmetry.
+#     Uses vectorized Run-Length Encoding logic for O(N^2) performance.
+    
+#     Time Complexity: ~O(N^2)
+#     Memory Complexity: O(N) for storing lengths
+    
+#     Parameters
+#     ----------
+#     R : np.ndarray
+#         2D binary recurrence matrix.
+#     min_length : int
+#         Minimum number of points required to define a valid line.
+        
+#     Returns
+#     -------
+#     np.ndarray
+#         1D array containing the lengths of valid diagonal lines from the upper triangle.
+#     """
+#     n_samples = R.shape[0]
+#     lengths = []
+    
+#     for k in range(1, n_samples):
+#         diag = np.diagonal(R, offset=k)
+        
+#         if not np.any(diag):
+#             continue
+            
+#         padded_diag = np.pad(diag, pad_width=1, mode='constant', constant_values=0)
+#         diffs = np.diff(padded_diag)
+#         starts = np.where(diffs == 1)[0]
+#         ends = np.where(diffs == -1)[0]
+        
+#         line_lengths = ends - starts
+#         valid_lengths = line_lengths[line_lengths >= min_length]
+        
+#         if valid_lengths.size > 0:
+#             lengths.extend(valid_lengths)
+            
+#     return np.array(lengths, dtype=np.int32)
+
+def _extract_diagonal_line_lengths(
+    R: np.ndarray,
+    min_length: int = 2
+) -> np.ndarray:
     """
-    Extracts the lengths of all diagonal lines formed by recurrence points.
-    Scans only the upper triangle (k > 0) due to matrix symmetry.
-    Uses vectorized Run-Length Encoding logic for O(N^2) performance.
-    
-    Time Complexity: ~O(N^2)
-    Memory Complexity: O(N) for storing lengths
-    
+    Extract the lengths of all diagonal line segments in the recurrence matrix.
+
+    Only diagonals above the Line of Identity (LOI) are scanned because
+    the recurrence matrix is symmetric.
+
     Parameters
     ----------
     R : np.ndarray
-        2D binary recurrence matrix.
-    min_length : int
-        Minimum number of points required to define a valid line.
-        
+        Binary recurrence matrix.
+    min_length : int, default=2
+        Minimum number of consecutive recurrence points required to define
+        a valid diagonal line.
+
     Returns
     -------
     np.ndarray
-        1D array containing the lengths of valid diagonal lines from the upper triangle.
+        1D array containing the lengths of all detected diagonal lines.
     """
+
+    if min_length < 2:
+        raise ValueError("min_length must be >= 2.")
+
     n_samples = R.shape[0]
     lengths = []
-    
+
+    # Scan every upper diagonal (LOI excluded)
     for k in range(1, n_samples):
-        diag = np.diagonal(R, offset=k)
-        
+
+        # IMPORTANT:
+        # Convert to signed integer before np.diff().
+        # Otherwise uint8 causes underflow (1->0 becomes 255 instead of -1).
+        diag = np.diagonal(R, offset=k).astype(np.int32)
+
+        # Skip empty diagonals
         if not np.any(diag):
             continue
-            
-        padded_diag = np.pad(diag, pad_width=1, mode='constant', constant_values=0)
-        diffs = np.diff(padded_diag)
-        starts = np.where(diffs == 1)[0]
-        ends = np.where(diffs == -1)[0]
-        
-        line_lengths = ends - starts
-        valid_lengths = line_lengths[line_lengths >= min_length]
-        
-        if valid_lengths.size > 0:
-            lengths.extend(valid_lengths)
-            
-    return np.array(lengths, dtype=np.int32)
 
+        # Pad with zeros to detect lines touching both ends
+        padded = np.pad(
+            diag,
+            pad_width=1,
+            mode="constant",
+            constant_values=0,
+        )
+
+        diff = np.diff(padded)
+
+        starts = np.where(diff == 1)[0]
+        ends = np.where(diff == -1)[0]
+
+        # RLE sanity check
+        assert len(starts) == len(ends), (
+            f"Run-Length Encoding failed "
+            f"(offset={k}, starts={len(starts)}, ends={len(ends)})"
+        )
+
+        line_lengths = ends - starts
+
+        valid = line_lengths[line_lengths >= min_length]
+
+        if valid.size > 0:
+            lengths.extend(valid.tolist())
+
+    if len(lengths) == 0:
+        return np.empty(0, dtype=np.int32)
+
+    return np.asarray(lengths, dtype=np.int32)
 
 def calculate_percent_line(R: np.ndarray, min_length: int = 2) -> float:
     """
@@ -556,8 +628,8 @@ def run_zbilut1992(
         plot_percent_rec_surface(d_list, tau_list, rec_matrix)
         plot_percent_line_surface(d_list, tau_list, line_matrix)
         
-        plot_heatmap(rec_matrix, "Heatmap: %REC", x_labels=tau_list, y_labels=d_list)
-        plot_heatmap(line_matrix, "Heatmap: %LINE", x_labels=tau_list, y_labels=d_list)
+        # plot_heatmap(rec_matrix, "Heatmap: %REC", x_labels=tau_list, y_labels=d_list)
+        # plot_heatmap(line_matrix, "Heatmap: %LINE", x_labels=tau_list, y_labels=d_list)
         
         print("Pipeline execution complete.")
     
