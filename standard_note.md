@@ -14,9 +14,16 @@ Keywords
 - Mathematical Foundation
 
 # 3. How
-- Algorithm
-- End-to-End Pipeline
-- Implementation Notes
+
+3.1 Algorithm
+
+3.2 Mathematical Formulation
+
+3.3 End-to-End Pipeline
+
+3.4 Computational Complexity (nếu có)
+
+3.5 Implementation Notes
 
 # 4. Validation
 - Assumptions
