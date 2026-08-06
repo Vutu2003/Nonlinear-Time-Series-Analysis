@@ -25,11 +25,16 @@ Keywords
 
 3.5 Implementation Notes
 
-# 4. Validation
+
+# 4. Experimentse
+- Setups
+- Reeults
+- Dicussion
+- 
+# 5. Validation
 - Assumptions
-- Experiments
 - Limitations
 
-# 5. My Research
+# 6. My Research
 - Research Ideas
 - Knowledge Contribution
