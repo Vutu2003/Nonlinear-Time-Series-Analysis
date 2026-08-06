@@ -1,3 +1,46 @@
+"""
+============================================================
+Recurrence Quantification Analysis (RQA) - Webber & Zbilut (1994)
+============================================================
+
+This module provides a minimal end-to-end implementation of the
+Recurrence Quantification Analysis (RQA) methodology introduced by
+Webber & Zbilut (1994).
+
+Unlike the 1992 implementation, which focused on topological unfolding
+through parameter sweeps and response surface visualization, this module
+implements the five core quantitative descriptors proposed in 1994:
+
+    • Percent Recurrence (%REC)
+    • Percent Determinism (%DET)
+    • Entropy (ENT)
+    • Ratio (DET / REC)
+    • Trend
+
+The implementation follows the original workflow:
+
+    Time Series
+        ↓
+    Phase-Space Reconstruction
+        ↓
+    Pairwise Distance Matrix
+        ↓
+    Binary Recurrence Matrix
+        ↓
+    Diagonal Line Extraction
+        ↓
+    RQA Quantification
+        ↓
+    RQAResult
+
+The wrapper `run_webber1994()` is designed as the computational core for
+Sliding Window RQA, where each window is transformed into a five-dimensional
+feature vector describing the local dynamics of the underlying system.
+
+This implementation prioritizes algorithmic clarity and faithfulness to the
+original publication over compatibility with modern RQA libraries.
+"""
+
 import numpy as np
 from scipy.spatial.distance import cdist
 from dataclasses import dataclass
