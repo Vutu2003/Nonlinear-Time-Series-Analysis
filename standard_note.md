@@ -25,13 +25,12 @@ Keywords
 
 3.5 Implementation Notes
 
-
 # 4. Experimentse
 - Setups
 - Reeults
 - Dicussion
 - 
-# 5. Validation
+# 5. Conclusion
 - Assumptions
 - Limitations
 
