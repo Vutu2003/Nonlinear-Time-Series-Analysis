@@ -143,3 +143,28 @@ Geometry Extraction
 * **Thuật toán đếm:** Sử dụng RLE (Run-Length Encoding) hoặc `np.diff` dọc theo các cột để đếm chiều dài hiệu quả.
 * **Data Type Safety:** Ép kiểu Recurrence Matrix (`bool` hoặc `uint8`) về `int32` trước khi dùng `np.diff` để tránh lỗi underflow và đảm bảo phát hiện chính xác các điểm bắt đầu/kết thúc.
 * **Guard Clauses:** Phải xử lý trường hợp biên bằng cách trả về $0.0$ nếu không có đường dọc nào đạt $v \ge v_{min}$ để ngăn lỗi `ZeroDivisionError` khi tính $\Lambda$ và $T$.
+
+
+# 4. Experiments
+
+## - Setups
+*   **Benchmark Ground Truth:** Sử dụng bản đồ Logistic ($x_{n+1} = a x_n(1 - x_n)$) làm hệ quy chiếu toán học có đáp án lý thuyết đã biết để kiểm chứng khả năng phát hiện chuyển pha của các chỉ số RQA mới.
+*   **Dải tham số:** Khảo sát $a \in [3.5, 4.0]$ với $\Delta a = 0.0005$; loại bỏ 1000 bước lặp đầu tiên (transients) để quỹ đạo thực sự ổn định.
+*   **Không gian pha:** Thiết lập chiều nhúng $m=1$ (do Logistic map vốn là hệ động lực một chiều), độ trễ $\tau=1$, và ngưỡng bán kính $\epsilon=0.1\sigma$.
+
+## - Results
+*   **Phân tích trực quan (Hình 2):**
+        *   Trạng thái tuần hoàn ($a=3.830$): RP được chi phối bởi các đường chéo đều đặn; các cấu trúc dọc gần như không xuất hiện.
+        *   Trạng thái laminar/gộp băng ($a=3.679$): RP bị chiếm giữ bởi các khối đen đặc kéo dài theo chiều dọc và ngang, minh họa rõ nét sự lưu trú.
+        *   Trạng thái hỗn loạn hoàn toàn ($a=4.000$): RP đồng nhất, chứa chủ yếu điểm cô lập, vắng bóng các cấu trúc vạch.
+*   **Phân tích định lượng (Hình 3):**
+        *   **RQA truyền thống:** Các chỉ số $\Delta$ và $L_{max}$ tạo đỉnh ở các cửa sổ tuần hoàn nhưng hoàn toàn phẳng lặng (bị "mù") tại các giao điểm siêu quỹ đạo (chaos-chaos transitions).
+        *   **RQA đề xuất:** Các chỉ số $\Lambda$, $T$, và $V_{max}$ triệt tiêu tại các pha tuần hoàn do không tồn tại trạng thái laminar, nhưng bứt phá tạo thành các đỉnh sắc nét trùng khớp tuyệt đối với các mốc chuyển pha hỗn loạn - hỗn loạn.
+        *   **Hiện tượng nhảy băng:** Tại vùng $a < 3.678$, quỹ đạo phải nhảy liên tục giữa hai băng hỗn loạn khiến hệ không thể lưu trú, dẫn đến $T$ và $V_{max}$ triệt tiêu về 0.
+
+## - Discussion
+*   **Mở rộng không gian thông tin:** Đóng góp quan trọng nhất của phương pháp không nằm ở việc thay thế các chỉ số cũ, mà ở việc khai phá một chiều thông tin động lực học hoàn toàn mới bị bỏ ngỏ trong RQA cổ điển.
+*   **Bổ sung thay vì cạnh tranh:** Bài báo không chứng minh $\Lambda > DET$. Thực chất, $DET$ đo lường khả năng dự báo (Predictability), còn $\Lambda$ đo lường khả năng lưu trú (Persistence). Chúng là hai thước đo trực giao và bổ trợ hoàn hảo cho nhau.
+*   **Mã hóa động lực học qua hình học:** Hình học của RP không chỉ là biểu diễn trực quan, mà bản thân các hình thái khác nhau (chéo, dọc) đã trực tiếp mã hóa các cơ chế động lực khác biệt của hệ thống.
+*   **Paradigm Shift:** Thực nghiệm chứng minh việc chuyển đổi đối tượng thống kê từ phân bố đường chéo $P(l)$ sang phân bố đường dọc $P(v)$ đã mở rộng trọn vẹn lăng kính của RQA từ cơ chế tiến hóa (evolution) sang cơ chế lưu trú (laminarity) của hệ động lực.
+
