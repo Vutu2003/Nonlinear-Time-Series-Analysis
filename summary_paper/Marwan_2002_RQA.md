@@ -169,9 +169,60 @@ Geometry Extraction
 *   **Paradigm Shift:** Thực nghiệm chứng minh việc chuyển đổi đối tượng thống kê từ phân bố đường chéo $P(l)$ sang phân bố đường dọc $P(v)$ đã mở rộng trọn vẹn lăng kính của RQA từ cơ chế tiến hóa (evolution) sang cơ chế lưu trú (laminarity) của hệ động lực.
 
 ## - Clinical Application (HRV & VT Prediction)
-*   **Thiết lập thực nghiệm:** Phân tích dữ liệu biến thiên nhịp tim (HRV) gồm 1000 nhịp từ máy khử rung tim (ICD) của bệnh nhân suy tim, so sánh giữa trạng thái kiểm soát (Control) và ngay trước cơn loạn nhịp thất (Before VT), với $m=6, \tau=1, \epsilon=110$ ms[cite: 1].
+*   **Thiết lập thực nghiệm:** Phân tích dữ liệu biến thiên nhịp tim (HRV) gồm 1000 nhịp từ máy khử rung tim (ICD) của bệnh nhân suy tim, so sánh giữa trạng thái kiểm soát (Control) và ngay trước cơn loạn nhịp thất (Before VT), với $m=6, \tau=1, \epsilon=110$ ms.
 *   **Biểu hiện trực quan (Hình 4):**
-    *   *Trạng thái Control:* Nhịp tim biến thiên linh hoạt (600-900 ms), RP thông thoáng với các khối đen nhỏ ($V_{max} = 117$), thể hiện cơ chế "hỗn loạn lành mạnh" và không bị mắc kẹt[cite: 1].
-    *   *Trạng thái Before VT:* Nhịp tim suy giảm biến thiên, đập phẳng lặng đơn điệu[cite: 1]. RP bị thống trị bởi các khối chữ nhật đen khổng lồ ($V_{max} = 242$), chứng tỏ quỹ đạo bị "bẫy" vào các pha laminar kéo dài do mất đi sự phức tạp động lực học trước khi sụp đổ[cite: 1].
-*   **Sức mạnh thống kê (Bảng I):** Trong khi RQA chéo ($L_{max}$) thất bại trong việc phân biệt hai nhóm ở chiều nhúng thấp ($p > 0.05$ tại $m=3$), RQA dọc ($V_{max}$) bộc lộ độ nhạy bén vượt trội với mức ý nghĩa thống kê cực kỳ mạnh mẽ (**, $p < 0.01$) tại các chiều nhúng cao ($m=6, 9, 12$)[cite: 1].
-*   **Mở rộng phân tích chuyển pha sinh lý:** Bản chất của sự xuất hiện các khối chữ nhật đen là chỉ báo vật lý cho sự suy kiệt cơ chế tự điều hòa[cite: 1]. Quá trình chuyển pha hỗn loạn - hỗn loạn này mang cơ chế tương đồng với sự dịch chuyển từ trạng thái tỉnh táo sang buồn ngủ, khi hệ thần kinh tự chủ bị ức chế[cite: 1]. Bằng cách áp dụng cửa sổ trượt trực tiếp lên chuỗi tín hiệu quang thể tích (PPG), sự đột biến của các chỉ số cấu trúc dọc như Laminarity và Trapping Time sẽ đóng vai trò như một bộ kích hoạt (trigger) nhạy bén, cho phép phát hiện sớm các pha laminar sinh lý để cảnh báo trạng thái ngủ gật thời gian thực[cite: 1].
+    *   *Trạng thái Control:* Nhịp tim biến thiên linh hoạt (600-900 ms), RP thông thoáng với các khối đen nhỏ ($V_{max} = 117$), thể hiện cơ chế "hỗn loạn lành mạnh" và không bị mắc kẹt.
+    *   *Trạng thái Before VT:* Nhịp tim suy giảm biến thiên, đập phẳng lặng đơn điệu. RP bị thống trị bởi các khối chữ nhật đen khổng lồ ($V_{max} = 242$), chứng tỏ quỹ đạo bị "bẫy" vào các pha laminar kéo dài do mất đi sự phức tạp động lực học trước khi sụp đổ.
+*   **Sức mạnh thống kê (Bảng I):** Trong khi RQA chéo ($L_{max}$) thất bại trong việc phân biệt hai nhóm ở chiều nhúng thấp ($p > 0.05$ tại $m=3$), RQA dọc ($V_{max}$) bộc lộ độ nhạy bén vượt trội với mức ý nghĩa thống kê cực kỳ mạnh mẽ (**, $p < 0.01$) tại các chiều nhúng cao ($m=6, 9, 12$).
+*   **Mở rộng phân tích chuyển pha sinh lý:** Bản chất của sự xuất hiện các khối chữ nhật đen là chỉ báo vật lý cho sự suy kiệt cơ chế tự điều hòa. Quá trình chuyển pha hỗn loạn - hỗn loạn này mang cơ chế tương đồng với sự dịch chuyển từ trạng thái tỉnh táo sang buồn ngủ, khi hệ thần kinh tự chủ bị ức chế. Bằng cách áp dụng cửa sổ trượt trực tiếp lên chuỗi tín hiệu quang thể tích (PPG), sự đột biến của các chỉ số cấu trúc dọc như Laminarity và Trapping Time sẽ đóng vai trò như một bộ kích hoạt (trigger) nhạy bén, cho phép phát hiện sớm các pha laminar sinh lý để cảnh báo trạng thái ngủ gật thời gian thực.
+*   
+
+# 5. Conclusion
+
+Công trình của Marwan et al. (2002) đã tạo ra bước ngoặt phương pháp luận khi đề xuất bộ ba phép đo độ phức tạp dựa trên cấu trúc dọc: Laminarity ($\Lambda$), Trapping Time ($T$), và Maximal Vertical Length ($V_{max}$). 
+
+Sự bổ sung này lấp đầy khoảng trống lớn của RQA truyền thống:
+*   **Lý thuyết động lực học:** Thay vì trực tiếp đo lường chuyển pha, bộ chỉ số dọc cho phép nhận diện và định lượng các trạng thái phiến (laminar states). Từ đó, chúng cung cấp một công cụ cực kỳ nhạy bén để khảo sát các vùng chuyển pha hỗn loạn - hỗn loạn (chaos-chaos transitions) – nơi RQA cổ điển hoàn toàn bị "mù".
+*   **Ứng dụng lâm sàng:** Ứng dụng thành công vào dữ liệu biến thiên nhịp tim (HRV) giúp phát hiện chính xác các pha laminar xuất hiện ngay trước cơn loạn nhịp thất ác tính (VT), mở ra tiềm năng dự báo sớm biến cố tim mạch.
+
+**Đóng góp triết học (Paradigm Shift):** 
+Về bản chất, Marwan et al. (2002) không thay đổi định nghĩa của Recurrence Plot mà mở rộng cách đọc thông tin hình học của nó. Nếu Webber (1994) biến các cấu trúc đường chéo thành những thước đo của khả năng tiến hóa (predictability), thì Marwan (2002) chứng minh rằng các cấu trúc dọc chứa một lớp thông tin độc lập về sự lưu trú (persistence) của hệ động lực. Hai họ chỉ số này không cạnh tranh mà bổ sung lẫn nhau, cùng tạo nên một mô tả toàn diện hơn về hành vi của các hệ phi tuyến.
+
+---
+
+## Assumptions (Giả định & Điều kiện vận hành)
+
+*   **Tái dựng không gian pha:** Giả định động học chuỗi thời gian đơn biến có thể khôi phục trong không gian Euclid qua định lý nhúng Takens ($m, \tau$).
+*   **Độ nhạy với Under-embedding (Láng giềng giả):** Các phép đo dọc cực kỳ nhạy cảm với chiều nhúng $m$. Nếu $m$ quá nhỏ, láng giềng giả tạo (false recurrences) sẽ sinh ra vô số cấu trúc dọc ảo trên RP, phá hỏng hoàn toàn kết quả lượng hóa.
+*   **Cân bằng ngưỡng bán kính ($\epsilon$):** Bắt buộc phải thỏa hiệp: $\epsilon$ đủ nhỏ để bắt được biến thiên tinh tế, nhưng đủ lớn để duy trì mật độ điểm hồi quy nhằm thống kê các cấu trúc liên tục (thực nghiệm chọn $\epsilon = 0.1\sigma$).
+*   **Độ phân giải thời gian (Temporal Resolution):** Việc tính toán cấu trúc dọc ngầm giả định dữ liệu có tần số lấy mẫu (sampling rate) đủ dày. Nếu lấy mẫu quá thưa, các trạng thái lưu trú sẽ bị đứt gãy thành các điểm cô lập, làm mất cấu trúc đường dọc.
+
+---
+
+## Limitations (Giới hạn nghiên cứu)
+
+*   **Quy mô mẫu lâm sàng hạn chế (Pilot Study):** Nghiên cứu mới dừng ở 24 ca VT và 24 ca đối chứng từ 17 bệnh nhân suy tim. Kết quả cần được xác thực trên các cơ sở dữ liệu lớn hơn.
+*   **Phân tích thống kê cơ bản:** Chưa thực hiện phân nhóm chi tiết (subdivisions) theo các biến số nhiễu như tuổi tác, giới tính, và bệnh lý nền tim mạch.
+*   **Ràng buộc khắt khe về chất lượng dữ liệu:** Thuật toán hiện tại không thể xử lý các chuỗi tachogram có >10% nhịp ngoại tâm thu thất, ca VT nhân tạo hoặc có máy tạo nhịp. Cần cải tiến để xử lý dữ liệu thực tế nhiễu hơn.
+*   **Khoảng trống giải mã cơ chế:** Mặc dù các chỉ số cấu trúc dọc, đặc biệt là $V_{max}$, cho thấy hiệu quả thực nghiệm và phân loại thống kê rất cao ($p < 0.01$), mối liên hệ định lượng chính xác giữa chúng với các cơ chế động lực học nền tảng (intermittency, band merging, chaos-chaos transitions) vẫn cần được nghiên cứu sâu hơn.
+*   
+
+# 6. My Research
+
+## 6.1 Research Ideas
+Sự đối ngẫu giữa Động lực tiến hóa (Evolution) của Webber (1994) và Động lực lưu trú (Persistence) của Marwan (2002) mở ra các hướng tiếp cận mới trong phân tích tín hiệu y sinh (PPG/PRV):
+
+*   **Mô hình hóa quá trình chuyển pha (Transition Modeling):** Đặt giả thuyết nghiên cứu (research hypothesis) rằng quá trình chuyển từ tỉnh táo sang buồn ngủ (Awake $\to$ Drowsy) đi kèm với sự gia tăng các pha laminar của hệ thần kinh tự chủ. Thông qua Sliding Window RQA, việc phân tích quỹ đạo biến thiên theo thời gian (Dynamics of Dynamics) của $DET(t)$ và $\Lambda(t)$ sẽ phác họa mô hình chuyển pha sinh lý thay vì chỉ gán nhãn tĩnh.
+*   **Chỉ báo cảnh báo sớm (Early Warning Indicators):** Sự gia tăng đột ngột của các chỉ số lưu trú ($\Lambda(t), T(t), V_{max}(t)$) có thể được kiểm chứng như những tín hiệu tiền triệu cho các cơn buồn ngủ ngắn (microsleeps), tương tự cách Marwan áp dụng trên dữ liệu dự báo loạn nhịp tim.
+*   **Không gian đặc trưng trực giao (Orthogonal Feature Engineering):** Nâng cấp vector đầu vào cho mô hình AI bằng việc kết hợp đồng thời Evolution Features (từ đường chéo) và Persistence Features (từ đường dọc). Khung đặc trưng kép này cung cấp bức tranh hoàn chỉnh về sự biến đổi độ phức tạp của hệ thống.
+
+## 6.2 Knowledge Contribution
+Luận án định hướng mang lại hai tầng đóng góp cốt lõi:
+
+*   **Tầng 1 - Phương pháp luận (Methodological Abstraction):** 
+    Nghiên cứu đề xuất và xem xét giả thuyết rằng sự buồn ngủ là một quá trình chuyển đổi động lực học (transition), nơi sự xuất hiện của các trạng thái laminar đóng vai trò tiền triệu. Bằng cách kết hợp Webber (1994) và Marwan (2002), luận án thiết lập hệ quy chiếu phân tích song song giữa Động lực tiến hóa (Predictability) và Động lực lưu trú (Laminarity) trên tín hiệu mạch đập.
+
+*   **Tầng 2 - Khung Động lực học Chuyển pha (Transition Dynamics Framework):**
+    Xây dựng một framework tổng quát để phân tích quá trình chuyển pha, vượt ra khỏi ranh giới của một phép đo cụ thể:
+    `Raw Signal $\to$ Sliding Window $\to$ Dynamic Features $\to$ Dynamics of Features $\to$ Transition Analysis`.
+    Cách tiếp cận này dịch chuyển bài toán từ việc đo lường tín hiệu sinh lý nguyên bản sang phân tích "nhịp điệu biến đổi của các cơ chế động lực học", tạo nền tảng thuật toán vững chắc để nhúng vào các thiết bị đeo (wearables) cảnh báo thời gian thực.
