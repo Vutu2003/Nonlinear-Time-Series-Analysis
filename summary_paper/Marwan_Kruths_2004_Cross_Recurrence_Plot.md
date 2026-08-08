@@ -129,3 +129,35 @@ Thay vì chỉ là ba phiên bản của cùng một thước đo, các chỉ s�
 1.  **$RR(t)$ (Existence - Sự tồn tại):** Hai hệ thống có thường xuyên chiếm hữu các trạng thái tương đồng tại độ trễ $t$ hay không?
 2.  **$DET(t)$ (Organization - Tính tổ chức):** Bao nhiêu phần trăm trong số các lần gặp gỡ đó được tổ chức thành các chuỗi tiến hóa đồng bộ (coherent diagonal structures)?
 3.  **$L(t)$ (Persistence - Tính bền vững):** Sự tiến hóa đồng bộ đó duy trì liên tục được bao lâu?
+
+### 5. Conclusion
+
+Phương pháp Biểu đồ hồi quy chéo (CRP) đã chuyển đổi bài toán đo lường sự tương đồng giữa hai chuỗi thời gian từ một giá trị thống kê toàn cục sang việc đo lường sự tương đồng động lực học như một hàm phụ thuộc vào độ trễ thời gian (temporal lag)[cite: 2]. Bộ ba chỉ số lượng hóa cung cấp các thông tin vật lý rành mạch: $RR(t)$ đo lường mật độ tái xuất hiện (recurrence), $DET(t)$ phản ánh mức độ tổ chức thành các quá trình tiến hóa song hành, và $L(t)$ lượng hóa thời gian duy trì sự tương đồng đó.
+
+Thông qua các thực nghiệm, CRP cho thấy năng lực khôi phục lại các khoảng trễ (known delays) trong dữ liệu nhiễu, phát hiện các mối quan hệ phi tuyến (nonlinear interrelations) mà tương quan tuyến tính bỏ sót, và nhận diện các tương tác theo độ trễ (lagged relationships) trong dữ liệu thực tế. Cụ thể, thay vì đưa ra các kết luận nhân quả tuyệt đối, CRP xác định các vị trí lag đặc trưng của interrelation; ví dụ, trong mô hình Lorenz-AR, các đỉnh cực đại đối xứng theo dấu phù hợp với bản chất chẵn của hàm liên kết ($x^2$), và trong dữ liệu khí hậu, phương pháp phát hiện các interrelation tương ứng với lag 0 và khoảng lag 5 tháng.
+
+---
+
+**Assumptions (Các giả định kỹ thuật)**
+
+1.  **Lựa chọn không gian pha phù hợp:** Các tham số nhúng như chiều nhúng $m$ và thời gian trễ $\tau$ phải được lựa chọn phù hợp với đặc tính động lực học của hệ thống. Các công cụ như láng giềng gần giả tạo (FNN) hay thông tin tương hỗ (MI) chỉ là phương pháp hỗ trợ lựa chọn tham số, không phải bản thân giả định toán học của CRP.
+2.  **Đồng nhất về thang đo thời gian (Time scale alignment):** CRP đòi hỏi hai hệ thống phải có ý nghĩa khi so sánh các chỉ số thời gian (temporal indices) với nhau. Nếu hai tín hiệu có tần số lấy mẫu (sampling rate) khác biệt, bắt buộc phải xử lý đồng bộ thời gian (temporal alignment/resampling) trước khi diễn giải ý nghĩa của các khoảng trễ (lag).
+
+---
+
+**Limitations (Các giới hạn phương pháp luận)**
+
+1.  **Sự phụ thuộc vào tham số nhúng và ngưỡng (Parameter Dependence):** Kết quả của CRP không chỉ phụ thuộc vào bản thân hai chuỗi tín hiệu mà còn bị chi phối mạnh bởi cách thiết lập không gian pha ($m$, $\tau$) và đặc biệt là ngưỡng cắt $\epsilon$. Sự thay đổi của $\epsilon$ sẽ trực tiếp làm thay đổi mật độ $RR(t)$ và toàn bộ cấu trúc đường chéo, đòi hỏi sự cẩn trọng cao độ khi xử lý các tín hiệu có biên độ dao động mạnh hoặc trôi đường nền (baseline drift).
+2.  **Độ trễ không đồng nghĩa với nhân quả (Lag does not imply causality):** Một đỉnh cực đại của CRP tại mốc $t^*$ chỉ cung cấp bằng chứng về một sự liên đới động lực học mạnh mẽ (strong interrelation at lag $t^*$) chứ không tự thân chứng minh được mối quan hệ nhân quả $X \rightarrow Y$.
+3.  **Không miễn nhiễm hoàn toàn với dữ liệu ngắn và phi dừng:** Mặc dù được thiết kế để xử lý tốt hơn các loại dữ liệu tự nhiên, CRP chỉ làm giảm bớt khó khăn chứ không loại bỏ hoàn toàn các sai lệch sinh ra từ dữ liệu quá ngắn hoặc có tính phi dừng cao (nonstationarity).
+4.  **Sự đứt gãy do nhiễu (Noise vulnerability):** Nhiễu mạnh làm đứt gãy các cấu trúc đường chéo dài, làm sụt giảm nghiêm trọng $DET(t)$ và $L(t)$. Tuy nhiên, $RR(t)$ ít phụ thuộc vào việc các điểm hồi quy có kết nối thành đường chéo dài hay không, nên nó bộc lộ tính bền bỉ (robust) tốt hơn trước nhiễu.
+
+---
+
+**Bức tranh Tổng thể Hệ sinh thái Recurrence Analysis**
+
+| Phương pháp | Đối tượng | Cấu trúc quét | Các chỉ số | Câu hỏi động lực học cốt lõi |
+| :--- | :--- | :--- | :--- | :--- |
+| **RP (Univariate)** | 1 hệ thống | Đường chéo (Diagonal) | $DET$, $L_{max}$, $L$ | Hệ thống tiến hóa (predictability) thế nào? |
+| **RP (Univariate)** | 1 hệ thống | Đường dọc (Vertical) | $\Lambda$, $T$, $V_{max}$ | Hệ thống lưu trú (laminarity) thế nào? |
+| **CRP (Bivariate)** | 2 hệ thống | Đường chéo theo lag | $RR(t)$, $DET(t)$, $L(t)$ | Hai hệ thống liên hệ động lực học ở lag nào? |
