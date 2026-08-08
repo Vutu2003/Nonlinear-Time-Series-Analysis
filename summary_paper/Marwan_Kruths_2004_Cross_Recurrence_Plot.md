@@ -105,4 +105,27 @@ Quá trình phân tích CRP vận hành theo một luồng trích xuất độ t
 
 > **Core Philosophy:** Về bản chất, CRP không thay đổi định nghĩa toán học của các chỉ số RQA cổ điển, mà mở rộng chúng thành các hàm phụ thuộc vào độ trễ thời gian. Chính sự thay đổi từ "một giá trị toàn cục" (scalar) sang "một hàm theo lag" (function) đã cho phép định vị chính xác thời điểm hai hệ thống đạt mức tương đồng động lực học lớn nhất.
 
+### 4. Experiments (Thực nghiệm)
+Công trình tiến hành kiểm chứng phương pháp CRP thông qua một "thang xác thực" (validation ladder) mang tính logic cao: từ kiểm tra độ bền bỉ với nhiễu, đến khả năng phát hiện liên kết phi tuyến, và cuối cùng là tính ứng dụng trên dữ liệu thực tế. 
 
+#### 4.1. Sóng tuần hoàn nhiễu nặng (Noise Robustness)
+*   **Thiết lập:** Hệ thống gồm sóng $f(t)$ và sóng $g(t)$ bị dịch pha (trễ $\pi/2$) kèm theo nhiễu trắng cộng tính cực kỳ nặng (SNR = 0.5). Mục tiêu là xem CRP có tìm lại được mốc trễ (lag) nguyên bản hay không.
+*   **Kết quả & Thảo luận:** Mặc dù nhiễu phá vỡ các đường chéo dài khiến trị số của $DET(t)$ và $L(t)$ sụt giảm, $RR(t)$ vẫn duy trì được đỉnh cực đại tại đúng mốc trễ $\pi/2$. Điều này chứng minh rằng CRP không nhất thiết phải tạo ra một đường chéo hoàn hảo mới phát hiện được quan hệ, và $RR$ có tính bền bỉ (robust) tốt hơn $DET$ và $L$ trong các kịch bản nhiễu làm đứt gãy cấu trúc không gian pha.
+
+#### 4.2. Hệ phi tuyến Lorenz - Autoregressive (Nonlinear Sensitivity)
+*   **Thiết lập:** Khảo sát một quá trình tự hồi quy (AR) $y_n$ bị dẫn dắt bởi bình phương thành phần $x$ của hệ hỗn loạn Lorenz ($y_n \sim \kappa x_n^2$). 
+*   **Kết quả & Thảo luận:** 
+    *   **Sự thất bại của tuyến tính:** Phép tương quan tuyến tính hoàn toàn bỏ sót mối quan hệ này. Lý do là vì quan hệ $x \rightarrow x^2$ làm mất dấu (ví dụ $x=2$ và $x=-2$ đều cho ra $4$), khiến hệ số tương quan triệt tiêu về xấp xỉ 0.
+    *   **Khám phá của CRP:** CRP không cố gắng ước lượng một đường thẳng tuyến tính, mà tìm kiếm xem trạng thái của hai hệ có tái xuất hiện tương đồng theo một độ trễ nào đó không. Kết quả, CRP phát hiện rõ ràng các mối liên hệ động lực học theo trễ (lagged interrelations) tại các mốc $0.05$, $+0.45$, và $-0.32$. Thực nghiệm này phân định rạch ròi ranh giới giữa tương quan (correlation) và sự phụ thuộc phi tuyến (nonlinear interrelation).
+
+#### 4.3. Ứng dụng dữ liệu khí hậu thực tế (Practical Applicability)
+*   **Thiết lập:** Khảo sát dữ liệu thực tế về chỉ số Dao động phương Nam (SOI - đại diện El Niño) và lượng mưa tại Jujuy (Argentina).
+*   **Kết quả & Thảo luận:** Thực nghiệm mang tính đối chiếu (comparative validation) cho thấy cross-correlation và mutual information biểu hiện rất yếu hoặc thất bại. Ngược lại, CRP cung cấp bằng chứng rõ ràng về các mối liên hệ động lực học theo độ trễ (lagged dynamical relationships): một tương tác đồng pha ở lag 0 và một tương tác nghịch pha ở lag 5. Các cực đại của CRP đóng vai trò là bằng chứng về sự liên đới động lực học, từ đó có thể kết hợp với kiến thức chuyên ngành để gợi ý các cơ chế nhân quả (causal mechanisms), thay vì tự thân chúng là một phép chứng minh nhân quả tuyệt đối.
+
+---
+
+### Tổng kết: Khung diễn giải bộ ba chỉ số CRP
+Thay vì chỉ là ba phiên bản của cùng một thước đo, các chỉ số $RR, DET, L$ của CRP phân rã sự tương tác thành 3 tầng câu hỏi vật lý:
+1.  **$RR(t)$ (Existence - Sự tồn tại):** Hai hệ thống có thường xuyên chiếm hữu các trạng thái tương đồng tại độ trễ $t$ hay không?
+2.  **$DET(t)$ (Organization - Tính tổ chức):** Bao nhiêu phần trăm trong số các lần gặp gỡ đó được tổ chức thành các chuỗi tiến hóa đồng bộ (coherent diagonal structures)?
+3.  **$L(t)$ (Persistence - Tính bền vững):** Sự tiến hóa đồng bộ đó duy trì liên tục được bao lâu?
