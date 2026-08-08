@@ -59,6 +59,11 @@ Mọi chỉ số định lượng đều bắt nguồn từ $P_t(l)$ – hàm ph
     *   Đại lượng này lượng hóa chính xác *khoảng thời gian duy trì liên tục sự tương đồng động lực học* giữa hai hệ thống.
     *   $$L(t) = \frac{\sum_{l=l_{min}}^{N-t} l P_t(l)}{\sum_{l=l_{min}}^{N-t} P_t(l)}$$
 *   
+| Đại lượng    | Ý nghĩa trực quan                                      | Câu hỏi nó trả lời                                                                         |
+| ------------ | ------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| **(RR(t))**  | Mật độ các điểm recurrence trên đường chéo tại lag (t) | *Hai hệ có thường xuyên ở trạng thái tương đồng tại lag này không?*                        |
+| **(DET(t))** | Tỷ lệ recurrence tạo thành **đường chéo liên tục**     | *Sự tương đồng đó có mang tính tiến hóa/dynamical, hay chỉ là các điểm trùng hợp rời rạc?* |
+| **(L(t))**   | Độ dài trung bình của các đường chéo hợp lệ            | *Khi hai hệ cùng tiến hóa, chúng duy trì sự tương đồng đó trong bao lâu?*                  |
 
 ### 3. How
 
