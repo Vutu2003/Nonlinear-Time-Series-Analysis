@@ -65,7 +65,7 @@ Mọi chỉ số định lượng đều bắt nguồn từ $P_t(l)$ – hàm ph
 | **(DET(t))** | Tỷ lệ recurrence tạo thành **đường chéo liên tục**     | *Sự tương đồng đó có mang tính tiến hóa/dynamical, hay chỉ là các điểm trùng hợp rời rạc?* |
 | **(L(t))**   | Độ dài trung bình của các đường chéo hợp lệ            | *Khi hai hệ cùng tiến hóa, chúng duy trì sự tương đồng đó trong bao lâu?*                  |
 
-### 3. How
+# 3. How
 
 #### 3.1 Algorithm
 Quá trình phân tích CRP vận hành theo một luồng trích xuất độ trễ (lag) rất tự nhiên:
@@ -105,7 +105,7 @@ Quá trình phân tích CRP vận hành theo một luồng trích xuất độ t
 
 > **Core Philosophy:** Về bản chất, CRP không thay đổi định nghĩa toán học của các chỉ số RQA cổ điển, mà mở rộng chúng thành các hàm phụ thuộc vào độ trễ thời gian. Chính sự thay đổi từ "một giá trị toàn cục" (scalar) sang "một hàm theo lag" (function) đã cho phép định vị chính xác thời điểm hai hệ thống đạt mức tương đồng động lực học lớn nhất.
 
-### 4. Experiments (Thực nghiệm)
+# 4. Experiments (Thực nghiệm)
 Công trình tiến hành kiểm chứng phương pháp CRP thông qua một "thang xác thực" (validation ladder) mang tính logic cao: từ kiểm tra độ bền bỉ với nhiễu, đến khả năng phát hiện liên kết phi tuyến, và cuối cùng là tính ứng dụng trên dữ liệu thực tế. 
 
 #### 4.1. Sóng tuần hoàn nhiễu nặng (Noise Robustness)
@@ -130,7 +130,7 @@ Thay vì chỉ là ba phiên bản của cùng một thước đo, các chỉ s�
 2.  **$DET(t)$ (Organization - Tính tổ chức):** Bao nhiêu phần trăm trong số các lần gặp gỡ đó được tổ chức thành các chuỗi tiến hóa đồng bộ (coherent diagonal structures)?
 3.  **$L(t)$ (Persistence - Tính bền vững):** Sự tiến hóa đồng bộ đó duy trì liên tục được bao lâu?
 
-### 5. Conclusion
+# 5. Conclusion
 
 Phương pháp Biểu đồ hồi quy chéo (CRP) đã chuyển đổi bài toán đo lường sự tương đồng giữa hai chuỗi thời gian từ một giá trị thống kê toàn cục sang việc đo lường sự tương đồng động lực học như một hàm phụ thuộc vào độ trễ thời gian (temporal lag). Bộ ba chỉ số lượng hóa cung cấp các thông tin vật lý rành mạch: $RR(t)$ đo lường mật độ tái xuất hiện (recurrence), $DET(t)$ phản ánh mức độ tổ chức thành các quá trình tiến hóa song hành, và $L(t)$ lượng hóa thời gian duy trì sự tương đồng đó.
 
@@ -163,7 +163,7 @@ Thông qua các thực nghiệm, CRP cho thấy năng lực khôi phục lại c
 | **CRP (Bivariate)** | 2 hệ thống | Đường chéo theo lag | $RR(t)$, $DET(t)$, $L(t)$ | Hai hệ thống liên hệ động lực học ở lag nào? |
 
 
-### 6. My Research
+# 6. My Research
 
 Dựa trên nền tảng của phương pháp CRP, hướng nghiên cứu sẽ được điều chỉnh từ việc đưa ra các "tuyên bố chắc chắn" sang việc "đặt giả thuyết", sử dụng CRP như một công cụ thăm dò các thay đổi động lực học trong quá trình chuyển pha sang trạng thái buồn ngủ.
 
