@@ -132,7 +132,7 @@ Thay vì chỉ là ba phiên bản của cùng một thước đo, các chỉ s�
 
 ### 5. Conclusion
 
-Phương pháp Biểu đồ hồi quy chéo (CRP) đã chuyển đổi bài toán đo lường sự tương đồng giữa hai chuỗi thời gian từ một giá trị thống kê toàn cục sang việc đo lường sự tương đồng động lực học như một hàm phụ thuộc vào độ trễ thời gian (temporal lag)[cite: 2]. Bộ ba chỉ số lượng hóa cung cấp các thông tin vật lý rành mạch: $RR(t)$ đo lường mật độ tái xuất hiện (recurrence), $DET(t)$ phản ánh mức độ tổ chức thành các quá trình tiến hóa song hành, và $L(t)$ lượng hóa thời gian duy trì sự tương đồng đó.
+Phương pháp Biểu đồ hồi quy chéo (CRP) đã chuyển đổi bài toán đo lường sự tương đồng giữa hai chuỗi thời gian từ một giá trị thống kê toàn cục sang việc đo lường sự tương đồng động lực học như một hàm phụ thuộc vào độ trễ thời gian (temporal lag). Bộ ba chỉ số lượng hóa cung cấp các thông tin vật lý rành mạch: $RR(t)$ đo lường mật độ tái xuất hiện (recurrence), $DET(t)$ phản ánh mức độ tổ chức thành các quá trình tiến hóa song hành, và $L(t)$ lượng hóa thời gian duy trì sự tương đồng đó.
 
 Thông qua các thực nghiệm, CRP cho thấy năng lực khôi phục lại các khoảng trễ (known delays) trong dữ liệu nhiễu, phát hiện các mối quan hệ phi tuyến (nonlinear interrelations) mà tương quan tuyến tính bỏ sót, và nhận diện các tương tác theo độ trễ (lagged relationships) trong dữ liệu thực tế. Cụ thể, thay vì đưa ra các kết luận nhân quả tuyệt đối, CRP xác định các vị trí lag đặc trưng của interrelation; ví dụ, trong mô hình Lorenz-AR, các đỉnh cực đại đối xứng theo dấu phù hợp với bản chất chẵn của hàm liên kết ($x^2$), và trong dữ liệu khí hậu, phương pháp phát hiện các interrelation tương ứng với lag 0 và khoảng lag 5 tháng.
 
@@ -161,3 +161,43 @@ Thông qua các thực nghiệm, CRP cho thấy năng lực khôi phục lại c
 | **RP (Univariate)** | 1 hệ thống | Đường chéo (Diagonal) | $DET$, $L_{max}$, $L$ | Hệ thống tiến hóa (predictability) thế nào? |
 | **RP (Univariate)** | 1 hệ thống | Đường dọc (Vertical) | $\Lambda$, $T$, $V_{max}$ | Hệ thống lưu trú (laminarity) thế nào? |
 | **CRP (Bivariate)** | 2 hệ thống | Đường chéo theo lag | $RR(t)$, $DET(t)$, $L(t)$ | Hai hệ thống liên hệ động lực học ở lag nào? |
+
+
+### 6. My Research
+
+Dựa trên nền tảng của phương pháp CRP, hướng nghiên cứu sẽ được điều chỉnh từ việc đưa ra các "tuyên bố chắc chắn" sang việc "đặt giả thuyết", sử dụng CRP như một công cụ thăm dò các thay đổi động lực học trong quá trình chuyển pha sang trạng thái buồn ngủ.
+
+#### 6.1. Research Hypotheses & Ideas (Giả thuyết và Ý tưởng)
+
+*   **Tương tác động lực học đa phương thức (Multi-modal Lagged Interrelations):** Ưu tiên sử dụng các cặp tín hiệu độc lập (như $EEG \leftrightarrow PPG$ hoặc $ECG \leftrightarrow PPG$) thay vì tách các thành phần từ cùng một nguồn PPG. CRP sẽ được dùng để trả lời câu hỏi: *Khi trạng thái thần kinh (thể hiện qua EEG) thay đổi, động lực học của hệ tim mạch/ngoại vi (PPG) có thay đổi theo một mối liên hệ thời gian (lag) đặc trưng nào không?*
+*   **Động lực học chuyển pha (Transition Dynamics & Windowing):** Không chỉ phân loại "tỉnh táo vs. buồn ngủ", nghiên cứu sẽ áp dụng kỹ thuật cửa sổ trượt (sliding window) lên bộ ba chỉ số $RR(t)$, $DET(t)$, $L(t)$. Cách tiếp cận này tạo ra không gian 2 chiều (Time vs. Lag), cho phép theo dõi *sự sụp đổ hoặc biến đổi của cấu trúc tiến hóa song hành* (collapse of parallel evolution) khi tài xế dần chìm vào giấc ngủ vi mô.
+*   **Giả thuyết về tính kháng nhiễu chuyển động (Motion Artifact Robustness Hypothesis):** Dựa trên phát hiện $RR(t)$ ít suy giảm hơn $DET(t)$ và $L(t)$ dưới tác động của nhiễu Gaussian, nghiên cứu đặt giả thuyết rằng $RR(t)$ có thể duy trì độ tin cậy tốt hơn khi đối mặt với các nhiễu chuyển động (motion artifacts) phức tạp thực tế trên tín hiệu PPG. 
+
+*(Lưu ý phương pháp luận: Tuyệt đối tránh gán ghép khái niệm "nhân quả" (causality). Đỉnh cực đại của CRP tại một mốc trễ $t$ chỉ được diễn giải là "có một mối liên đới động lực học mạnh mẽ tại độ trễ $t$", không phải là bằng chứng hệ này sinh ra hệ kia).*
+
+#### 6.2. Proposed Research Architecture (Kiến trúc Nghiên cứu)
+
+Khung nghiên cứu được thiết kế để tích hợp hài hòa cả RP đơn biến (Marwan 2002) và CRP đa biến (Marwan & Kurths 2002):
+
+```text
+                    Biomedical Signals
+                           │
+             ┌─────────────┴─────────────┐
+             │                           │
+       Single Signal             Multiple Signals (e.g., EEG & PPG)
+             │                           │
+         RP + RQA                    CRP + RQA
+             │                           │
+        Persistence                Interrelation
+             │                           │
+     LAM / TT / Vmax             RR(t) / DET(t) / L(t)
+             │                           │
+             └─────────────┬─────────────┘
+                           │
+                    Sliding Window
+                           │
+                           ▼
+                  Transition Dynamics
+                           │
+                           ▼
+                  Drowsiness Detection
