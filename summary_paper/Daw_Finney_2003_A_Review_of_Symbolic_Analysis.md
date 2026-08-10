@@ -185,3 +185,49 @@ $$
 $$
 
 Câu hỏi cốt lõi không phải là **mất bao nhiêu thông tin**, mà là **mất thông tin nào và thông tin đó có quan trọng hay không**.
+
+
+# Practical Measurements Issues
+$$
+\boxed{\text{Sampling}}
+$$
+
+Dữ liệu được lấy theo fixed-rate hay event-triggered? Có aliasing không?
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{\text{Noise}}
+$$
+
+Noise đến từ measurement hay chính dynamics? Coarse-graining sẽ lọc hay làm méo nó?
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{\text{Observability}}
+$$
+
+Ta có full state hay chỉ một observable? Có cần reconstructed phase space không?
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{\text{Stationarity}}
+$$
+
+Statistics có ổn định trong khoảng phân tích không, hay đang trộn nhiều regimes?
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{\text{Sau đó mới symbolization}}
+$$
