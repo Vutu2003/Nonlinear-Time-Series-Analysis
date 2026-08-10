@@ -443,3 +443,125 @@ Trong đó:
 - $\pi$: định nghĩa symbolic state
 - $L$: temporal depth
 - $\tau_s$: temporal scale
+
+# V. Symbol-Sequence Statistics
+
+$$
+\boxed{w_t \rightarrow P(w)}
+$$
+
+Đếm tần suất các words để thu **symbolic distribution**.
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{\text{Histogram}}
+$$
+
+Quan sát trực tiếp temporal structure, regime change, oversampling hoặc nonstationarity.
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{\text{So sánh distributions}}
+$$
+
+Dùng Euclidean norm, chi-square,... nhưng cần chú ý word counts có thể không độc lập.
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{\text{Entropy}}
+$$
+
+$$
+H=-\sum_i p_i\log_2 p_i
+$$
+
+Entropy cao → distribution rộng; entropy thấp → một số patterns chiếm ưu thế.
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{H_L \rightarrow h_L \rightarrow h}
+$$
+
+$$
+h_L=H_{L+1}-H_L,
+\qquad
+h=\lim_{L\to\infty}h_L
+$$
+
+Từ block entropy tới **entropy rate / information production**.
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{\text{Complexity} \neq \text{Entropy}}
+$$
+
+Các measure như EMC cố lượng hóa temporal organization vượt ra ngoài randomness đơn thuần.
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{\text{Finite-sample bias}}
+$$
+
+Vì số possible words tăng như:
+
+$$
+K^L
+$$
+
+nên $L$ lớn làm probability và entropy khó estimate chính xác.
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{\text{Surrogate testing}}
+$$
+
+So sánh statistic quan sát được với dữ liệu sinh dưới một null hypothesis.
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{\text{Time asymmetry}}
+$$
+
+So sánh forward/backward word statistics để kiểm tra time reversibility và một số null linear-Gaussian.
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{
+x_t
+\xrightarrow{\pi}
+s_t
+\xrightarrow{(L,\tau_s)}
+w_t
+\xrightarrow{\text{count}}
+P(w)
+\xrightarrow{\text{statistics}}
+\text{inference about dynamics}
+}
+$$
