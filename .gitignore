@@ -8,3 +8,4 @@ __pycache__/
 dataset/
 algorithm_design/
 experiment_design/
+soh_estimation/
