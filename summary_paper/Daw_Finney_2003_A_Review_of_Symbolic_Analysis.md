@@ -565,3 +565,37 @@ P(w)
 \text{inference about dynamics}
 }
 $$
+
+# 6. Nghiên cứu của tôi
+
+## Ý tưởng nghiên cứu
+
+Áp dụng **Symbolic Time-Series Analysis cho tín hiệu PPG trong phát hiện buồn ngủ**:
+
+$$
+\boxed{
+PPG
+\rightarrow
+\text{biểu diễn sinh lý}
+\rightarrow
+\text{mã hóa ký hiệu}
+\rightarrow
+\text{mẫu hình theo thời gian}
+\rightarrow
+\text{suy luận trạng thái buồn ngủ}
+}
+$$
+
+Tập trung vào việc buồn ngủ làm thay đổi **tổ chức động học theo thời gian** của hệ tim mạch như thế nào, thay vì chỉ sử dụng các đặc trưng PPG truyền thống.
+
+## Đóng góp tri thức
+
+Xác định cách mã hóa ký hiệu phù hợp để giữ lại thông tin sinh lý liên quan đến buồn ngủ trong PPG, đồng thời tìm các **mẫu ký hiệu, chuyển trạng thái hoặc chỉ số complexity** đặc trưng cho sự thay đổi mức độ tỉnh táo.
+
+$$
+\boxed{
+\text{Động học PPG}
+\rightarrow
+\text{biomarker ký hiệu có khả năng diễn giải cho drowsiness}
+}
+$$
