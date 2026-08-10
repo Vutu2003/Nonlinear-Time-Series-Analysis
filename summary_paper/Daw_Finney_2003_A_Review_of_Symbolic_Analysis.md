@@ -231,3 +231,95 @@ $$
 $$
 \boxed{\text{Sau đó mới symbolization}}
 $$
+
+# III. Defining Symbols
+
+$$
+\boxed{\text{Digitization} \neq \text{Symbolization}}
+$$
+
+Dữ liệu số đã rời rạc, nhưng symbolic analysis thường coarse-grain mạnh hơn nhiều.
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{\text{Partition dữ liệu thành alphabet hữu hạn}}
+$$
+
+$$
+x_t \in A_i \Rightarrow s_t=i
+$$
+
+Alphabet size quyết định trade-off giữa **giữ chi tiết** và **giữ cả noise**.
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{\text{Ideal: Generating Partition}}
+$$
+
+Với hệ deterministic, noise-free, đây là encoding lý tưởng; nhưng thường không khả thi với dữ liệu thực nghiệm.
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{\text{Practical / Heuristic Partition}}
+$$
+
+Có thể dùng mean, median, equal-width bins, equiprobable bins,...
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{\text{Ưu tiên partition có ý nghĩa vật lý}}
+$$
+
+Nếu hệ có natural threshold hoặc discrete states, nên tận dụng chúng.
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{\text{Luôn kiểm tra sensitivity}}
+$$
+
+Partition xấu có thể làm mất meaningful dynamics; “optimal” luôn phụ thuộc objective.
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{\text{Không chỉ encode amplitude}}
+$$
+
+Có thể encode:
+
+$$
+x_t,\qquad \Delta x_t,\qquad \mathbf{x}_t \text{ trong phase space}
+$$
+
+tương ứng với static, dynamic hoặc phase-space symbolization.
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{\text{Continuous data} \rightarrow \text{Symbol sequence}}
+$$
+
+Cốt lõi của Section III:
+
+$$
+\boxed{\text{Encoding = quyết định giữ thông tin gì và bỏ thông tin gì}}
+$$
