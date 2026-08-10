@@ -323,3 +323,123 @@ Cốt lõi của Section III:
 $$
 \boxed{\text{Encoding = quyết định giữ thông tin gì và bỏ thông tin gì}}
 $$
+
+# IV. Define Symbol Sequences
+
+$$
+\boxed{s_t \rightarrow w_t}
+$$
+
+Symbol đơn chỉ mô tả state; cần ghép theo thời gian để tạo **word**.
+
+$$
+w_t^{(L)}=(s_t,s_{t+1},\ldots,s_{t+L-1})
+$$
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{\text{Word length }L}
+$$
+
+Với alphabet size $K$, số possible words là:
+
+$$
+K^L
+$$
+
+$L$ lớn giữ dependency dài hơn nhưng làm word space tăng rất nhanh.
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{\text{Fixed }L \;\text{vs}\; \text{Context-dependent }L}
+$$
+
+Context tree cho phép word length thay đổi theo memory/predictability của process.
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{\text{Allowed / Forbidden Words}}
+$$
+
+Không phải mọi possible word đều xuất hiện; dynamics tạo ra một **grammar** của symbolic sequence.
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{\text{Intersymbol interval }\tau_s}
+$$
+
+$\tau_s$ quá nhỏ $\rightarrow$ redundancy; quá lớn $\rightarrow$ mất relevant dynamics.
+
+Có thể chọn dựa trên:
+
+$$
+C(\tau),\qquad I(\tau),\qquad \text{physical timescale}
+$$
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{\text{Symbolic statistics có thể giữ temporal dependence}}
+$$
+
+Word frequencies cung cấp một representation gọn của multistep correlations.
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{\text{Univariate} \rightarrow \text{Multivariate}}
+$$
+
+Nhiều symbolic signals có thể ghép thành symbolic vectors để nghiên cứu synchronization và information transfer.
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{\text{Word} \rightarrow \text{Unique code}}
+$$
+
+Mỗi word được gán một identifier để tạo **symbol-sequence series**.
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{\text{Section V: } P(w)\rightarrow\text{statistics}}
+$$
+
+Cốt lõi của Section IV:
+
+$$
+\boxed{
+x_t
+\xrightarrow{\pi}
+s_t
+\xrightarrow{(L,\tau_s)}
+w_t
+}
+$$
+
+Trong đó:
+
+- $\pi$: định nghĩa symbolic state
+- $L$: temporal depth
+- $\tau_s$: temporal scale
