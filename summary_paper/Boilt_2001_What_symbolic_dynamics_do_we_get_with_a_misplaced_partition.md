@@ -312,3 +312,51 @@ $$
 $$
 
 Một representation có thể dự đoán tốt nhưng chưa chắc phản ánh đúng underlying cardiovascular dynamics.
+
+
+## Bảo vệ phương pháp luận khi dùng Symbolic Encoding
+
+Sau Bollt et al. (2001), không nên giả định partition là faithful representation khi true dynamics không biết.
+
+Thay vào đó, biện luận bằng nhiều lớp evidence:
+
+1. **Theoretical / physiological justification**  
+   Giải thích tại sao cách symbolization phù hợp với dynamics hoặc ý nghĩa sinh lý cần nghiên cứu.
+
+2. **Partition sensitivity / robustness**  
+   Perturb threshold, alphabet hoặc partition và kiểm tra kết luận có ổn định không.
+
+3. **Surrogate testing**  
+   Kiểm tra symbolic structure có vượt quá một null model phù hợp hay không.
+
+4. **External validation**  
+   Kiểm tra symbolic measures có liên hệ nhất quán với trạng thái / marker độc lập hay không.
+
+5. **Alternative encodings**  
+   So sánh nhiều representation hợp lý để tránh kết luận phụ thuộc vào một encoding duy nhất.
+
+$$
+\boxed{
+\text{Justification}
++
+\text{Robustness}
++
+\text{Surrogates}
++
+\text{External validity}
+}
+$$
+
+Mục tiêu không phải chứng minh:
+
+$$
+\text{partition = true generating partition}
+$$
+
+mà là chứng minh:
+
+$$
+\boxed{
+\text{representation is reasonable, robust, non-trivial, and interpretable}
+}
+$$
