@@ -1,9 +1,10 @@
 """Permutation entropy based on Bandt and Pompe (2002)."""
 
 from collections import Counter
+from dataclasses import dataclass
 from math import factorial, fsum, isfinite, log2
 from numbers import Integral, Real
-from typing import Any, Iterable, Mapping, Sequence
+from typing import Iterable, Mapping, Sequence
 
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
@@ -12,6 +13,7 @@ from numpy.typing import ArrayLike, NDArray
 OrdinalPattern = tuple[int, ...]
 
 __all__ = [
+    "PermutationEntropyResult",
     "validate_series",
     "build_windows",
     "encode_ordinal_pattern",
@@ -21,6 +23,23 @@ __all__ = [
     "compute_permutation_entropy",
     "permutation_entropy",
 ]
+
+
+@dataclass(slots=True)
+class PermutationEntropyResult:
+    """Results and metadata from the permutation entropy pipeline."""
+
+    entropy: float
+    maximum_entropy: float
+    normalized_entropy: float
+    entropy_per_symbol: float
+    pattern_sequence: list[OrdinalPattern]
+    pattern_counts: dict[OrdinalPattern, int]
+    pattern_probabilities: dict[OrdinalPattern, float]
+    order: int
+    number_of_windows: int
+    number_of_possible_patterns: int
+    number_of_observed_patterns: int
 
 
 def validate_series(
@@ -381,7 +400,7 @@ def permutation_entropy(
     order: int = 3,
     tie_method: str = "error",
     random_state: int | np.random.Generator | None = None,
-) -> dict[str, Any]:
+) -> PermutationEntropyResult:
     """Run the complete Bandt-Pompe permutation entropy pipeline.
 
     The logarithm uses base 2, so entropy values are expressed in bits.
@@ -401,7 +420,7 @@ def permutation_entropy(
 
     Returns
     -------
-    dict
+    PermutationEntropyResult
         Entropy measures, ordinal representation, pattern statistics,
         and lightweight pipeline metadata.
     """
@@ -419,13 +438,16 @@ def permutation_entropy(
         order,
     )
 
-    return {
-        **entropy_results,
-        "pattern_sequence": pattern_sequence,
-        "pattern_counts": pattern_counts,
-        "pattern_probabilities": pattern_probabilities,
-        "order": int(order),
-        "number_of_windows": len(pattern_sequence),
-        "number_of_possible_patterns": factorial(order),
-        "number_of_observed_patterns": len(pattern_counts),
-    }
+    return PermutationEntropyResult(
+        entropy=entropy_results["entropy"],
+        maximum_entropy=entropy_results["maximum_entropy"],
+        normalized_entropy=entropy_results["normalized_entropy"],
+        entropy_per_symbol=entropy_results["entropy_per_symbol"],
+        pattern_sequence=pattern_sequence,
+        pattern_counts=pattern_counts,
+        pattern_probabilities=pattern_probabilities,
+        order=int(order),
+        number_of_windows=len(pattern_sequence),
+        number_of_possible_patterns=factorial(order),
+        number_of_observed_patterns=len(pattern_counts),
+    )
