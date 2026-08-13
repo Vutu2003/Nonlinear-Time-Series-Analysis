@@ -619,3 +619,171 @@ $$
 \text{but rich enough to reflect nonlinear dynamical complexity}
 }
 $$
+
+# 5. Conclusion
+
+## Assumptions
+
+- Time series cần cho phép xác định **relative ordering** giữa các giá trị trong local window.
+- Authors giả định ties hiếm; nếu có thể thêm perturbation rất nhỏ để phá ties.
+- Probability của ordinal patterns được ước lượng từ finite observations, nên cần đủ dữ liệu so với số possible patterns:
+
+$$
+n!
+$$
+
+- Với interpretation xác suất dài hạn, authors giả định một weak stationarity condition cho các ordinal relations.
+
+## Limitations
+
+- Số possible ordinal patterns tăng factorial:
+
+$$
+n!
+$$
+
+nên order $n$ lớn đòi hỏi sequence dài hơn nhiều.
+
+- Finite-sample bias xuất hiện khi:
+
+$$
+T \text{ không đủ lớn so với } n!
+$$
+
+- PE không giữ:
+  - absolute amplitude;
+  - amplitude differences;
+
+mà chỉ giữ relative ordering.
+
+- Ties gây ambiguity trong ordinal ranking.
+
+- PE không hoàn toàn immune với noise:
+
+$$
+\text{noise changes ordering}
+\Rightarrow
+\text{PE changes}
+$$
+
+Đặc biệt với near-constant hoặc low-period signals, một lượng noise nhỏ có thể tạo nhiều ordinal patterns mới và làm PE tăng mạnh.
+
+- Quan hệ giữa PE và dynamical complexity được paper kiểm chứng mạnh trên chaotic systems, nhưng không có nghĩa PE luôn bằng Lyapunov exponent hoặc KS entropy trong mọi hệ.
+
+## Main Takeaways
+
+Permutation Entropy cung cấp một complexity measure:
+
+$$
+\boxed{
+\text{simple}
++
+\text{fast}
++
+\text{robust}
++
+\text{directly applicable to real-world time series}
+}
+$$
+
+Cốt lõi của phương pháp là:
+
+$$
+\boxed{
+\text{discard amplitude}
++
+\text{preserve temporal ordering}
+}
+$$
+
+Kết quả thực nghiệm cho thấy PE:
+
+- phân biệt được regular / periodic và chaotic behavior;
+- có cấu trúc tương tự Lyapunov exponent trên logistic map;
+- hoạt động tốt trên real-world speech signal;
+- tương đối robust trước observational và dynamical noise;
+- phù hợp với large datasets và applications cần ít preprocessing / fine-tuning.
+
+# 6. My Research
+
+## Research Ideas
+
+Bandt–Pompe gợi ý một hướng rất phù hợp cho symbolic analysis trên PPG/PPI:
+
+$$
+\text{Physiological time series}
+\rightarrow
+\text{Ordinal patterns}
+\rightarrow
+\text{Pattern distribution}
+\rightarrow
+\text{Permutation Entropy}
+$$
+
+Các hướng có thể triển khai:
+
+- Đánh giá thay đổi của ordinal-pattern distribution giữa alert và drowsy.
+- So sánh PE giữa các trạng thái thay vì chỉ dùng raw amplitude features.
+- Kiểm tra sensitivity theo pattern order $n$ và window length.
+- Khảo sát xem drowsiness có làm temporal organization trở nên:
+  - regular hơn;
+  - random hơn;
+  - hay chỉ thay đổi distribution của một số ordinal motifs cụ thể.
+- Không chỉ dùng PE như một scalar feature, mà phân tích trực tiếp các ordinal patterns để tăng interpretability.
+
+Một câu hỏi nghiên cứu tiềm năng:
+
+$$
+\boxed{
+\text{Does drowsiness alter the ordinal organization of beat-to-beat cardiovascular dynamics?}
+}
+$$
+
+## Knowledge Contribution
+
+Bandt–Pompe bổ sung một hướng symbolic encoding khác với amplitude partition:
+
+$$
+\boxed{
+\text{Amplitude-based encoding}
+\rightarrow
+\text{Ordinal-based encoding}
+}
+$$
+
+Điểm quan trọng nhất cho nghiên cứu của tôi:
+
+$$
+\boxed{
+\text{Representation can preserve temporal order while discarding absolute amplitude}
+}
+$$
+
+Điều này mở ra một symbolic representation:
+
+- ít phụ thuộc vào amplitude scale;
+- invariant với monotonic transformations;
+- đơn giản và computationally efficient;
+- phù hợp với noisy physiological time series.
+
+Về phương pháp luận, paper cho thấy:
+
+$$
+\boxed{
+\text{Symbolic encoding không nhất thiết phải bắt đầu bằng amplitude thresholds}
+}
+$$
+
+mà có thể được xây trực tiếp từ **temporal relations giữa các samples**.
+
+Do đó, khi thiết kế symbolic pipeline cho PPG/PPI, cần xem ordinal encoding như một candidate representation và đánh giá:
+
+$$
+\boxed{
+\text{What physiological information is preserved?}
+\quad
+\text{vs.}
+\quad
+\text{What amplitude information is discarded?}
+}
+$$
