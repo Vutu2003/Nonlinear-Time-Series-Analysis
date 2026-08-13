@@ -65,3 +65,369 @@ $$
 $$
 
 để symbolic structure phát sinh tự nhiên từ chính chuỗi thời gian.
+
+# 2. What
+
+## Core Insight
+
+Bandt & Pompe đề xuất đo complexity của time series bằng **thứ tự tương đối của các giá trị lân cận**, thay vì amplitude tuyệt đối.
+
+Một local vector:
+
+$$
+(x_t,x_{t+1},\ldots,x_{t+n-1})
+$$
+
+được chuyển thành một **ordinal pattern / permutation**:
+
+$$
+\boxed{
+\text{Local temporal values}
+\rightarrow
+\text{relative ordering}
+\rightarrow
+\text{permutation symbol}
+}
+$$
+
+Sau đó complexity được đo từ phân bố xác suất của các permutation này.
+
+Ý tưởng cốt lõi:
+
+$$
+\boxed{
+\text{Permutation Entropy}
+=
+\text{Shannon entropy của ordinal-pattern distribution}
+}
+$$
+
+Method cố ý:
+
+- bỏ thông tin amplitude tuyệt đối;
+- giữ thông tin về temporal ordering;
+- không cần amplitude threshold hay generating partition được biết trước.
+
+---
+
+## Mathematical Foundation
+
+Với time series:
+
+$$
+x_1,x_2,\ldots,x_T
+$$
+
+chọn embedding dimension / order $n$ và tạo các local vectors:
+
+$$
+W_t=(x_t,x_{t+1},\ldots,x_{t+n-1})
+$$
+
+Mỗi $W_t$ được ánh xạ thành một permutation $\pi_t$ dựa trên rank ordering của các phần tử.
+
+Số possible ordinal patterns là:
+
+$$
+|\mathcal{A}|=n!
+$$
+
+Xác suất của permutation $\pi$ được estimate bằng relative frequency:
+
+$$
+p(\pi)
+=
+\frac{
+\#\{t:W_t\text{ có ordinal type }\pi\}
+}{
+T-n+1
+}
+$$
+
+Permutation entropy order $n$:
+
+$$
+H(n)
+=
+-\sum_{\pi}p(\pi)\log p(\pi)
+$$
+
+với:
+
+$$
+0\le H(n)\le \log(n!)
+$$
+
+- $H(n)=0$: chỉ một ordinal pattern chiếm ưu thế → dynamics rất regular.
+- $H(n)=\log(n!)$: các patterns xuất hiện đồng đều → maximum ordinal uncertainty.
+
+Authors còn định nghĩa permutation entropy per symbol:
+
+$$
+h_n=\frac{H(n)}{n-1}
+$$
+
+Parameter $n$ quyết định đồng thời:
+
+$$
+\boxed{
+\text{temporal pattern length}
++
+\text{alphabet size }n!
++
+\text{data requirement}
+}
+$$
+
+Vì vậy:
+
+$$
+n\uparrow
+\Rightarrow
+\text{richer temporal structure}
+\quad\text{but}\quad
+n!\uparrow
+\Rightarrow
+\text{more samples required}
+$$
+
+# 3. How
+
+## 3.1 Algorithm
+
+Input:
+
+$$
+x_1,x_2,\ldots,x_T
+$$
+
+Chọn embedding dimension / order $n$.
+
+Với mỗi vị trí $t$, tạo local vector:
+
+$$
+W_t=(x_t,x_{t+1},\ldots,x_{t+n-1})
+$$
+
+Sau đó:
+
+1. Xếp hạng các giá trị trong $W_t$.
+2. Chuyển thứ tự tương đối thành một permutation $\pi_t$.
+3. Lặp trên toàn bộ signal để tạo ordinal-pattern sequence.
+4. Đếm số lần xuất hiện của từng permutation.
+5. Estimate $p(\pi)$ bằng relative frequency.
+6. Tính permutation entropy từ distribution $p(\pi)$.
+
+Authors khuyến nghị trong practical applications:
+
+$$
+n=3,\ldots,7
+$$
+
+---
+
+## 3.2 Mathematical Formulation
+
+### Ordinal encoding
+
+Mỗi vector:
+
+$$
+W_t=(x_t,\ldots,x_{t+n-1})
+$$
+
+được ánh xạ thành một permutation:
+
+$$
+W_t\rightarrow\pi_t
+$$
+
+biểu diễn rank ordering của $n$ giá trị.
+
+Số possible patterns:
+
+$$
+n!
+$$
+
+### Pattern probability
+
+$$
+p(\pi)
+=
+\frac{
+\#\{t:W_t\text{ có type }\pi\}
+}{
+T-n+1
+}
+$$
+
+### Permutation Entropy
+
+$$
+H(n)
+=
+-\sum_{\pi}p(\pi)\log p(\pi)
+$$
+
+với:
+
+$$
+0\le H(n)\le\log(n!)
+$$
+
+### Permutation entropy per symbol
+
+$$
+h_n
+=
+\frac{H(n)}{n-1}
+$$
+
+Authors còn định nghĩa sorting entropy:
+
+$$
+d_n
+=
+H(n)-H(n-1)
+$$
+
+nhưng đây không phải quantity chính trong implementation PE cơ bản.
+
+---
+
+## 3.3 End-to-End Pipeline
+
+$$
+\boxed{
+\text{Raw time series}
+\rightarrow
+\text{Local windows of length }n
+\rightarrow
+\text{Ordinal ranking}
+}
+$$
+
+$$
+\boxed{
+\rightarrow
+\text{Permutation symbols}
+\rightarrow
+\text{Pattern frequencies}
+\rightarrow
+p(\pi)
+\rightarrow
+H(n)
+}
+$$
+
+Theo symbolic-encoding view:
+
+$$
+\boxed{
+x_t
+\rightarrow
+W_t
+\rightarrow
+\pi_t
+\rightarrow
+p(\pi)
+\rightarrow
+\text{Permutation Entropy}
+}
+$$
+
+---
+
+## 3.4 Computational Complexity
+
+Paper không đưa một Big-O analysis đầy đủ.
+
+Authors nhấn mạnh:
+
+- calculation rất nhanh;
+- mỗi pair of values chỉ cần được so sánh một lần trong optimized implementation;
+- computational time không phải bottleneck chính.
+
+Bottleneck quan trọng hơn là số possible patterns:
+
+$$
+n!
+$$
+
+Khi $n$ tăng:
+
+$$
+n!\uparrow
+\Rightarrow
+\text{memory requirement và data requirement tăng rất nhanh}
+$$
+
+Để estimate $H(n)$ đáng tin cậy:
+
+$$
+\boxed{
+T \gg n!
+}
+$$
+
+Trong chaotic-map experiments, authors dùng:
+
+$$
+T=10^6
+$$
+
+để estimate các orders lớn.
+
+---
+
+## 3.5 Implementation Notes
+
+- Paper gốc dùng consecutive samples:
+
+$$
+(x_t,x_{t+1},\ldots,x_{t+n-1})
+$$
+
+tức delay mặc định là $1$.
+
+- Authors khuyến nghị:
+
+$$
+n=3,\ldots,7
+$$
+
+cho practical applications.
+
+- Các giá trị bằng nhau (ties) gây ambiguity trong ranking.
+
+Paper giả định ties hiếm khi distribution liên tục; nếu có, authors đề xuất thêm perturbation ngẫu nhiên rất nhỏ để phá ties.
+
+- $n$ càng lớn:
+  - capture temporal structure dài hơn;
+  - nhưng alphabet tăng thành $n!$;
+  - cần nhiều data hơn để estimate probabilities.
+
+- Không cần amplitude threshold hay generating partition được biết trước.
+
+- PE invariant dưới strictly monotonic transformations:
+
+$$
+y_t=f(x_t)
+$$
+
+nếu $f$ strictly increasing/decreasing thì ordinal structure và PE không đổi.
+
+- Finite-sample bias xuất hiện khi:
+
+$$
+T
+$$
+
+quá nhỏ so với:
+
+$$
+n!
+$$
+
+nên việc chọn $n$ phải phù hợp với độ dài dữ liệu.
