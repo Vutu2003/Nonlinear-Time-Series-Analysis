@@ -431,3 +431,191 @@ n!
 $$
 
 nên việc chọn $n$ phải phù hợp với độ dài dữ liệu.
+
+# 4. Experiments
+
+## Setups
+
+### Speech Signal
+
+- Dữ liệu: câu nói dài khoảng 4 s, sampling frequency 11 kHz.
+- Sliding window:
+
+$$
+T_{\text{win}}=512
+$$
+
+samples, tương đương khoảng 46 ms.
+
+- Window shift: 1 sample.
+- Permutation entropy được tính với các order thấp:
+
+$$
+n=3,4,5
+$$
+
+- So sánh với Zero-Crossing Rate (ZCR).
+
+### Chaotic Time Series
+
+- Hệ chính: logistic map
+
+$$
+x_{t+1}=r x_t(1-x_t)
+$$
+
+với:
+
+$$
+3.5\le r\le4
+$$
+
+- Quét 5001 giá trị của $r$.
+- So sánh permutation entropy:
+
+$$
+h_6,\;h_{12}
+$$
+
+với Lyapunov exponent.
+- Với nghiên cứu finite-sample tại $r=4$, authors dùng nhiều độ dài:
+
+$$
+T=10^2,\ldots,10^6
+$$
+
+và lặp 1000 time series cho mỗi $T$.
+
+---
+
+## Results
+
+### Speech Signal
+
+- Noise và unvoiced sounds có normalized PE gần:
+
+$$
+1
+$$
+
+- Voiced sounds làm PE giảm rõ rệt:
+
+$$
+\text{more regular temporal structure}
+\Rightarrow
+\text{lower PE}
+$$
+
+- PE nhận diện một số transitions tốt hơn ZCR.
+- Kết quả tương đối ổn khi thay đổi:
+  - window length;
+  - sampling frequency;
+  - observational noise;
+  - permutation order $n=3,\ldots,7$.
+- Phương pháp có computational cost thấp và phù hợp cho real-time analysis.
+
+### Chaotic Time Series
+
+Permutation entropy có cấu trúc rất giống Lyapunov exponent:
+
+$$
+\boxed{
+\text{PE} \approx \text{dynamical complexity}
+}
+$$
+
+trên phần lớn chaotic regime của logistic map.
+
+- Periodic windows:
+
+$$
+\text{restricted ordinal patterns}
+\Rightarrow
+\text{low PE}
+$$
+
+- Chaotic regions:
+
+$$
+\text{greater ordinal-pattern diversity}
+\Rightarrow
+\text{higher PE}
+$$
+
+- $h_6$ và $h_{12}$ cho overall behavior khá giống nhau, cho thấy low-order PE có thể đủ trong applications.
+- $h_6$ có thể được estimate khá tin cậy với khoảng:
+
+$$
+T\approx1000
+$$
+
+samples.
+
+Finite-sample bias xuất hiện khi:
+
+$$
+T
+$$
+
+quá nhỏ so với:
+
+$$
+n!
+$$
+
+---
+
+## Discussion
+
+Hai experiments kiểm chứng PE ở hai góc độ bổ sung:
+
+$$
+\boxed{
+\text{Real-world applicability}
++
+\text{Dynamical validity}
+}
+$$
+
+Speech experiment cho thấy PE:
+
+- đơn giản;
+- nhanh;
+- robust;
+- usable trực tiếp trên noisy real-world signals.
+
+Chaotic-system experiment cho thấy ordinal-pattern complexity có thể phản ánh cấu trúc động lực học tương tự Lyapunov exponent.
+
+Trade-off thực tế quan trọng:
+
+$$
+n\uparrow
+\Rightarrow
+\text{capture richer temporal patterns}
+$$
+
+nhưng:
+
+$$
+n!\uparrow
+\Rightarrow
+\text{need much more data}
+$$
+
+Do đó:
+
+$$
+\boxed{
+\text{low-order PE can provide a practical balance between temporal detail and statistical reliability}
+}
+$$
+
+Kết quả tổng quát:
+
+$$
+\boxed{
+\text{Ordinal representation is simple enough for real data}
+\\
+\text{but rich enough to reflect nonlinear dynamical complexity}
+}
+$$
