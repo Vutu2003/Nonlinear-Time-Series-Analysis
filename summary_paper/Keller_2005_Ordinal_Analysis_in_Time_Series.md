@@ -515,3 +515,325 @@ theo thời gian thực.
 - Không cần lưu permutation nếu mục tiêu cuối là ordinal transformation; inversion vector có thể được tính trực tiếp.
 - Chuẩn hóa về $[0,1]$ giúp các ordinal representations ở different orders nằm trên cùng một numerical range.
 - Ordinal transformation giữ ordinal information, không khôi phục absolute amplitude information.
+
+# 4. Experiments
+
+## Setups
+
+Keller & Sinn minh họa ordinal transformation trên hai hệ:
+
+### 1. EEG
+
+- Sampling rate:
+
+$$
+256\ \text{Hz}
+$$
+
+- Thời lượng:
+
+$$
+252\ \text{s}
+$$
+
+- Có epileptic seizure trong khoảng:
+
+$$
+152\text{s} \rightarrow 217\text{s}
+$$
+
+- Ordinal transformation chính dùng:
+
+$$
+d=7,\qquad \tau=1
+$$
+
+nên có:
+
+$$
+8!=40320
+$$
+
+possible ordinal patterns.
+
+Ngoài ra, authors dùng sliding-window analysis:
+
+- window length: 512 samples;
+- order:
+
+$$
+d=3
+$$
+
+để quan sát:
+- time-dependent ordinal-pattern distribution;
+- normalized Permutation Entropy.
+
+### 2. Quadratic / Logistic Map
+
+Xét:
+
+$$
+f_r(x)=rx(1-x)
+$$
+
+với:
+
+$$
+r\in[2.8,4]
+$$
+
+và sử dụng:
+
+$$
+d=7,\qquad \tau=1.
+$$
+
+Authors so sánh:
+
+- Feigenbaum diagram truyền thống;
+- ordinal Feigenbaum diagram sau ordinal transformation.
+
+---
+
+## Results
+
+### EEG
+
+Ordinal-transformed EEG cho thấy các cấu trúc khác nhau tương ứng với các trạng thái signal khác nhau.
+
+Đặc biệt trong seizure:
+
+$$
+152\text{s} \rightarrow 217\text{s}
+$$
+
+transformed signal tạo thành cấu trúc rất:
+
+$$
+\boxed{\text{thin / attractor-like}}
+$$
+
+giúp phân biệt seizure với các đoạn EEG khác.
+
+Time-dependent ordinal-pattern distribution cũng phản ánh sự khác biệt giữa các đoạn signal.
+
+Ví dụ, sự xuất hiện nhiều của extreme patterns:
+
+$$
+n_3=0
+$$
+
+và:
+
+$$
+n_3=23
+$$
+
+liên quan đến sự xuất hiện nhiều hơn của các đoạn monotonic trong EEG.
+
+Permutation Entropy cung cấp thêm một scalar summary, nhưng ordinal distribution cho thấy structure chi tiết hơn.
+
+### Logistic Map
+
+Ordinal Feigenbaum diagram giữ được cấu trúc complexity tương ứng với Feigenbaum diagram truyền thống.
+
+Tuy nhiên, ordinal representation thường tạo ra các cấu trúc:
+
+$$
+\boxed{\text{thinner and more restricted}}
+$$
+
+Ví dụ tại:
+
+$$
+r=4
+$$
+
+orbit gốc có thể dense trong:
+
+$$
+[0,1]
+$$
+
+nhưng ordinal-transformed orbit chỉ chiếm một phần nhỏ của interval này.
+
+---
+
+## Discussion
+
+Các experiments cho thấy ordinal transformation có thể:
+
+- làm nổi bật structure khó quan sát trực tiếp trong raw signal;
+- phân biệt các trạng thái khác nhau của hệ;
+- giữ nhiều thông tin ordinal hơn một scalar entropy;
+- cung cấp một representation phù hợp cho downstream analysis.
+
+EEG example cho thấy khả năng:
+
+$$
+\boxed{
+\text{state discrimination}
+}
+$$
+
+trong real-world noisy physiological data.
+
+Logistic-map example cho thấy ordinal transformation vẫn phản ánh:
+
+$$
+\boxed{
+\text{underlying dynamical structure}
+}
+$$
+
+trong deterministic nonlinear systems.
+
+Kết luận chính từ experiments:
+
+$$
+\boxed{
+\text{Ordinal transformation không chỉ đo complexity,
+mà còn tạo ra một representation để quan sát structure của dynamics.}
+}
+$$
+
+Authors vì vậy cho rằng cần phát triển thêm các **ordinal statistical characteristics beyond Permutation Entropy** để khai thác representation này tốt hơn.
+
+
+# 5. Conclusion
+
+## Assumptions
+
+Keller & Sinn xây dựng ordinal analysis dựa trên một số giả định chính:
+
+- Time series là một chuỗi scalar:
+
+$$
+(x_t)
+$$
+
+- Information quan trọng được biểu diễn thông qua **relative ordering** giữa các samples thay vì absolute amplitude.
+- Với order $d$ và delay $\tau$, local ordinal state được xác định từ:
+
+$$
+(x_t,x_{t-\tau},...,x_{t-d\tau})
+$$
+
+- Mỗi local window phải ánh xạ duy nhất tới một ordinal pattern; ties cần một rule xác định.
+- Khi tăng $d$, representation chứa nhiều ordinal information hơn.
+
+Về lý thuyết:
+
+$$
+d\rightarrow\infty
+$$
+
+cho phép ordinal transformation tiến tới representation chứa toàn bộ **ordinal information**.
+
+## Limitations
+
+- Ordinal transformation chỉ giữ **order relations**, không giữ absolute amplitude hay khoảng cách giữa các amplitudes.
+- Finite real-world time series chỉ cho phép sử dụng finite order $d$; trường hợp $d\rightarrow\infty$ chủ yếu mang tính lý thuyết.
+- Số possible ordinal patterns tăng factorial:
+
+$$
+(d+1)!
+$$
+
+nên order lớn có thể gây vấn đề về data coverage và estimation.
+- Representation phụ thuộc vào lựa chọn:
+
+$$
+d,\tau
+$$
+
+nên các scale khác nhau có thể cho structure khác nhau.
+- Ordinal transformation tự nó chưa phải là một measure cuối cùng; cần phát triển thêm các statistical characteristics để quantify và classify ordinal structure.
+
+Ý chính của paper:
+
+$$
+\boxed{
+\text{Ordinal transformation tạo representation giàu thông tin hơn PE,
+nhưng cần các phương pháp downstream để khai thác representation đó.}
+}
+$$
+
+# 6. My Research
+
+## Research Ideas
+
+Áp dụng ordinal transformation lên physiological signals như PPG để nghiên cứu structure ngoài một scalar Permutation Entropy.
+
+Possible pipeline:
+
+$$
+\text{PPG}
+\rightarrow
+\text{ordinal transformation}
+\rightarrow
+\text{ordinal representation}
+\rightarrow
+\text{feature / biomarker extraction}
+$$
+
+Các hướng có thể nghiên cứu:
+
+- So sánh ordinal structure giữa alert và drowsy states.
+- Phân tích sự thay đổi của ordinal distribution thay vì chỉ PE.
+- Khai thác temporal evolution của ordinal-transformed signal.
+- Nghiên cứu ảnh hưởng của:
+
+$$
+d,\tau
+$$
+
+đến khả năng phân biệt physiological states.
+- Xây dựng các features mới từ ordinal representation thay vì chỉ dùng:
+
+$$
+H_{\text{PE}}
+$$
+
+## Knowledge Contribution
+
+Hướng đóng góp tiềm năng là chuyển từ:
+
+$$
+\boxed{
+\text{PPG}
+\rightarrow
+\text{Permutation Entropy}
+\rightarrow
+\text{single complexity feature}
+}
+$$
+
+sang:
+
+$$
+\boxed{
+\text{PPG}
+\rightarrow
+\text{ordinal representation}
+\rightarrow
+\text{richer physiological features}
+}
+$$
+
+Research question có thể phát triển thành:
+
+> Liệu ordinal representation của PPG có chứa những thay đổi về temporal organization liên quan đến drowsiness mà Permutation Entropy đơn lẻ không thể biểu diễn?
+
+Potential contribution:
+
+$$
+\boxed{
+\text{From scalar ordinal complexity}
+\rightarrow
+\text{structure-aware ordinal biomarkers}
+}
+$$
+
+Ý tưởng này nên được xem là research hypothesis tiếp theo, chưa phải kết luận trực tiếp của Keller & Sinn.
