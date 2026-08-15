@@ -506,3 +506,255 @@ $$
 $$
 
 một cách tuyệt đối; chúng là các symbolic markers được validate dưới các điều kiện sinh lý và dược lý cụ thể.
+
+# 4. Experiments
+
+## Setups
+
+Paper gồm 2 nhóm thực nghiệm chính.
+
+### 1. Autonomic Tests — Healthy Subjects
+
+Nghiên cứu trên:
+
+$$
+N=60
+$$
+
+người khỏe mạnh.
+
+Mỗi chuỗi phân tích gồm:
+
+$$
+300\ \text{RR intervals}
+$$
+
+Các điều kiện được thiết kế để thay đổi điều biến thần kinh tự chủ:
+
+- Rest: trạng thái nghỉ.
+- Tilt test: tăng sympathetic modulation và vagal withdrawal.
+- Handgrip: tăng sympathetic modulation.
+- High-dose atropine: parasympathetic blockade.
+- Low-dose atropine: tác động parasympathetic ở liều thấp.
+- Phenylephrine: tăng reflex parasympathetic modulation.
+- Nitroprusside: tăng reflex sympathetic modulation.
+
+Trên mỗi chuỗi, authors tính:
+
+$$
+\%0V,\quad \%1V,\quad \%2V
+$$
+
+và Shannon entropy.
+
+Ngoài ra, các chỉ số HRV tuyến tính trong miền thời gian và miền tần số cũng được tính để so sánh.
+
+---
+
+### 2. Patients Before Major Arrhythmias
+
+Authors thu 28 chuỗi RR trước các biến cố:
+
+$$
+VT/VF
+$$
+
+ở bệnh nhân có implantable cardioverter-defibrillator (ICD).
+
+Sau khi loại các recordings không phù hợp:
+
+$$
+21\ \text{patients}
+$$
+
+được đưa vào phân tích.
+
+So sánh:
+
+$$
+\text{Baseline}
+\quad \text{vs} \quad
+\text{300 beats before VT/VF}
+$$
+
+Các feature chính:
+
+$$
+\%0V,\quad \%2V,\quad H_{\text{Shannon}}
+$$
+
+Ngoài ra, 15 surrogate series cho mỗi original series được tạo bằng cách shuffle temporal order để kiểm tra liệu symbolic structure có xuất hiện do chance hay không.
+
+---
+
+## Results
+
+### Autonomic Tests
+
+Trong các điều kiện tăng sympathetic modulation hoặc vagal withdrawal:
+
+$$
+\boxed{
+0V\uparrow
+}
+$$
+
+và:
+
+$$
+\boxed{
+2V\downarrow
+}
+$$
+
+Đặc biệt được quan sát trong:
+
+- tilt;
+- handgrip;
+- high-dose atropine;
+- nitroprusside.
+
+Ngược lại, khi parasympathetic modulation tăng:
+
+$$
+\boxed{
+2V\uparrow
+}
+$$
+
+ví dụ trong phenylephrine infusion.
+
+1V không cho thấy thay đổi có ý nghĩa thống kê rõ ràng.
+
+Do đó:
+
+$$
+\boxed{
+0V \sim \text{sympathetic prevalence}
+}
+$$
+
+$$
+\boxed{
+2V \sim \text{parasympathetic/vagal prevalence}
+}
+$$
+
+trong các điều kiện validation của nghiên cứu.
+
+Shannon entropy cũng thay đổi trong một số autonomic tests, nhưng kém đặc hiệu hơn pattern classification trong việc phân biệt loại autonomic modulation.
+
+---
+
+### Before Major Arrhythmias
+
+Trước VT/VF:
+
+$$
+0V:
+24.4\pm2.9\%
+\rightarrow
+41.6\pm3.9\%
+$$
+
+với:
+
+$$
+P<0.01
+$$
+
+cho thấy sự gia tăng rõ của nonvariable patterns.
+
+Trong khi đó:
+
+$$
+2V:
+1.5\pm0.6\%
+\rightarrow
+3.2\pm1.0\%
+$$
+
+không thay đổi có ý nghĩa thống kê:
+
+$$
+P=0.14
+$$
+
+Shannon entropy giảm:
+
+$$
+3.59\pm0.07
+\rightarrow
+3.19\pm0.08
+$$
+
+với:
+
+$$
+P<0.05
+$$
+
+Các chỉ số HRV phổ truyền thống không cho thấy thay đổi đáng kể tương ứng.
+
+---
+
+## Discussion
+
+Kết quả healthy-subject experiments hỗ trợ interpretation:
+
+$$
+\boxed{
+\text{sympathetic dominance}
+\rightarrow
+0V\uparrow,\ 2V\downarrow
+}
+$$
+
+và:
+
+$$
+\boxed{
+\text{parasympathetic dominance}
+\rightarrow
+2V\uparrow,\ 0V\downarrow
+}
+$$
+
+Điểm quan trọng là symbolic analysis không chỉ đo:
+
+$$
+\text{complexity}
+$$
+
+mà còn xác định:
+
+$$
+\boxed{
+\text{loại local temporal pattern đang chiếm ưu thế}
+}
+$$
+
+nên có khả năng diễn giải sinh lý tốt hơn một scalar entropy đơn lẻ.
+
+Trước major arrhythmias, 0V tăng nhưng 2V không giảm tương ứng:
+
+$$
+\boxed{
+0V\uparrow
+\quad \text{nhưng} \quad
+2V\not\downarrow
+}
+$$
+
+Điều này gợi ý rằng trong trạng thái bệnh lý, sympathetic và parasympathetic modulation không nhất thiết hoạt động theo cơ chế reciprocal đơn giản.
+
+Scientific insight chính:
+
+$$
+\boxed{
+\text{Short symbolic patterns có thể phát hiện
+những thay đổi autonomic ngắn hạn mà standard HRV analysis có thể bỏ sót.}
+}
+$$
+
+Surrogate analysis bổ sung bằng chứng rằng các symbolic patterns quan sát được có liên quan đến temporal organization của RR series, thay vì chỉ do distribution của các RR values.
