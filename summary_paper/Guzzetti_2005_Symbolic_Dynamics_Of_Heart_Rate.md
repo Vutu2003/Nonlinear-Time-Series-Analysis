@@ -216,3 +216,293 @@ w_t
 \text{pattern prevalence}
 }
 $$
+
+# 3. How
+
+## 3.1 Algorithm
+
+Với mỗi chuỗi RR dài:
+
+$$
+N=300
+$$
+
+thực hiện:
+
+1. Xác định:
+
+$$
+RR_{\min},\quad RR_{\max}
+$$
+
+2. Chia đều toàn bộ khoảng RR thành 6 mức:
+
+$$
+\mathcal{A}=\{0,1,2,3,4,5\}
+$$
+
+3. Ánh xạ mỗi RR interval thành một symbol:
+
+$$
+RR_t \rightarrow s_t
+$$
+
+4. Tạo các pattern dài 3 beats:
+
+$$
+w_t=(s_t,s_{t+1},s_{t+2})
+$$
+
+5. Phân loại mỗi pattern thành:
+
+- 0V: không variation;
+- 1V: một variation;
+- 2V: hai variations.
+
+6. Tính tỷ lệ xuất hiện:
+
+$$
+\%0V,\qquad \%1V,\qquad \%2V
+$$
+
+7. Tính thêm Shannon entropy của phân bố toàn bộ 216 patterns:
+
+$$
+H=-\sum_i p_i\log p_i
+$$
+
+8. So sánh symbolic features giữa các điều kiện sinh lý/dược lý hoặc giữa baseline và trước biến cố tim.
+
+---
+
+## 3.2 Mathematical Formulation
+
+### Symbolization
+
+Với:
+
+$$
+R=RR_{\max}-RR_{\min}
+$$
+
+chia range thành 6 khoảng có độ rộng:
+
+$$
+\Delta=\frac{R}{6}
+$$
+
+Mỗi:
+
+$$
+RR_t
+$$
+
+được ánh xạ thành:
+
+$$
+s_t\in\{0,1,2,3,4,5\}
+$$
+
+tùy theo khoảng mà nó thuộc vào.
+
+### Pattern Construction
+
+$$
+w_t=(s_t,s_{t+1},s_{t+2})
+$$
+
+Số possible words:
+
+$$
+6^3=216
+$$
+
+### Pattern Families
+
+$$
+0V:\quad s_t=s_{t+1}=s_{t+2}
+$$
+
+$$
+1V:\quad
+\begin{cases}
+s_t=s_{t+1}\neq s_{t+2}\\
+\text{hoặc}\\
+s_t\neq s_{t+1}=s_{t+2}
+\end{cases}
+$$
+
+$$
+2V:\quad
+s_t\neq s_{t+1}
+\quad\text{và}\quad
+s_{t+1}\neq s_{t+2}
+$$
+
+Tỷ lệ một family $C$:
+
+$$
+\%C
+=
+\frac{N_C}{N_{\text{patterns}}}\times100
+$$
+
+với:
+
+$$
+N_{\text{patterns}}=N-2
+$$
+
+nếu dùng sliding window từng beat.
+
+---
+
+## 3.3 End-to-End Pipeline
+
+$$
+\text{RR intervals}
+$$
+
+$$
+\downarrow
+$$
+
+$$
+\text{6-level uniform quantization}
+$$
+
+$$
+\downarrow
+$$
+
+$$
+(s_1,s_2,\ldots,s_N)
+$$
+
+$$
+\downarrow
+$$
+
+$$
+(s_t,s_{t+1},s_{t+2})
+$$
+
+$$
+\downarrow
+$$
+
+$$
+\{0V,1V,2V\}
+$$
+
+$$
+\downarrow
+$$
+
+$$
+\boxed{
+\%0V,\ \%1V,\ \%2V
+}
+$$
+
+Song song:
+
+$$
+\text{216-pattern distribution}
+\rightarrow
+H_{\text{Shannon}}
+$$
+
+Và để kiểm tra cấu trúc thời gian:
+
+$$
+\text{original RR}
+\rightarrow
+\text{shuffle}
+\rightarrow
+\text{surrogate RR}
+\rightarrow
+\text{symbolic analysis}
+$$
+
+sau đó so sánh original với surrogate.
+
+---
+
+## 3.4 Computational Complexity
+
+Với chuỗi dài $N$ và alphabet size cố định bằng 6:
+
+- tìm min/max: $O(N)$;
+- symbolization: $O(N)$;
+- tạo và phân loại 3-beat patterns: $O(N)$;
+- đếm pattern / family: $O(N)$.
+
+Do đó tổng thể:
+
+$$
+\boxed{
+O(N)
+}
+$$
+
+Memory có thể giữ ở mức:
+
+$$
+O(N)
+$$
+
+hoặc gần:
+
+$$
+O(1)
+$$
+
+ngoài input nếu xử lý streaming.
+
+---
+
+## 3.5 Implementation Notes
+
+- Mỗi subject và mỗi experimental condition có **RR range riêng**, nên các ngưỡng symbolization cũng khác nhau.
+- Quantization là **uniform theo amplitude range**, không phải ordinal ranking.
+- Word length được cố định:
+
+$$
+L=3
+$$
+
+- Alphabet size:
+
+$$
+\xi=6
+$$
+
+- Có:
+
+$$
+216
+$$
+
+possible symbolic words, nhưng kết quả sinh lý chính được tóm tắt bằng:
+
+$$
+\%0V,\quad \%2V
+$$
+
+- 1V được tính nhưng không cho thay đổi rõ trong các autonomic tests của paper.
+- Với ectopic beats, paper nhấn mạnh cần correction; trong study họ dùng linear interpolation khi ectopic beats dưới ngưỡng cho phép.
+- Surrogate data được tạo bằng cách shuffle temporal order, nhằm kiểm tra liệu các pattern quan sát được có phụ thuộc vào cấu trúc thời gian hay chỉ xuất hiện ngẫu nhiên.
+- Không nên diễn giải:
+
+$$
+0V=\text{sympathetic}
+$$
+
+hay:
+
+$$
+2V=\text{parasympathetic}
+$$
+
+một cách tuyệt đối; chúng là các symbolic markers được validate dưới các điều kiện sinh lý và dược lý cụ thể.
