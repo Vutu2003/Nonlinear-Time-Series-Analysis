@@ -758,3 +758,150 @@ những thay đổi autonomic ngắn hạn mà standard HRV analysis có thể b
 $$
 
 Surrogate analysis bổ sung bằng chứng rằng các symbolic patterns quan sát được có liên quan đến temporal organization của RR series, thay vì chỉ do distribution của các RR values.
+
+# 5. Conclusion
+
+## Assumptions
+
+Phương pháp dựa trên một số giả định chính:
+
+- Chuỗi RR phản ánh một phần **điều hòa thần kinh tự chủ của tim (cardiac autonomic modulation)**.
+- Các thay đổi ngắn hạn trong RR có thể được biểu diễn bằng các **mẫu ký hiệu dài 3 nhịp (3-beat symbolic patterns)**.
+- Việc chia toàn bộ RR range thành 6 mức là đủ để giữ những thay đổi quan trọng liên quan đến autonomic modulation.
+- Tỷ lệ các family:
+
+$$
+\%0V,\quad \%2V
+$$
+
+có thể được dùng như các symbolic markers của sympathetic và parasympathetic modulation sau khi đã được validate bằng các autonomic tests.
+- Phương pháp giả định nút xoang (SA node) hoạt động bình thường để RR dynamics còn phản ánh cardiac autonomic control.
+
+## Limitations
+
+- 0V và 2V không phải phép đo trực tiếp sympathetic hoặc parasympathetic nerve activity.
+- Mapping:
+
+$$
+0V \leftrightarrow \text{sympathetic}
+$$
+
+và:
+
+$$
+2V \leftrightarrow \text{parasympathetic}
+$$
+
+là association được validate trong các điều kiện cụ thể, không phải quan hệ tuyệt đối.
+- Kết quả phụ thuộc vào lựa chọn:
+
+$$
+\text{6 levels} + \text{3-beat patterns}
+$$
+
+- Ectopic beats có thể làm giảm số pattern và làm sai lệch complexity, nên cần correction.
+- Trong nhóm ICD, baseline không được ghi ngay trước cùng một loại hoạt động hằng ngày nên không thể kết luận sympathetic activation trước VT/VF là đặc hiệu cho arrhythmia.
+- Phương pháp chỉ phản ánh RR dynamics và không đo trực tiếp các đặc tính tái cực cơ tim (myocardial repolarization) liên quan đến cơ chế gây arrhythmia.
+
+Ý chính:
+
+$$
+\boxed{
+\text{Symbolic pattern classification có thể cung cấp
+thông tin sinh lý cụ thể hơn một global complexity measure.}
+}
+$$
+
+# 6. My Research
+
+## Research Ideas
+
+Có thể chuyển framework từ RR sang **khoảng giữa các nhịp mạch (pulse-to-pulse interval, PPI)** được trích từ PPG:
+
+$$
+\text{PPG}
+\rightarrow
+\text{pulse detection}
+\rightarrow
+PPI_t
+\rightarrow
+\text{symbolization}
+\rightarrow
+\{0V,1V,2V\}
+$$
+
+Các hướng nghiên cứu tiềm năng:
+
+- Kiểm tra liệu:
+
+$$
+\%0V,\quad \%2V
+$$
+
+trên PPI có thay đổi theo trạng thái alert/drowsy hay không.
+- So sánh symbolic features với các chỉ số HRV/PRV truyền thống và entropy-based features.
+- Kiểm tra robustness theo:
+  - window length;
+  - số mức quantization;
+  - signal quality;
+  - motion artifact;
+  - inter-subject variability.
+- Dùng surrogate data để kiểm tra liệu sự thay đổi feature đến từ temporal organization hay chỉ từ distribution của PPI.
+- Mở rộng từ 0V/1V/2V sang các pattern families mới phù hợp hơn với physiological dynamics của PPG.
+
+## Knowledge Contribution
+
+Contribution tiềm năng không chỉ là áp dụng lại 0V/2V cho PPG, mà là kiểm tra:
+
+$$
+\boxed{
+\text{Liệu symbolic organization của PPI có chứa
+thông tin về autonomic changes liên quan đến drowsiness?}
+}
+$$
+
+Có thể chuyển từ:
+
+$$
+\text{PPG}
+\rightarrow
+\text{global complexity feature}
+$$
+
+sang:
+
+$$
+\boxed{
+\text{PPG/PPI}
+\rightarrow
+\text{physiologically interpretable local pattern features}
+}
+$$
+
+Hướng đóng góp mạnh hơn:
+
+$$
+\boxed{
+\text{Physiology-driven symbolic biomarker}
+}
+$$
+
+thay vì chỉ:
+
+$$
+\boxed{
+\text{generic nonlinear feature}
+}
+$$
+
+Trong đó Guzzetti 2005 cung cấp template:
+
+$$
+\text{physiological hypothesis}
+\rightarrow
+\text{symbolic representation}
+\rightarrow
+\text{pattern family}
+\rightarrow
+\text{experimental validation}
+$$
