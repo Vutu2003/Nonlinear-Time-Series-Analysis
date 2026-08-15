@@ -115,3 +115,27 @@ The project is being developed paper by paper across the five research
 directions. Some modules or notebooks may still be in the design, validation,
 or reproduction stage. Results should therefore be checked against the
 original publications before being used in real-world applications.
+
+## Core Research Questions in NTSA
+
+Nhìn tổng thể, **Nonlinear Time Series Analysis (NTSA)** có thể được tổ chức quanh 5 câu hỏi nghiên cứu chính:
+
+| # | Research Question | Câu hỏi cốt lõi |
+|---|---|---|
+| 1 | **Existence** | Hệ có **deterministic / chaotic dynamics** không? |
+| 2 | **Characterization** | Dynamics hiện tại có **tính chất gì**? |
+| 3 | **Interaction** | Các hệ **tương tác / synchronize** với nhau như thế nào? |
+| 4 | **Transition** | Hệ chuyển từ **regime này sang regime khác** như thế nào? |
+| 5 | **Predictability** | Tương lai của dynamics có thể **dự đoán được đến đâu**? |
+
+Có thể xem đây là một abstraction layer nằm trên các trường phái NTSA:
+
+$$
+\boxed{
+\text{Research Question}
+\times
+\text{Dynamical Lens}
+}
+$$
+
+Trong đó các trường phái như **chaos analysis, fractal/scaling analysis, entropy-based analysis, recurrence analysis, symbolic dynamics** là những cách tiếp cận khác nhau để trả lời một hoặc nhiều câu hỏi trên.
