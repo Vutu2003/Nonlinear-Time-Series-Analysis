@@ -64,13 +64,14 @@ import numpy as np
 # Cuối cùng, tất cả các sample thuộc cửa sổ artifact
 # được đánh dấu True trong sample-level artifact mask.
 
+
 def detect_motion_artifacts(
     signal: np.ndarray,
     fs: float,
     window_s: float = 5.0,
     threshold: float = 3.5,
 ) -> np.ndarray:
-    """Detect motion-artifact regions using robust local features."""
+    """Detect motion artifacts using robust local PPG features."""
 
     signal = np.asarray(signal, dtype=float)
 
@@ -80,21 +81,29 @@ def detect_motion_artifacts(
     if fs <= 0 or window_s <= 0:
         raise ValueError("fs and window_s must be greater than 0.")
 
+    if threshold <= 0:
+        raise ValueError("threshold must be greater than 0.")
+
     if not np.isfinite(signal).all():
         raise ValueError("signal must contain only finite values.")
 
     window_samples = max(2, int(round(window_s * fs)))
+    artifact_mask = np.zeros(len(signal), dtype=bool)
+
+    if len(signal) < window_samples:
+        return artifact_mask
+
     windows = []
 
-    # Extract local amplitude and roughness.
-    for start in range(0, len(signal), window_samples):
-        end = min(start + window_samples, len(signal))
+    # Use only complete local windows.
+    for start in range(0, len(signal) - window_samples + 1, window_samples):
+        end = start + window_samples
         segment = signal[start:end]
 
-        if len(segment) < 2:
-            continue
-
-        amplitude = np.quantile(segment, 0.95) - np.quantile(segment, 0.05)
+        amplitude = (
+            np.quantile(segment, 0.95)
+            - np.quantile(segment, 0.05)
+        )
         roughness = np.sqrt(np.mean(np.diff(segment) ** 2))
 
         windows.append((start, end, amplitude, roughness))
@@ -108,13 +117,11 @@ def detect_motion_artifacts(
     mad = np.median(np.abs(features - median), axis=0)
     mad = np.maximum(mad, np.finfo(float).eps)
 
-    # Modified robust z-score.
+    # Modified robust z-score for amplitude and roughness.
     scores = 0.6745 * (features - median) / mad
-
     artifact_windows = np.any(scores > threshold, axis=1)
 
-    artifact_mask = np.zeros(len(signal), dtype=bool)
-
+    # Convert window-level decisions to a sample-level mask.
     for (start, end, _, _), is_artifact in zip(
         windows,
         artifact_windows,
