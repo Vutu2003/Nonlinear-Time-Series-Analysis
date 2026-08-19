@@ -48,7 +48,7 @@ def segment_session(
     sqi_mask: np.ndarray,
     fs: float,
     session_id: str = "",
-    window_sizes: tuple[int, ...] = (60, 120, 180, 240, 300),
+    window_sizes: tuple[int, ...] = (60, 120, 180),
     gap_factor: float = 1.5,
 ) -> dict[int, list[dict]]:
     """
