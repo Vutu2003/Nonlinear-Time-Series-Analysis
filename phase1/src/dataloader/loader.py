@@ -489,3 +489,76 @@ def load_segmented_session(
     }
 
     return results, metadata
+
+
+# Load analysis-ready windows with a simple interface.
+#
+# Example:
+# data_awake, data_drowsy = get_data("sample_1.csv")
+# awake_60 = data_awake[60]
+#
+# Each state is keyed by window size. Every batch contains aligned
+# ``raw``, ``processed``, and ``time`` arrays with shape
+# (n_windows, n_samples). Exported windows have already passed SQI.
+# ``stationarity`` selects the Raw, Processed, or both pass flags.
+
+def get_data(
+    session: str,
+    data_dir: str | Path | None = None,
+    window_sizes: int | Sequence[int] | None = None,
+    stationarity: str = "processed",
+) -> tuple[
+    dict[int, dict[str, object]],
+    dict[int, dict[str, object]],
+]:
+    """Return stationary Awake and Drowsy window batches."""
+    if not isinstance(stationarity, str):
+        raise TypeError("stationarity must be a string")
+
+    stationarity = stationarity.strip().lower()
+    if stationarity not in {"raw", "processed", "both"}:
+        raise ValueError(
+            "stationarity must be 'raw', 'processed', or 'both'"
+        )
+
+    # Exported segmented windows have already passed SQI.
+    batches, _ = load_segmented_session(
+        session,
+        data_dir=data_dir,
+        window_sizes=window_sizes,
+        representation="both",
+        stationarity_only=False,
+    )
+    state_data = {0: {}, 1: {}}
+
+    for window_size, batch in batches.items():
+        if stationarity == "both":
+            stationary = (
+                batch["stationarity_pass_raw"]
+                & batch["stationarity_pass_processed"]
+            )
+        else:
+            stationary = batch[f"stationarity_pass_{stationarity}"]
+
+        sample_offsets = np.arange(
+            batch["n_samples"],
+            dtype=float,
+        ) / batch["fs"]
+
+        for label in state_data:
+            selected = stationary & (batch["label"] == label)
+            start_time = batch["start_time"][selected].copy()
+            time = start_time[:, None] + sample_offsets
+
+            state_data[label][window_size] = {
+                "raw": batch["raw"][selected].copy(),
+                "processed": batch["processed"][selected].copy(),
+                "time": time,
+                "window_id": batch["window_id"][selected].copy(),
+                "start_time": start_time,
+                "end_time": batch["end_time"][selected].copy(),
+                "fs": batch["fs"],
+                "n_samples": batch["n_samples"],
+            }
+
+    return state_data[0], state_data[1]
