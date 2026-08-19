@@ -46,7 +46,7 @@ def reconstruct_phase_space(signal, m, tau, plot=False):
             ax.spines["right"].set_visible(False)
             ax.set_box_aspect(1)
 
-        elif m == 3:
+        else:
             fig = plt.figure(figsize=(5.2, 4.6), dpi=150)
             ax = fig.add_subplot(111, projection="3d")
 
@@ -72,9 +72,6 @@ def reconstruct_phase_space(signal, m, tau, plot=False):
 
             ax.grid(False)
             ax.view_init(elev=25, azim=45)
-
-        else:
-            raise ValueError("plot=True supports only m=2 or m=3.")
 
         fig.tight_layout()
         plt.show()
