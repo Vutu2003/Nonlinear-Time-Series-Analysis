@@ -190,3 +190,87 @@ def segment_session(
                 })
 
     return results
+
+
+
+# Quasi-stationarity theo độ ổn định variance.
+#
+# Chia analysis window thành K sub-window bằng nhau.
+#
+# Với sub-window k:
+#   v_k = Var(x_k)
+#
+# Tính:
+#   v_med = median(v_1, ..., v_K)
+#   v_IQR = Q75(v) - Q25(v)
+#
+# Variance-instability score:
+#   S = v_IQR / v_med
+#
+# Diễn giải:
+#   S nhỏ -> variance ổn định -> quasi-stationary hơn
+#   S lớn -> variance thay đổi mạnh -> non-stationary hơn
+#
+# Quyết định:
+#   S <= threshold -> pass
+#   S > threshold  -> fail
+#
+# Đây là tiêu chí local variance stability,
+# không phải phép chứng minh strict stationarity.
+
+def validate_quasi_stationarity(
+    window: dict,
+    signal_key: str = "ppg_processed",
+    subwindow_s: float = 10.0,
+    threshold: float = 0.5,
+) -> tuple[float, bool]:
+    """Evaluate local variance stability of one segmented PPG window."""
+
+    if signal_key not in window:
+        raise KeyError(f"Missing signal: {signal_key}")
+
+    signal = np.asarray(window[signal_key], dtype=float)
+    fs = float(window["fs"])
+
+    if signal.ndim != 1:
+        raise ValueError("Signal must be a 1D array.")
+
+    if fs <= 0 or subwindow_s <= 0:
+        raise ValueError("fs and subwindow_s must be greater than 0.")
+
+    if threshold < 0:
+        raise ValueError("threshold must be non-negative.")
+
+    if not np.isfinite(signal).all():
+        raise ValueError("Signal must contain only finite values.")
+
+    subwindow_samples = int(round(subwindow_s * fs))
+    n_subwindows = len(signal) // subwindow_samples
+
+    if n_subwindows < 2:
+        raise ValueError("At least two complete sub-windows are required.")
+
+    # Calculate variance in complete local sub-windows.
+    variances = np.array([
+        np.var(
+            signal[
+                index * subwindow_samples:
+                (index + 1) * subwindow_samples
+            ]
+        )
+        for index in range(n_subwindows)
+    ])
+
+    median_variance = np.median(variances)
+    variance_iqr = (
+        np.quantile(variances, 0.75)
+        - np.quantile(variances, 0.25)
+    )
+
+    denominator = max(
+        median_variance,
+        np.finfo(float).eps,
+    )
+    score = variance_iqr / denominator
+
+    return float(score), bool(score <= threshold)
