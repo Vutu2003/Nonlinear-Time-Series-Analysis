@@ -1,0 +1,7 @@
+representation,window_size,n_windows,invalid_outputs,max_rr_error,zero_diagonal_support,zero_vertical_support,invalid_det_lam,invalid_metrics,lmax_below_lmean,vmax_below_tt
+Processed,60,901,0,9.034960491011157e-07,0,0,0,0,0,0
+Processed,120,405,0,2.171325430011528e-07,0,0,0,0,0,0
+Processed,180,238,0,9.525833399859351e-08,0,0,0,0,0,0
+Raw,60,951,0,3.229800290598106e-06,0,0,0,0,0,0
+Raw,120,432,0,7.690541914996685e-07,0,0,0,0,0,0
+Raw,180,254,0,3.363833790993864e-07,0,0,0,0,0,0
