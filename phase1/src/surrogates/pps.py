@@ -83,7 +83,7 @@ def generate_pps_indices(z, rho, length, rng=None):
 
 
 def count_matching_segments(indices, segment_length=2):
-    """Đếm các đoạn PPS liên tục theo quỹ đạo gốc."""
+    """Đếm maximal runs có đúng độ dài yêu cầu."""
     indices = np.asarray(indices, dtype=int)
 
     if indices.ndim != 1:
@@ -94,20 +94,18 @@ def count_matching_segments(indices, segment_length=2):
         return 0
 
     consecutive = np.diff(indices) == 1
-
-    if segment_length == 2:
-        return int(np.sum(consecutive))
-
-    run_length = segment_length - 1
-    kernel = np.ones(run_length, dtype=int)
-
-    matches = np.convolve(
-        consecutive.astype(int),
-        kernel,
-        mode="valid",
+    boundaries = np.flatnonzero(~consecutive) + 1
+    run_lengths = np.diff(
+        np.concatenate(
+            (
+                np.array([0]),
+                boundaries,
+                np.array([len(indices)]),
+            )
+        )
     )
 
-    return int(np.sum(matches == run_length))
+    return int(np.count_nonzero(run_lengths == segment_length))
 
 
 def generate_pps_signal(signal, tau, m, rho, rng=None):
