@@ -1,6 +1,42 @@
 import numpy as np
 
 
+# PPS CORE PSEUDOCODE
+#
+# Inputs: scalar signal x[0:N], delay tau, dimension m, noise radius rho,
+#         surrogate length L, and a random-number generator.
+#
+# 1. Delay embedding
+#    N_e <- N - (m - 1) * tau
+#    Z[i] <- [x[i], x[i + tau], ..., x[i + (m - 1) * tau]]
+#
+# 2. PPS trajectory generation
+#    candidates <- {0, ..., N_e - 2}
+#    I[0] <- Uniform({0, ..., N_e - 1})
+#    for t <- 1, ..., L - 1:
+#        d[j] <- EuclideanDistance(Z[I[t - 1]], Z[j])
+#        w[j] <- exp(-(d[j] - min(d)) / rho), for j in candidates
+#        p[j] <- w[j] / sum(w)
+#        j <- CategoricalSample(p)
+#        I[t] <- j + 1
+#    y[t] <- Z[I[t], 0], for t <- 0, ..., L - 1
+#    return surrogate y and, optionally, source indices I
+#
+#    Self-matches and temporal neighbors remain valid candidates. The last
+#    state is excluded only because it has no observed successor.
+#
+# 3. Noise-radius selection
+#    for each candidate rho_k and each independent trial q:
+#        generate source indices I[k, q]
+#        split I[k, q] into maximal runs satisfying I[t + 1] = I[t] + 1
+#        C_n[k, q] <- number of runs with length >= n
+#    rho_star <- argmax_k Mean_q(C_n[k, q])
+#    return rho_star and the mean and standard deviation of C_n for each rho_k
+#
+#    Exact-length run counts are retained as a diagnostic, not as the default
+#    optimization criterion.
+
+
 def embed_phase_space(signal, tau, m):
     """Tái cấu trúc không gian pha bằng delay embedding."""
     signal = np.asarray(signal, dtype=float)
@@ -82,20 +118,18 @@ def generate_pps_indices(z, rho, length, rng=None):
     return indices
 
 
-def count_matching_segments(indices, segment_length=2):
-    """Đếm maximal runs có đúng độ dài yêu cầu."""
+def consecutive_run_lengths(indices):
+    """Trả về độ dài các maximal consecutive runs."""
     indices = np.asarray(indices, dtype=int)
 
     if indices.ndim != 1:
         raise ValueError("indices phải là mảng 1D.")
-    if segment_length < 2:
-        raise ValueError("segment_length phải >= 2.")
-    if len(indices) < segment_length:
-        return 0
+    if len(indices) == 0:
+        return np.array([], dtype=int)
 
     consecutive = np.diff(indices) == 1
     boundaries = np.flatnonzero(~consecutive) + 1
-    run_lengths = np.diff(
+    return np.diff(
         np.concatenate(
             (
                 np.array([0]),
@@ -105,10 +139,59 @@ def count_matching_segments(indices, segment_length=2):
         )
     )
 
-    return int(np.count_nonzero(run_lengths == segment_length))
+
+def count_matching_segments(
+    indices,
+    segment_length=2,
+    mode="at_least",
+):
+    """Đếm maximal runs theo ngưỡng hoặc độ dài chính xác."""
+    if segment_length < 2:
+        raise ValueError("segment_length phải >= 2.")
+    if mode not in {"at_least", "exact"}:
+        raise ValueError("mode phải là 'at_least' hoặc 'exact'.")
+
+    run_lengths = consecutive_run_lengths(indices)
+    if mode == "exact":
+        matches = run_lengths == segment_length
+    else:
+        matches = run_lengths >= segment_length
+
+    return int(np.count_nonzero(matches))
 
 
-def generate_pps_signal(signal, tau, m, rho, rng=None):
+def summarize_pps_indices(indices):
+    """Tóm tắt mức liên tục theo quỹ đạo gốc."""
+    indices = np.asarray(indices, dtype=int)
+    run_lengths = consecutive_run_lengths(indices)
+    n_transitions = max(len(indices) - 1, 0)
+    successor_fraction = (
+        float(np.sum(np.diff(indices) == 1) / n_transitions)
+        if n_transitions
+        else 0.0
+    )
+
+    return {
+        "run_count": int(len(run_lengths)),
+        "mean_run_length": (
+            float(run_lengths.mean()) if len(run_lengths) else 0.0
+        ),
+        "max_run_length": (
+            int(run_lengths.max()) if len(run_lengths) else 0
+        ),
+        "successor_fraction": successor_fraction,
+        "run_lengths": run_lengths,
+    }
+
+
+def generate_pps_signal(
+    signal,
+    tau,
+    m,
+    rho,
+    rng=None,
+    return_indices=False,
+):
     """Sinh một tín hiệu PPS có cùng độ dài tín hiệu gốc."""
     signal = np.asarray(signal, dtype=float)
     z = embed_phase_space(signal, tau, m)
@@ -120,7 +203,11 @@ def generate_pps_signal(signal, tau, m, rho, rng=None):
         rng=rng,
     )
 
-    return z[indices, 0]
+    surrogate = z[indices, 0]
+    if return_indices:
+        return surrogate, indices
+
+    return surrogate
 
 
 def optimize_rho(
@@ -130,6 +217,7 @@ def optimize_rho(
     rho_candidates,
     trials=10,
     segment_length=2,
+    count_mode="at_least",
     seed=None,
 ):
     """Chọn rho tối đa hóa số đoạn PPS trùng khớp."""
@@ -147,6 +235,8 @@ def optimize_rho(
         raise ValueError("Mọi rho candidate phải > 0.")
     if trials < 1:
         raise ValueError("trials phải >= 1.")
+    if count_mode not in {"at_least", "exact"}:
+        raise ValueError("count_mode phải là 'at_least' hoặc 'exact'.")
 
     z = embed_phase_space(signal, tau, m)
     master_rng = np.random.default_rng(seed)
@@ -182,6 +272,7 @@ def optimize_rho(
             counts[trial] = count_matching_segments(
                 indices,
                 segment_length=segment_length,
+                mode=count_mode,
             )
 
         mean_counts[r_idx] = counts.mean()
@@ -195,6 +286,7 @@ def optimize_rho(
         "mean_counts": mean_counts,
         "std_counts": std_counts,
         "segment_length": segment_length,
+        "count_mode": count_mode,
         "trials": trials,
     }
 
