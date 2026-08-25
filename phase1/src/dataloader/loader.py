@@ -500,7 +500,7 @@ def load_segmented_session(
 # Each state is keyed by window size. Every batch contains aligned
 # ``raw``, ``processed``, and ``time`` arrays with shape
 # (n_windows, n_samples). Exported windows have already passed SQI.
-# ``stationarity`` selects the Raw, Processed, or both pass flags.
+# ``stationarity`` selects a pass flag or disables stationarity filtering.
 
 def get_data(
     session: str,
@@ -516,9 +516,9 @@ def get_data(
         raise TypeError("stationarity must be a string")
 
     stationarity = stationarity.strip().lower()
-    if stationarity not in {"raw", "processed", "both"}:
+    if stationarity not in {"raw", "processed", "both", "none"}:
         raise ValueError(
-            "stationarity must be 'raw', 'processed', or 'both'"
+            "stationarity must be 'raw', 'processed', 'both', or 'none'"
         )
 
     # Exported segmented windows have already passed SQI.
@@ -532,7 +532,9 @@ def get_data(
     state_data = {0: {}, 1: {}}
 
     for window_size, batch in batches.items():
-        if stationarity == "both":
+        if stationarity == "none":
+            stationary = np.ones(len(batch["label"]), dtype=bool)
+        elif stationarity == "both":
             stationary = (
                 batch["stationarity_pass_raw"]
                 & batch["stationarity_pass_processed"]
