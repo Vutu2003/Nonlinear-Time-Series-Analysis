@@ -5,7 +5,7 @@ from scipy.spatial.distance import cdist
 
 
 # Fixed-RR pipeline:
-# signal -> embedding -> distances -> epsilon quantile -> recurrence plot
+# signal -> embedding -> distances -> tie-safe epsilon -> recurrence plot
 # -> Theiler exclusion -> line extraction -> RQA metrics.
 
 
@@ -23,6 +23,8 @@ class RQAResult:
     epsilon: float
     target_rr: float
     achieved_rr: float
+    zero_distance_fraction: float
+    rr_exact: bool
     theiler: int
     n_diagonal_lines: int
     n_vertical_lines: int
@@ -67,6 +69,20 @@ def compute_fixed_rr_threshold(
     theiler: int,
     target_rr: float,
 ) -> float:
+    """Select a tie-safe threshold for the target recurrence rate."""
+    epsilon, _, _ = _select_fixed_rr_threshold(
+        distances,
+        theiler,
+        target_rr,
+    )
+    return epsilon
+
+
+def _select_fixed_rr_threshold(
+    distances: np.ndarray,
+    theiler: int,
+    target_rr: float,
+) -> tuple[float, float, int]:
     """Tính epsilon từ target RR ngoài vùng Theiler."""
     distances = np.asarray(distances, dtype=float)
 
@@ -110,7 +126,7 @@ def compute_fixed_rr_threshold(
 
     cursor = 0
 
-    # Copy eligible distances into one vector for exact quantile selection.
+    # Copy eligible distances into one vector for threshold selection.
     for row in range(n_eligible_rows):
         values = distances[
             row,
@@ -125,22 +141,58 @@ def compute_fixed_rr_threshold(
 
         cursor = next_cursor
 
-    # The vector is temporary, so quantile may partition it in place.
-    epsilon = float(
+    zero_count = int(np.count_nonzero(eligible_distances == 0.0))
+    zero_fraction = zero_count / n_eligible
+    if zero_fraction >= target_rr:
+        return 0.0, float(zero_fraction), n_eligible
+
+    legacy_epsilon = float(
         np.quantile(
             eligible_distances,
             target_rr,
             method="linear",
-            overwrite_input=True,
+        )
+    )
+    target_count = target_rr * n_eligible
+    upper_rank = int(np.ceil(target_count)) - 1
+    eligible_distances.partition(upper_rank)
+    upper_threshold = float(eligible_distances[upper_rank])
+    upper_count = int(
+        np.count_nonzero(eligible_distances <= upper_threshold)
+    )
+
+    below_upper = eligible_distances < upper_threshold
+    lower_count = int(np.count_nonzero(below_upper))
+    lower_threshold = float(
+        np.max(
+            eligible_distances,
+            where=below_upper,
+            initial=0.0,
         )
     )
 
-    if epsilon <= 0.0:
-        raise ValueError(
-            "fixed-RR threshold must be positive."
-        )
+    upper_error = abs(upper_count / n_eligible - target_rr)
+    lower_error = abs(lower_count / n_eligible - target_rr)
+    # Equal errors choose the lower recurrence rate deterministically.
+    error_tolerance = 4.0 * np.finfo(float).eps
+    use_lower = (
+        lower_threshold > 0.0
+        and lower_error <= upper_error + error_tolerance
+    )
+    selected_threshold = lower_threshold if use_lower else upper_threshold
+    selected_count = lower_count if use_lower else upper_count
 
-    return epsilon
+    # Keep the legacy value when it defines the selected recurrence set.
+    legacy_count = int(
+        np.count_nonzero(eligible_distances <= legacy_epsilon)
+    )
+    if legacy_epsilon > 0.0 and legacy_count == selected_count:
+        selected_threshold = legacy_epsilon
+
+    if selected_threshold <= 0.0:
+        raise RuntimeError("No positive fixed-RR threshold is available.")
+
+    return selected_threshold, float(zero_fraction), n_eligible
 
 
 def compute_recurrence_matrix(
@@ -152,8 +204,8 @@ def compute_recurrence_matrix(
 
     if distances.ndim != 2 or distances.shape[0] != distances.shape[1]:
         raise ValueError("distances must be a square matrix.")
-    if not np.isfinite(epsilon) or epsilon <= 0.0:
-        raise ValueError("epsilon must be positive.")
+    if not np.isfinite(epsilon) or epsilon < 0.0:
+        raise ValueError("epsilon must be non-negative.")
 
     # Theiler correction is applied separately after thresholding.
     return distances <= epsilon
@@ -416,8 +468,8 @@ def run_rqa(
 
     theiler = (m - 1) * tau
 
-    # Epsilon uses only nonduplicate distances outside the Theiler corridor.
-    epsilon = compute_fixed_rr_threshold(
+    # Epsilon uses all eligible distances outside the Theiler corridor.
+    epsilon, zero_fraction, n_eligible = _select_fixed_rr_threshold(
         distances,
         theiler=theiler,
         target_rr=target_rr,
@@ -476,6 +528,10 @@ def run_rqa(
             theiler=theiler,
         )
     )
+    rr_tolerance = 0.5 / n_eligible + np.finfo(float).eps
+    rr_exact = bool(
+        abs(achieved_rr - target_rr) <= rr_tolerance
+    )
 
     return RQAResult(
         det=det,
@@ -488,6 +544,8 @@ def run_rqa(
         epsilon=epsilon,
         target_rr=float(target_rr),
         achieved_rr=achieved_rr,
+        zero_distance_fraction=zero_fraction,
+        rr_exact=rr_exact,
         theiler=theiler,
         n_diagonal_lines=n_diag,
         n_vertical_lines=n_vert,
