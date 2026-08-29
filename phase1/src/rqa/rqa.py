@@ -1,7 +1,41 @@
 from dataclasses import dataclass
 
 import numpy as np
-from scipy.spatial.distance import cdist
+
+try:
+    from scipy.spatial.distance import cdist
+except (ImportError, ValueError):
+    def cdist(
+        first: np.ndarray,
+        second: np.ndarray,
+        metric: str = "euclidean",
+    ) -> np.ndarray:
+        """Compute Euclidean distances when SciPy is unavailable."""
+        if metric != "euclidean":
+            raise ValueError(
+                "The NumPy fallback supports Euclidean distance only."
+            )
+
+        first = np.asarray(first, dtype=float)
+        second = np.asarray(second, dtype=float)
+        if first.ndim != 2 or second.ndim != 2:
+            raise ValueError("Distance inputs must be two-dimensional.")
+        if first.shape[1] != second.shape[1]:
+            raise ValueError("Distance inputs must have equal feature counts.")
+
+        distances = np.empty((len(first), len(second)), dtype=float)
+        values_per_row = max(
+            1,
+            len(second) * first.shape[1],
+        )
+        block_size = max(1, 2**20 // values_per_row)
+        for start in range(0, len(first), block_size):
+            stop = min(start + block_size, len(first))
+            differences = first[start:stop, None, :] - second[None, :, :]
+            squared = np.einsum("ijk,ijk->ij", differences, differences)
+            np.sqrt(squared, out=distances[start:stop])
+
+        return distances
 
 
 # Fixed-RR pipeline:
