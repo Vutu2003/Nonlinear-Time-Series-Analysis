@@ -1,0 +1,3 @@
+session,window_id,state,fs_hz,stationarity_score_processed,centrality_distance,selection_rule,signal_sd,signal_iqr,rmssd,skewness,excess_kurtosis
+sample_1,7,Awake,50.000000000045475,0.17857617328338113,0.19297299233090323,session sample_1 fixed a priori; minimum robust within-state morphology distance,163.7686181275348,277.88511416033606,40.56134577237894,-0.40152310629838184,-1.0836652217505456
+sample_1,25,Drowsy,50.000000000045475,0.3819388338101805,0.0,session sample_1 fixed a priori; minimum robust within-state morphology distance,111.54495095570948,184.45342509415656,26.307161820896614,-0.5376868257474706,-0.8706809474475339
