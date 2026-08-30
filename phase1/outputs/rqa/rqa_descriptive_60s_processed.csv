@@ -1,0 +1,5 @@
+metric,awake_median,drowsy_median,drowsy_median_minus_awake_median,n_drowsy_gt_awake,n_drowsy_lt_awake,n_drowsy_eq_awake
+DET,0.7126145798,0.6983490906,-0.01426548927,5,15,0
+Lmean,4.013234009,3.915069524,-0.09816448468,4,16,0
+LAM,0.3146086289,0.328886116,0.01427748716,13,7,0
+TT,2.026677259,2.033117411,0.006440152697,14,6,0
