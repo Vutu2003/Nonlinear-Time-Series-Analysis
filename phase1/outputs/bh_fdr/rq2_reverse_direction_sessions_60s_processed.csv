@@ -1,0 +1,37 @@
+Domain,Metric,Session,Awake_value,Drowsy_value,Delta_Drowsy_minus_Awake,expected_direction,observed_direction
+Prediction,Mean_CC,session_01,0.71625728,0.73717846,0.02092118,lower in Drowsy,higher in Drowsy
+Prediction,Mean_CC,session_04,0.62487759,0.66170646,0.03682887,lower in Drowsy,higher in Drowsy
+Prediction,Mean_CC,session_09,0.67370997,0.68369145,0.00998148,lower in Drowsy,higher in Drowsy
+Prediction,Mean_CC,session_13,0.65704069,0.66286413,0.00582344,lower in Drowsy,higher in Drowsy
+Prediction,Mean_CC,session_17,0.6670946,0.76691449,0.09981989,lower in Drowsy,higher in Drowsy
+Prediction,Mean_NRMSE,session_01,0.58696249,0.58284113,-0.00412136,higher in Drowsy,lower in Drowsy
+Prediction,Mean_NRMSE,session_04,0.68975104,0.6695738,-0.02017724,higher in Drowsy,lower in Drowsy
+Prediction,Mean_NRMSE,session_13,0.6827985,0.67639734,-0.00640116,higher in Drowsy,lower in Drowsy
+Prediction,Mean_NRMSE,session_17,0.6735028,0.58216211,-0.09134069,higher in Drowsy,lower in Drowsy
+Prediction,Mean_NRMSE,session_21,0.7005008,0.69781284,-0.00268796,higher in Drowsy,lower in Drowsy
+RQA,DET,session_01,0.9191743526,0.9390959137,0.0199215611,lower in Drowsy,higher in Drowsy
+RQA,DET,session_04,0.695829534,0.7143062821,0.0184767481,lower in Drowsy,higher in Drowsy
+RQA,DET,session_09,0.5960550943,0.6426788885,0.0466237942,lower in Drowsy,higher in Drowsy
+RQA,DET,session_12,0.6341727137,0.6651929454,0.0310202317,lower in Drowsy,higher in Drowsy
+RQA,DET,session_13,0.7177616739,0.7217449729,0.003983299,lower in Drowsy,higher in Drowsy
+RQA,Lmean,session_01,4.972188214,5.256884422,0.284696208,lower in Drowsy,higher in Drowsy
+RQA,Lmean,session_09,3.533367037,3.722410187,0.18904315,lower in Drowsy,higher in Drowsy
+RQA,Lmean,session_12,3.614850395,3.774434088,0.159583693,lower in Drowsy,higher in Drowsy
+RQA,Lmean,session_19,3.646269336,3.674563748,0.028294412,lower in Drowsy,higher in Drowsy
+RQA,LAM,session_04,0.3216633872,0.2804866344,-0.0411767528,higher in Drowsy,lower in Drowsy
+RQA,LAM,session_09,0.3105533426,0.2719801315,-0.0385732111,higher in Drowsy,lower in Drowsy
+RQA,LAM,session_11,0.3559893459,0.3485146614,-0.0074746845,higher in Drowsy,lower in Drowsy
+RQA,LAM,session_13,0.458727264,0.3674953208,-0.0912319432,higher in Drowsy,lower in Drowsy
+RQA,LAM,session_15,0.2546671786,0.2534193982,-0.0012477804,higher in Drowsy,lower in Drowsy
+RQA,LAM,session_17,0.4232255123,0.3490665643,-0.074158948,higher in Drowsy,lower in Drowsy
+RQA,LAM,session_23,0.4399865624,0.4146470221,-0.0253395403,higher in Drowsy,lower in Drowsy
+RQA,TT,session_01,2.459657902,2.44831075,-0.011347152,higher in Drowsy,lower in Drowsy
+RQA,TT,session_04,2.036613272,2.027823241,-0.008790031,higher in Drowsy,lower in Drowsy
+RQA,TT,session_09,2.05341074,2.013289909,-0.040120831,higher in Drowsy,lower in Drowsy
+RQA,TT,session_13,2.110099241,2.051845494,-0.058253747,higher in Drowsy,lower in Drowsy
+RQA,TT,session_17,2.05690725,2.028526302,-0.028380948,higher in Drowsy,lower in Drowsy
+RQA,TT,session_23,2.088029051,2.077984637,-0.010044414,higher in Drowsy,lower in Drowsy
+Local divergence,LLE,session_09,0.7538726861,0.7618431815,0.0079704954,lower in Drowsy,higher in Drowsy
+Local divergence,LLE,session_12,0.7697401216,0.7728564744,0.0031163528,lower in Drowsy,higher in Drowsy
+Local divergence,LLE,session_13,0.7834380338,0.8029733651,0.0195353313,lower in Drowsy,higher in Drowsy
+Local divergence,LLE,session_18,0.7094166847,0.7559050314,0.0464883467,lower in Drowsy,higher in Drowsy
