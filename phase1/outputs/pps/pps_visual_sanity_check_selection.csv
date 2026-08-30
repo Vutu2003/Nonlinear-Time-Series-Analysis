@@ -1,0 +1,2 @@
+session,state,window_size_s,window_id,sampling_rate_hz,n_samples,dataset_median_stationarity_score,window_stationarity_score,absolute_distance_to_median,embedding_dimension,tau_seconds,tau_samples,rho_star,surrogate_seed,display_start_s,display_end_s
+session_01,Awake,60,3,50,3000,0.1446534176,0.1344838362,0.0101695814,8,0.16,8,18.1840661,20260829,0,15
