@@ -1,0 +1,2 @@
+metric,n_sessions,awake_median,drowsy_median,median_delta,bootstrap_ci_low,bootstrap_ci_high,bootstrap_resamples,bootstrap_seed,wilcoxon_statistic,raw_p_value,rank_biserial_r_rb,n_positive,n_negative,n_zero,n_valid_windows
+LLE,20,0.8109117134,0.7947168305,-0.03757036126,-0.05369761933,-0.02297554368,20000,20260829,20,0.0007076263428,-0.8095238095,4,16,0,872

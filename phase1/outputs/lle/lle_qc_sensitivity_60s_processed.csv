@@ -1,0 +1,3 @@
+criterion,fit_r2_threshold,retained_windows,retained_paired_sessions,median_delta,bootstrap_ci_low,bootstrap_ci_high,raw_p_value,rank_biserial_r_rb,n_positive,n_negative,n_zero
+Primary,0.9,872,20,-0.03757036126,-0.05369761933,-0.02297554368,0.0007076263428,-0.8095238095,4,16,0
+Sensitivity,0.95,734,20,-0.03061820472,-0.0417010411,-0.01398692912,0.002325057983,-0.7428571429,4,16,0
