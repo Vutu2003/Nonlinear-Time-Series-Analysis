@@ -1,0 +1,13 @@
+record_type,state,requested_horizon_s,horizon_seconds,n_sessions,n_windows,cc_value_median,cc_value_q25,cc_value_q75,nrmse_value_median,nrmse_value_q25,nrmse_value_q75,cc_decay_count,nrmse_increase_count,value_definition
+horizon_summary,Awake,0.04,0.04,20,596,0.966166,0.961027,0.971301,0.258062,0.237996,0.277835,,,Across-session distribution of session-level window medians
+horizon_summary,Awake,0.5,0.4,20,596,0.901429,0.877341,0.915145,0.432740,0.402490,0.481166,,,Across-session distribution of session-level window medians
+horizon_summary,Awake,1.0,1.0,20,596,0.759257,0.712961,0.803843,0.654519,0.595402,0.700639,,,Across-session distribution of session-level window medians
+horizon_summary,Awake,2.0,2.0,20,596,0.534876,0.491662,0.576004,0.861734,0.827778,0.887819,,,Across-session distribution of session-level window medians
+horizon_summary,Awake,4.0,4.0,20,596,0.215728,0.177981,0.290775,1.019443,0.996391,1.034380,,,Across-session distribution of session-level window medians
+horizon_summary,Drowsy,0.04,0.04,20,305,0.962198,0.957250,0.965866,0.273594,0.259876,0.289066,,,Across-session distribution of session-level window medians
+horizon_summary,Drowsy,0.5,0.4,20,305,0.885741,0.873370,0.907104,0.464833,0.420753,0.486111,,,Across-session distribution of session-level window medians
+horizon_summary,Drowsy,1.0,1.0,20,305,0.730302,0.713442,0.753860,0.687378,0.660530,0.706607,,,Across-session distribution of session-level window medians
+horizon_summary,Drowsy,2.0,2.0,20,305,0.488629,0.450717,0.520694,0.889375,0.871416,0.905598,,,Across-session distribution of session-level window medians
+horizon_summary,Drowsy,4.0,4.0,20,305,0.179450,0.146557,0.225296,1.037755,1.019872,1.045913,,,Across-session distribution of session-level window medians
+endpoint_change,Awake,,,20,596,-0.744251,-0.786992,-0.680075,0.758534,0.743684,0.772800,20,20,Session endpoint change: 4.00 s minus 0.04 s
+endpoint_change,Drowsy,,,20,305,-0.783377,-0.808241,-0.736713,0.754952,0.743118,0.769173,20,20,Session endpoint change: 4.00 s minus 0.04 s
