@@ -1,0 +1,15 @@
+Metric,State,Valid windows,"Windows with exact p=0.05, n (%)",Sessions with >50% directional rejection,Expected direction
+CC,Awake,596,374 (62.8%),16/20,Original > PPS
+CC,Drowsy,305,229 (75.1%),19/20,Original > PPS
+NRMSE,Awake,596,542 (90.9%),20/20,Original < PPS
+NRMSE,Drowsy,305,291 (95.4%),20/20,Original < PPS
+DET,Awake,596,595 (99.8%),20/20,Original > PPS
+DET,Drowsy,305,305 (100.0%),20/20,Original > PPS
+Lmean,Awake,596,594 (99.7%),20/20,Original > PPS
+Lmean,Drowsy,305,305 (100.0%),20/20,Original > PPS
+LAM,Awake,596,537 (90.1%),20/20,Original < PPS
+LAM,Drowsy,305,273 (89.5%),20/20,Original < PPS
+TT,Awake,596,580 (97.3%),20/20,Original < PPS
+TT,Drowsy,305,295 (96.7%),20/20,Original < PPS
+LLE,Awake,579,545 (94.1%),20/20,Original > PPS
+LLE,Drowsy,293,287 (98.0%),20/20,Original > PPS
