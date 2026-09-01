@@ -1,16 +1,15 @@
-## Window-size robustness — Final interpretation
+## Four-duration window-size robustness
 
-The primary Awake–Drowsy effects were re-evaluated at 120-s and 180-s window lengths.
+The 60-s analysis remains primary; 30, 120, and 180 s are sensitivity analyses.
 
-- Mean_CC: median Delta -0.0339, -0.0271, and -0.0428 at 60, 120, and 180 s; same expected sign in 14/20 sessions.
-- Mean_NRMSE: median Delta 0.0294, 0.0321, and 0.0321 at 60, 120, and 180 s; same expected sign in 15/20 sessions.
-- DET: median Delta -0.0186, -0.0201, and -0.0248 at 60, 120, and 180 s; same expected sign in 14/20 sessions.
-- LLE: median Delta -0.0376, -0.0442, and -0.0498 at 60, 120, and 180 s; same expected sign in 15/20 sessions.
+Metrics preserving the predefined effect direction at all four durations: Mean_CC, Mean_NRMSE, DET, LLE.
+Metrics not preserving it at all four durations: none.
 
-Across the four headline metrics, the direction of the 60-s effect was preserved at both longer window sizes.
+- Mean_CC: 30-s median Delta=-0.0147 versus 60-s=-0.0339 (absolute magnitude smaller; ratio=0.434); same expected sign across all durations in 12/20 common sessions.
+- Mean_NRMSE: 30-s median Delta=0.0203 versus 60-s=0.0294 (absolute magnitude smaller; ratio=0.689); same expected sign across all durations in 13/20 common sessions.
+- DET: 30-s median Delta=-0.0169 versus 60-s=-0.0186 (absolute magnitude smaller; ratio=0.906); same expected sign across all durations in 12/20 common sessions.
+- LLE: 30-s median Delta=-0.0325 versus 60-s=-0.0376 (absolute magnitude smaller; ratio=0.865); same expected sign across all durations in 15/20 common sessions.
 
-Effect directions and bootstrap confidence intervals showed partially stable behavior across durations.
+The widest absolute bootstrap interval occurred for Mean_CC at 30 s (width=0.0673 on that metric's native scale).
 
-These results indicate that the primary 60-s findings are not directionally dependent on the selected window length.
-
-The 120-s and 180-s analyses are strictly robustness checks; 60 s remains the predefined primary temporal scale. Raw robustness p-values were not added to the primary BH-FDR family.
+Direction and magnitude are reported independently of statistical significance. Raw robustness p-values are descriptive and were not added to the primary BH-FDR family.
