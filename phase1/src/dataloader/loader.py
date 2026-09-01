@@ -14,6 +14,7 @@ REQUIRED_COLUMNS = [
 ]
 
 PRIMARY_WINDOW_SIZES = (60, 120, 180)
+SUPPORTED_WINDOW_SIZES = (30, *PRIMARY_WINDOW_SIZES)
 SEGMENTED_INDEX_COLUMNS = [
     "session",
     "npz_file",
@@ -173,10 +174,10 @@ def _normalize_window_sizes(
         ):
             raise TypeError("Every window size must be an integer")
         size = int(value)
-        if size not in PRIMARY_WINDOW_SIZES:
+        if size not in SUPPORTED_WINDOW_SIZES:
             raise ValueError(
                 f"Unsupported window size {size}; "
-                f"choose from {PRIMARY_WINDOW_SIZES}"
+                f"choose from {SUPPORTED_WINDOW_SIZES}"
             )
         if size not in normalized:
             normalized.append(size)
@@ -267,6 +268,37 @@ def _read_segmented_index(index_path: Path) -> pd.DataFrame:
         index[column] = normalized.map(mapping).astype(bool)
 
     return index
+
+
+def _unpack_numeric_windows(
+    values: np.ndarray,
+    offsets: np.ndarray,
+    logical_name: str,
+) -> tuple[np.ndarray, np.ndarray, bool]:
+    """Decode packed numeric windows without pickle or padding."""
+    values = np.asarray(values)
+    offsets = np.asarray(offsets, dtype=int)
+    if values.ndim != 1:
+        raise ValueError(f"Packed {logical_name} values must be one-dimensional")
+    if offsets.ndim != 1 or len(offsets) < 2:
+        raise ValueError(f"Packed {logical_name} offsets are invalid")
+    if offsets[0] != 0 or offsets[-1] != len(values):
+        raise ValueError(f"Packed {logical_name} offsets do not span values")
+    if np.any(np.diff(offsets) <= 0):
+        raise ValueError(f"Packed {logical_name} windows must be non-empty")
+
+    lengths = np.diff(offsets)
+    windows = [
+        values[start:end].copy()
+        for start, end in zip(offsets[:-1], offsets[1:])
+    ]
+    is_ragged = not np.all(lengths == lengths[0])
+    if is_ragged:
+        unpacked = np.empty(len(windows), dtype=object)
+        unpacked[:] = windows
+    else:
+        unpacked = np.stack(windows)
+    return unpacked, lengths.astype(int), is_ragged
 
 
 # Reproducibility use:
@@ -365,8 +397,6 @@ def load_segmented_session(
             for window_size in selected_sizes:
                 prefix = str(window_size)
                 required_keys = {
-                    f"{prefix}/raw",
-                    f"{prefix}/processed",
                     f"{prefix}/window_id",
                     f"{prefix}/label",
                     f"{prefix}/start_time",
@@ -376,6 +406,33 @@ def load_segmented_session(
                     f"{prefix}/stationarity_score_processed",
                     f"{prefix}/stationarity_pass_processed",
                 }
+                has_raw = f"{prefix}/raw" in archive.files
+                has_dense_processed = (
+                    f"{prefix}/processed" in archive.files
+                )
+                packed_processed_keys = {
+                    f"{prefix}/processed_values",
+                    f"{prefix}/processed_offsets",
+                    f"{prefix}/time_values",
+                    f"{prefix}/time_offsets",
+                }
+                has_packed_processed = packed_processed_keys.issubset(
+                    archive.files
+                )
+                if representation in {"raw", "both"} and not has_raw:
+                    raise ValueError(
+                        f"Raw representation is unavailable for "
+                        f"{window_size} s in {archive_path.name}"
+                    )
+                if (
+                    representation in {"processed", "both"}
+                    and not has_dense_processed
+                    and not has_packed_processed
+                ):
+                    raise ValueError(
+                        f"Processed representation is unavailable for "
+                        f"{window_size} s in {archive_path.name}"
+                    )
                 missing_keys = required_keys.difference(archive.files)
                 if missing_keys:
                     raise ValueError(
@@ -383,28 +440,78 @@ def load_segmented_session(
                         f"{sorted(missing_keys)}"
                     )
 
-                raw = archive[f"{prefix}/raw"]
-                processed = archive[f"{prefix}/processed"]
-                if raw.ndim != 2 or raw.shape != processed.shape:
-                    raise ValueError(
-                        f"Raw/processed shape mismatch for {window_size} s"
-                    )
-
+                archive_ids = archive[f"{prefix}/window_id"]
                 size_rows = session_rows[
                     session_rows["window_size_s"] == window_size
                 ].sort_values("row_index")
-                if len(size_rows) != raw.shape[0]:
+                if len(size_rows) != len(archive_ids):
                     raise ValueError(
                         f"Index length mismatch for {window_size} s"
                     )
-
-                archive_ids = archive[f"{prefix}/window_id"]
                 if not np.array_equal(
                     archive_ids,
                     size_rows["window_id"].to_numpy(dtype=int),
                 ):
                     raise ValueError(
                         f"Window IDs do not match for {window_size} s"
+                    )
+
+                raw = None
+                if has_raw:
+                    raw = archive[f"{prefix}/raw"]
+                    if raw.ndim != 2 or raw.shape[0] != len(archive_ids):
+                        raise ValueError(
+                            f"Invalid raw shape for {window_size} s"
+                        )
+
+                processed = None
+                processed_lengths = None
+                packed_time = None
+                is_ragged = False
+                if has_dense_processed:
+                    processed = archive[f"{prefix}/processed"]
+                    if (
+                        processed.ndim != 2
+                        or processed.shape[0] != len(archive_ids)
+                    ):
+                        raise ValueError(
+                            f"Invalid processed shape for {window_size} s"
+                        )
+                    processed_lengths = np.full(
+                        len(processed), processed.shape[1], dtype=int
+                    )
+                elif has_packed_processed:
+                    processed, processed_lengths, is_ragged = (
+                        _unpack_numeric_windows(
+                            archive[f"{prefix}/processed_values"],
+                            archive[f"{prefix}/processed_offsets"],
+                            f"{window_size}-s processed",
+                        )
+                    )
+                    packed_time, time_lengths, time_is_ragged = (
+                        _unpack_numeric_windows(
+                            archive[f"{prefix}/time_values"],
+                            archive[f"{prefix}/time_offsets"],
+                            f"{window_size}-s time",
+                        )
+                    )
+                    if not np.array_equal(
+                        processed_lengths, time_lengths
+                    ):
+                        raise ValueError(
+                            f"Processed/time lengths differ for {window_size} s"
+                        )
+                    is_ragged = is_ragged or time_is_ragged
+                if representation == "both" and raw.shape != processed.shape:
+                    raise ValueError(
+                        f"Raw/processed shape mismatch for {window_size} s"
+                    )
+                if processed_lengths is not None and not np.array_equal(
+                    processed_lengths,
+                    size_rows["n_samples"].to_numpy(dtype=int),
+                ):
+                    raise ValueError(
+                        f"Index sample counts differ for {window_size} s"
                     )
 
                 selected = size_rows
@@ -418,10 +525,22 @@ def load_segmented_session(
                 selected = selected.sort_values("row_index").copy()
                 row_indices = selected["row_index"].to_numpy(dtype=int)
 
+                if representation == "raw":
+                    selected_lengths = np.full(
+                        len(row_indices), raw.shape[1], dtype=int
+                    )
+                else:
+                    selected_lengths = processed_lengths[row_indices].copy()
                 batch = {
                     "representation": representation,
                     "fs": fs,
-                    "n_samples": int(raw.shape[1]),
+                    "n_samples": (
+                        int(selected_lengths[0])
+                        if len(selected_lengths)
+                        and np.all(selected_lengths == selected_lengths[0])
+                        else selected_lengths
+                    ),
+                    "is_ragged": bool(is_ragged),
                     "row_index": row_indices.copy(),
                     "window_id": archive_ids[row_indices].copy(),
                     "label": archive[f"{prefix}/label"][row_indices].copy(),
@@ -432,6 +551,8 @@ def load_segmented_session(
                         f"{prefix}/end_time"
                     ][row_indices].copy(),
                 }
+                if packed_time is not None:
+                    batch["time"] = packed_time[row_indices].copy()
 
                 if representation == "both":
                     batch.update({
@@ -497,10 +618,11 @@ def load_segmented_session(
 # data_awake, data_drowsy = get_data("sample_1.csv")
 # awake_60 = data_awake[60]
 #
-# Each state is keyed by window size. Every batch contains aligned
-# ``raw``, ``processed``, and ``time`` arrays with shape
-# (n_windows, n_samples). Exported windows have already passed SQI.
-# ``stationarity`` selects a pass flag or disables stationarity filtering.
+# Each state is keyed by window size. Legacy datasets return aligned dense
+# ``raw``, ``processed``, and ``time`` arrays. Processed-only packed datasets
+# omit ``raw`` and may return iterable object arrays when window lengths differ.
+# Exported windows have already passed SQI. ``stationarity`` selects a pass
+# flag or disables stationarity filtering.
 
 def get_data(
     session: str,
@@ -521,12 +643,44 @@ def get_data(
             "stationarity must be 'raw', 'processed', 'both', or 'none'"
         )
 
+    if not isinstance(session, str) or not session.strip():
+        raise TypeError("session must be a non-empty string")
+    selected_sizes = _normalize_window_sizes(window_sizes)
+    dataset_dir = (
+        _default_segmented_data_dir()
+        if data_dir is None
+        else Path(data_dir)
+    )
+    archive_path = dataset_dir / f"{Path(session.strip()).stem}.npz"
+    if not archive_path.is_file():
+        raise FileNotFoundError(
+            f"Session archive does not exist: {archive_path}"
+        )
+    try:
+        with np.load(archive_path, allow_pickle=False) as archive:
+            has_raw = all(
+                f"{window_size}/raw" in archive.files
+                for window_size in selected_sizes
+            )
+    except (OSError, ValueError) as exc:
+        raise ValueError(
+            f"Cannot inspect segmented session '{archive_path.name}': {exc}"
+        ) from exc
+    loader_representation = "both" if has_raw else "processed"
+    if loader_representation == "processed" and stationarity in {
+        "raw",
+        "both",
+    }:
+        raise ValueError(
+            "Raw stationarity is unavailable in this processed-only dataset"
+        )
+
     # Exported segmented windows have already passed SQI.
     batches, _ = load_segmented_session(
         session,
-        data_dir=data_dir,
-        window_sizes=window_sizes,
-        representation="both",
+        data_dir=dataset_dir,
+        window_sizes=selected_sizes,
+        representation=loader_representation,
         stationarity_only=False,
     )
     state_data = {0: {}, 1: {}}
@@ -534,33 +688,46 @@ def get_data(
     for window_size, batch in batches.items():
         if stationarity == "none":
             stationary = np.ones(len(batch["label"]), dtype=bool)
-        elif stationarity == "both":
+        elif loader_representation == "both" and stationarity == "both":
             stationary = (
                 batch["stationarity_pass_raw"]
                 & batch["stationarity_pass_processed"]
             )
-        else:
+        elif loader_representation == "both":
             stationary = batch[f"stationarity_pass_{stationarity}"]
-
-        sample_offsets = np.arange(
-            batch["n_samples"],
-            dtype=float,
-        ) / batch["fs"]
+        else:
+            stationary = batch["stationarity_pass"]
 
         for label in state_data:
             selected = stationary & (batch["label"] == label)
             start_time = batch["start_time"][selected].copy()
-            time = start_time[:, None] + sample_offsets
-
-            state_data[label][window_size] = {
-                "raw": batch["raw"][selected].copy(),
-                "processed": batch["processed"][selected].copy(),
+            if "time" in batch:
+                time = batch["time"][selected].copy()
+            else:
+                sample_offsets = np.arange(
+                    batch["n_samples"], dtype=float
+                ) / batch["fs"]
+                time = start_time[:, None] + sample_offsets
+            processed = (
+                batch["processed"]
+                if loader_representation == "both"
+                else batch["signal"]
+            )
+            n_samples = batch["n_samples"]
+            if not np.isscalar(n_samples):
+                n_samples = np.asarray(n_samples)[selected].copy()
+            state_batch = {
+                "processed": processed[selected].copy(),
                 "time": time,
                 "window_id": batch["window_id"][selected].copy(),
                 "start_time": start_time,
                 "end_time": batch["end_time"][selected].copy(),
                 "fs": batch["fs"],
-                "n_samples": batch["n_samples"],
+                "n_samples": n_samples,
+                "is_ragged": bool(batch.get("is_ragged", False)),
             }
+            if loader_representation == "both":
+                state_batch["raw"] = batch["raw"][selected].copy()
+            state_data[label][window_size] = state_batch
 
     return state_data[0], state_data[1]
