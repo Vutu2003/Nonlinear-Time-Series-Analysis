@@ -1,219 +1,145 @@
+````markdown
 # Verification Plan — PPG Dynamics Across Awake–Drowsy
 
 ## Mục tiêu chung
 
-Mục tiêu của verification phase không phải tìm thêm metric mới hay cố làm cho nhiều kết quả đạt significance hơn.
-
-Mục tiêu là kiểm tra xem các finding chính:
+Verification phase nhằm kiểm tra xem các finding chính của nghiên cứu:
 
 - CC ↓
 - NRMSE ↑
 - DET ↓
 - LLE ↓
 
-có còn giữ được khi thay đổi những giả định quan trọng nhất của pipeline hay không.
+có còn giữ được khi thay đổi các giả định hợp lý của pipeline hay không.
 
-Ba nguồn bất định cần kiểm tra:
+Ba nguồn bất định chính cần kiểm tra:
 
 1. Label uncertainty
-2. Statistical dependence giữa các session cùng subject
-3. NTSA parameter dependence
+2. NTSA parameter dependence
+3. Statistical dependence giữa các session cùng subject
+
+Thứ tự ưu tiên được sắp xếp theo mức độ liên quan trực tiếp tới concern hiện tại của nghiên cứu:
+
+```text
+Label uncertainty
+        ↓
+NTSA parameter robustness
+        ↓
+Method-specific robustness
+        ↓
+Window-length robustness
+        ↓
+Subject-level strict sensitivity
+````
 
 Nguyên tắc chung:
 
-> Một finding được xem là robust nếu hướng thay đổi, độ lớn hiệu ứng và tính nhất quán vẫn được duy trì dưới các thiết lập hợp lý khác nhau, ngay cả khi p-value hoặc CI thay đổi.
-
-Không sử dụng significance như tiêu chí duy nhất để quyết định robustness.
+> Verification không nhằm làm cho tất cả kết quả trở nên statistically significant, mà nhằm kiểm tra xem kết luận khoa học có ổn định dưới các giả định hợp lý khác nhau hay không.
 
 ---
 
-# 1. Verification A — Label Reliability / Label Robustness
+# 1. Verification A — Label Uncertainty
 
-## 1.1. Câu hỏi khoa học
+## 1.1. Mục tiêu
 
-Các khác biệt Awake–Drowsy có phụ thuộc quá mạnh vào bộ label hiện có hay không?
+Kiểm tra xem các khác biệt Awake–Drowsy có phụ thuộc quá mạnh vào bộ label hiện tại hay không.
 
-Dataset hiện tại chỉ cung cấp:
+Dataset hiện tại chỉ có:
 
-- PPG
-- label Awake/Drowsy
-- có thể có KSS/raw score tùy file
+* PPG
+* Awake/Drowsy label
+* không có raw camera data để tái đánh giá độc lập
 
-Không có raw camera recordings để tái đánh giá label độc lập.
+Do đó không thể trực tiếp xác nhận camera-based validation.
 
-Do đó không thể claim:
+Mục tiêu phù hợp hơn là:
 
-> Camera independently validated the labels.
-
-Thay vào đó, mục tiêu là:
-
-> Kiểm tra tính ổn định của các finding khi áp dụng các quy tắc label bảo thủ hơn.
+> Kiểm tra tính ổn định của các finding khi áp dụng các cách chọn label bảo thủ hơn.
 
 ---
 
-## 1.2. Audit lại label structure
+## 1.2. Audit cấu trúc label
 
-Trước khi chạy sensitivity analysis, cần tạo một bảng mô tả đầy đủ label structure.
+Trước sensitivity analysis, cần kiểm tra:
 
-### Cần xác định
-
-- label hiện tại là binary Awake/Drowsy hay có raw KSS?
-- KSS được ghi trực tiếp trong CSV hay chỉ label đã quy đổi?
-- label đổi theo sample, beat, epoch hay đoạn thời gian?
-- thời lượng trung bình của mỗi contiguous state segment
-- số lần chuyển state trong mỗi session
-- có isolated segment rất ngắn không?
-- có A → D → A hoặc D → A → D trong thời gian rất ngắn không?
+* label là binary Awake/Drowsy hay có raw KSS
+* label được cập nhật theo đơn vị thời gian nào
+* số lần Awake ↔ Drowsy transition trong từng session
+* thời lượng từng contiguous state segment
+* có segment rất ngắn hoặc label oscillation bất thường hay không
+* vị trí chính xác của các state transition
 
 ### Output
 
-Tạo một bảng:
+Tạo bảng:
 
-| subject | session | state | segment_start | segment_end | duration | n_windows |
-|---|---|---|---|---|---|---|
+| subject | session | state | start | end | duration |
+| ------- | ------- | ----- | ----- | --- | -------- |
 
-Và một bảng summary:
+và summary:
 
-| session | n_awake_segments | n_drowsy_segments | median_awake_duration | median_drowsy_duration | n_transitions |
-|---|---:|---:|---:|---:|---:|
-
-Mục tiêu:
-
-> hiểu cấu trúc label trước khi thiết kế sensitivity rule.
+| session | n_awake_segments | n_drowsy_segments | n_transitions | median_state_duration |
+| ------- | ---------------: | ----------------: | ------------: | --------------------: |
 
 ---
 
-## 1.3. Trường hợp có raw KSS score
+## 1.3. Transition-boundary exclusion
 
-Nếu raw KSS có sẵn, giữ một labeling scheme làm primary và tạo một hoặc nhiều stricter schemes.
+### Giả thuyết
 
-Ví dụ:
-
-### Primary scheme
-
-Giữ đúng rule hiện tại của dataset.
-
-### Strict scheme
-
-- Awake: chỉ giữ KSS thấp rõ ràng
-- Drowsy: chỉ giữ KSS cao rõ ràng
-- loại vùng KSS trung gian
-
-Không lựa chọn threshold dựa trên NTSA result.
-
-Threshold phải được xác định từ:
-
-- protocol dataset
-- literature KSS
-- hoặc rule đã định trước
-
-### Rerun
-
-Chỉ rerun bốn headline metrics:
-
-- CC
-- NRMSE
-- DET
-- LLE
-
-### So sánh
-
-Với mỗi metric:
-
-| metric | primary Δ | strict Δ | direction preserved | 95% CI | q |
-|---|---:|---:|---|---|---|
-
-Primary quantity:
-
-$$
-\Delta = \mathrm{Drowsy} - \mathrm{Awake}
-$$
-
-### Tiêu chí robustness
-
-Ưu tiên theo thứ tự:
-
-1. giữ cùng direction
-2. magnitude không collapse
-3. session/subject consistency còn tương tự
-4. CI vẫn centered cùng phía
-5. significance chỉ là secondary
-
----
-
-## 1.4. Trường hợp chỉ có binary label
-
-Nếu không có raw KSS, không được tạo artificial KSS thresholds.
-
-Thay vào đó dùng các sensitivity analyses sau.
-
----
-
-## 1.4.1. Transition-boundary exclusion
-
-### Ý tưởng
-
-Window nằm sát ranh giới Awake ↔ Drowsy có khả năng chứa mixed physiological state hoặc label uncertainty cao hơn.
+Các window nằm sát ranh giới Awake–Drowsy có khả năng chứa trạng thái sinh lý pha trộn hoặc label uncertainty cao hơn.
 
 ### Thiết kế
 
 Primary:
 
-> dùng toàn bộ valid labeled windows.
+> sử dụng toàn bộ valid windows như hiện tại.
 
-Sensitivity A:
+Sensitivity 1:
 
-> loại các window nằm trong ±30 s quanh state transition.
+> loại window nằm trong ±30 s quanh state transition.
 
-Sensitivity B:
+Sensitivity 2:
 
-> loại các window nằm trong ±60 s quanh state transition.
+> loại window nằm trong ±60 s quanh state transition.
 
-Có thể thêm ±90 s nếu data density vẫn đủ, nhưng không cần quá nhiều mức.
+Có thể thêm ±90 s nếu số lượng dữ liệu vẫn đủ, nhưng không bắt buộc.
 
-### Implementation
+### Pipeline
 
-Một window bị loại nếu:
+```text
+Original labels
+→ identify transition points
+→ remove boundary windows
+→ recompute session × state medians
+→ paired Awake–Drowsy comparison
+```
 
-$$
-\operatorname{distance}(\text{window},\text{transition}) < T
-$$
+### Metrics
 
-với:
+Chỉ rerun 4 headline metrics:
 
-$$
-T \in \{30\,\mathrm{s}, 60\,\mathrm{s}\}
-$$
+* CC
+* NRMSE
+* DET
+* LLE
 
-### Rerun
+### Output
 
-Rerun:
-
-- CC
-- NRMSE
-- DET
-- LLE
-
-Sau đó aggregate lại đúng pipeline primary:
-
-window → median per session × state → paired Awake–Drowsy comparison.
-
-### Kết quả cần báo
-
-| metric | primary | ±30 s excluded | ±60 s excluded | direction stable |
-|---|---:|---:|---:|---|
-
-### Diễn giải nếu pass
-
-> Finding không phụ thuộc chủ yếu vào những window gần ranh giới trạng thái.
+| Metric | Primary Δ | ±30 s | ±60 s | Direction preserved |
+| ------ | --------: | ----: | ----: | ------------------- |
+| CC     |           |       |       |                     |
+| NRMSE  |           |       |       |                     |
+| DET    |           |       |       |                     |
+| LLE    |           |       |       |                     |
 
 ---
 
-## 1.4.2. Minimum state-segment duration
+## 1.4. Minimum state-segment duration
 
-### Ý tưởng
+### Giả thuyết
 
-Các state segment quá ngắn có thể là label không ổn định hoặc transition fragment.
+Các state segment rất ngắn có thể phản ánh transition fragment hoặc label kém ổn định hơn.
 
 ### Thiết kế
 
@@ -223,384 +149,94 @@ Primary:
 
 Sensitivity:
 
-- chỉ giữ state segment ≥ 3 min
-- chỉ giữ state segment ≥ 5 min
+* chỉ giữ segment ≥ 3 phút
+* chỉ giữ segment ≥ 5 phút
 
-Chỉ dùng thresholds nếu vẫn còn đủ paired sessions.
+Chỉ sử dụng threshold nếu vẫn còn đủ paired Awake–Drowsy session.
 
 ### Mục tiêu
 
-Kiểm tra xem finding có giữ trong các đoạn Awake/Drowsy kéo dài và ổn định hơn không.
-
-### Output
-
-| metric | primary | segment ≥3 min | segment ≥5 min |
-|---|---:|---:|---:|
-
-Không bắt buộc mọi analysis phải significance.
+Kiểm tra xem các finding có giữ khi chỉ dùng những state segment kéo dài và ổn định hơn hay không.
 
 ---
 
-## 1.4.3. Window-purity check
+## 1.5. Tiêu chí đánh giá label robustness
 
-Nếu segmentation cho phép xác định tỷ lệ label trong từng window, yêu cầu:
+Không sử dụng p-value như tiêu chí duy nhất.
 
-$$
-\mathrm{purity} = \frac{\text{samples in dominant state}}{\text{samples in window}}
-$$
+Ưu tiên:
 
-Primary:
+1. direction preservation
+2. effect magnitude
+3. session consistency
+4. CI location
+5. statistical significance
 
-- current rule
+### Strong support
 
-Sensitivity:
+```text
+CC ↓
+NRMSE ↑
+DET ↓
+LLE ↓
+```
 
-- \mathrm{purity} = 100%
-- hoặc ≥95%
+giữ nguyên dưới primary và conservative label subsets.
 
-Nếu window đã được tạo riêng trong từng contiguous state segment thì mục này có thể không cần.
+### Concern
 
----
-
-## 1.5. Label robustness figure
-
-Tạo một figure đơn giản cho 4 headline metrics.
-
-Có thể dùng forest plot:
-
-- y-axis: CC, NRMSE, DET, LLE
-- x-axis: paired median effect
-- series:
-  - Primary
-  - Boundary-excluded
-  - Long-segment subset
-
-Mục tiêu figure:
-
-> cho thấy direction preservation, không phải significance hunting.
+* effect đảo direction
+* effect chỉ tồn tại khi giữ boundary windows
+* effect collapse gần zero sau conservative filtering
 
 ---
 
-## 1.6. Label robustness conclusion
+## 1.6. Claim nếu verification pass
 
-Một finding được xem là label-robust nếu:
-
-- direction không đảo dưới các conservative subsets
-- effect size vẫn cùng order of magnitude
-- kết quả không biến mất chỉ khi loại boundary windows
-
-Claim an toàn:
-
-> The principal Awake–Drowsy effects remained directionally stable under conservative label-related sensitivity analyses.
+> Các khác biệt Awake–Drowsy chính vẫn giữ cùng hướng khi loại các window gần ranh giới trạng thái và khi chỉ giữ các đoạn trạng thái kéo dài hơn.
 
 Không claim:
 
-> Labels were externally validated.
+> Label là ground truth khách quan.
 
 ---
 
-# 2. Verification B — Subject-Level Dependence
+# 2. Verification B — NTSA Parameter Dependence
 
-## 2.1. Câu hỏi khoa học
+## 2.1. Mục tiêu
 
-20 sessions đến từ 10 subjects.
+Kiểm tra xem các finding có chỉ xuất hiện tại một bộ tham số NTSA cụ thể hay không.
 
-Do đó cần kiểm tra:
-
-> Kết luận có còn giữ khi inference tôn trọng repeated measurements trong cùng subject hay không?
-
-Cấu trúc:
+Primary configuration hiện tại:
 
 $$
-10\,\text{subjects} \times 2\,\text{sessions} \approx 20\,\text{sessions}
+\tau = 0.16s,\quad m = 8
 $$
 
-Hai session cùng subject không được mặc nhiên coi là independent participants.
+Mục tiêu không phải chứng minh đây là optimum duy nhất.
+
+Mục tiêu là:
+
+> Chứng minh conclusion ổn định trên một vùng parameter hợp lý được hỗ trợ bởi AMI và FNN.
 
 ---
 
-## 2.2. Primary session-level analysis
+# 2.2. Embedding parameter robustness
 
-Giữ analysis hiện tại làm primary descriptive/inferential framework:
-
-Trong mỗi session:
+## Nominal setting
 
 $$
-\Delta_{ij} = \mathrm{Drowsy}_{ij} - \mathrm{Awake}_{ij}
-$$
-
-Sau đó báo:
-
-- median Δ
-- bootstrap 95% CI
-- Wilcoxon signed-rank
-- rank-biserial effect size
-- direction count
-- BH-FDR
-
-Không xóa analysis này.
-
----
-
-## 2.3. Subject-level aggregation
-
-### Mục tiêu
-
-Biến mỗi subject thành một đơn vị độc lập.
-
-Với subject $i$:
-
-$$
-\Delta_i^{\mathrm{subject}}
-=
-\operatorname{median}\left(\Delta_{i,1}, \Delta_{i,2}\right)
-$$
-
-Nếu chỉ có một valid session ở subject nào đó thì cần ghi rõ và xác định rule trước.
-
-### Output
-
-N = 10 subjects.
-
-Cho mỗi metric báo:
-
-- median subject-level Δ
-- bootstrap CI
-- Wilcoxon signed-rank
-- direction count
-
-### Quan trọng
-
-Không kỳ vọng power giống N=20.
-
-Với N=10, p-value có thể lớn hơn dù direction rất ổn định.
-
-Do đó đánh giá theo:
-
-1. direction
-2. magnitude
-3. subject consistency
-4. CI
-5. p-value
-
-### Bảng
-
-| metric | session-level Δ | subject-level Δ | subject direction count | direction preserved |
-|---|---:|---:|---:|---|
-
----
-
-## 2.4. Cluster bootstrap
-
-### Mục tiêu
-
-Giữ toàn bộ session nhưng bootstrap ở level subject.
-
-### Procedure
-
-Mỗi bootstrap replicate:
-
-1. sample 10 subjects with replacement
-2. khi một subject được chọn, lấy toàn bộ session của subject đó
-3. tính paired effect theo pipeline
-4. lưu group-level statistic
-
-Lặp:
-
-$$
-B \in \{10{,}000,\ 20{,}000\}
-$$
-
-### Output
-
-Cluster-aware bootstrap CI cho:
-
-- CC
-- NRMSE
-- DET
-- LLE
-
-### Ý nghĩa
-
-Điều này giữ correlation structure giữa các session của cùng subject.
-
----
-
-## 2.5. Mixed-effects model
-
-### Mục tiêu
-
-Kiểm tra state effect khi accounting for subject-specific baseline.
-
-Model cơ bản:
-
-$$
-Y = \beta_0 + \beta_1\,\mathrm{State} + u_{\mathrm{subject}} + \epsilon
-$$
-
-Trong đó:
-
-$$
-u_{\mathrm{subject}} \sim \mathcal{N}(0,\sigma^2_u)
-$$
-
-State:
-
-- Awake
-- Drowsy
-
-### Optional: meal/session type
-
-Nếu metadata rõ:
-
-$$
-Y =
-\beta_0
-+
-\beta_1\,\mathrm{State}
-+
-\beta_2\,\mathrm{Meal}
-+
-u_{\mathrm{subject}}
-+
-\epsilon
-$$
-
-với Meal:
-
-- lunch
-- dinner
-
-Có thể thêm:
-
-$$
-\mathrm{State} \times \mathrm{Meal}
-$$
-
-chỉ khi thật sự cần.
-
-Với N=10 subjects, tránh model quá phức tạp.
-
-### Output
-
-Cho mỗi metric:
-
-- β_State
-- CI
-- p-value
-- direction
-
-### Mục tiêu
-
-Không cần mixed model trở thành primary.
-
-Dùng như sensitivity analysis.
-
----
-
-## 2.6. Lunch vs Dinner consistency
-
-### Câu hỏi
-
-Finding có chỉ xuất hiện ở một loại session hay không?
-
-Tách:
-
-$$
-\Delta_{\mathrm{lunch}}
-$$
-
-và:
-
-$$
-\Delta_{\mathrm{dinner}}
-$$
-
-Cho 4 headline metrics.
-
-### Báo
-
-- median effect
-- direction
-- subject consistency
-
-### Không cần
-
-Không nhất thiết hypothesis-test mạnh vì sample nhỏ.
-
-### Interpretation
-
-Nếu cùng direction:
-
-> effect không bị giới hạn ở một thời điểm ghi duy nhất.
-
-Nếu khác:
-
-> đây là source of physiological/session variability cần Discussion.
-
----
-
-## 2.7. Subject-level robustness criteria
-
-Một finding được xem là robust nếu:
-
-- session-level và subject-level cùng direction
-- cluster bootstrap không cho thấy effect đảo chiều rõ
-- mixed model β_State cùng direction
-- lunch/dinner không cho pattern hoàn toàn đối nghịch
-
-Không yêu cầu tất cả p < 0.05.
-
----
-
-# 3. Verification C — NTSA Parameter Robustness
-
-## 3.1. Câu hỏi khoa học
-
-Kết quả có chỉ xuất hiện tại:
-
-$$
-\tau = 0.16\,\mathrm{s},\quad m=8
-$$
-
-hay giữ trên một vùng parameter hợp lý?
-
-Mục tiêu không phải chứng minh $\tau=0.16$ và $m=8$ là optimum tuyệt đối.
-
-Mục tiêu:
-
-> chứng minh finding không phụ thuộc vào một parameter choice duy nhất.
-
----
-
-## 3.2. Freeze nominal configuration
-
-Nominal:
-
-$$
-\tau = 0.16\,\mathrm{s}
+\tau = 0.16s
 $$
 
 $$
 m = 8
 $$
 
-Giữ đây là primary setting.
-
-Lý do:
-
-- AMI supports delay region quanh 0.16 s
-- FNN đã plateau ở vùng m cao
-- m=8 là common conservative embedding dimension
-
----
-
-## 3.3. Embedding parameter grid
-
-### Recommended grid
+## Sensitivity grid
 
 $$
-\tau \in \{0.12,\ 0.16,\ 0.20\}\,\mathrm{s}
+\tau \in \{0.12,\ 0.16,\ 0.20\}\ s
 $$
 
 $$
@@ -610,201 +246,141 @@ $$
 Tổng:
 
 $$
-3\times3=9
+3 \times 3 = 9
 $$
 
 configurations.
 
-Nếu compute cost lớn, có thể dùng:
+Delay phải được quy đổi từ seconds sang samples theo từng sampling frequency:
 
 $$
-m \in \{7,8,9\}
-$$
-
-nhưng 6/8/10 cho robustness range rộng hơn.
-
-### Important
-
-Convert delay từ seconds sang samples theo từng session:
-
-$$
-\tau_{\mathrm{samples}}
+\tau_{samples}
 =
-\operatorname{round}\left(\tau_{\mathrm{seconds}} \times f_s\right)
+round(\tau_{seconds}\times f_s)
 $$
 
-Không dùng cùng sample delay cho 25 Hz và 50 Hz.
+---
+
+## 2.3. Metrics rerun
+
+Chỉ rerun primary supported metrics:
+
+* CC
+* NRMSE
+* DET
+* LLE
+
+Pipeline giữ nguyên:
+
+```text
+Window
+→ metric
+→ median per session × state
+→ paired Drowsy − Awake
+→ statistical summary
+```
 
 ---
 
-## 3.4. Metrics rerun
+## 2.4. Output
 
-Trước tiên chỉ rerun primary supported metrics:
+Với mỗi \((\tau,m)\), tính:
 
-- CC
-- NRMSE
-- DET
-- LLE
+* median paired Δ
+* bootstrap 95% CI
+* rank-biserial effect size
+* direction count
+* p/q nếu cần
 
-Không cần rerun toàn bộ secondary metrics ngay.
-
----
-
-## 3.5. Embedding robustness outputs
-
-Với mỗi $(\tau,m)$:
-
-1. compute all window metrics
-2. median per session × state
-3. paired Awake–Drowsy Δ
-4. compute:
-   - median Δ
-   - CI
-   - r_rb
-   - direction count
-   - p/q nếu cần
-
-### Figure
+### Visualization
 
 Một heatmap cho mỗi metric:
 
-- x-axis = τ
-- y-axis = m
-- cell value = median paired Δ
+```text
+x-axis = τ
+y-axis = m
+cell value = median paired Δ
+```
 
-Optional:
+Màu thể hiện:
 
-- cell border nếu CI excludes zero
-- symbol nếu BH-FDR supported
+* direction
+* magnitude
 
-Nhưng màu chính phải biểu diễn effect direction/magnitude, không phải p-value.
-
-### Robustness target
-
-Ví dụ:
-
-CC:
-
-$$
-\Delta < 0
-$$
-
-NRMSE:
-
-$$
-\Delta > 0
-$$
-
-DET:
-
-$$
-\Delta < 0
-$$
-
-LLE:
-
-$$
-\Delta < 0
-$$
-
-trên phần lớn hoặc toàn bộ grid.
+Không dùng màu chủ yếu để thể hiện p-value.
 
 ---
 
-## 3.6. Embedding robustness criteria
+## 2.5. Tiêu chí đánh giá embedding robustness
 
-Không dùng:
+### Strong robustness
 
-> 9/9 phải p<0.05
+* 9/9 configurations giữ cùng direction
 
-Thay vào đó:
+### Moderate robustness
 
-Strong robustness:
+* 7–8/9 giữ direction
+* các setting còn lại gần zero nhưng không đảo mạnh
 
-- 9/9 same direction
+### Concern
 
-Moderate robustness:
-
-- 7–8/9 same direction
-- remaining cells weak/near zero nhưng không đảo mạnh
-
-Concern:
-
-- nhiều parameter combinations đảo direction
-- effect chỉ tồn tại ở nominal point
+* nhiều setting đảo direction
+* finding chỉ tồn tại ở đúng \(\tau=0.16, m=8\)
 
 ---
 
-# 4. Verification D — RQA-Specific Robustness
+# 3. Verification C — Method-Specific Robustness
 
-## 4.1. Câu hỏi
-
-DET↓ có phụ thuộc vào một recurrence definition cụ thể hay không?
-
-RQA phụ thuộc nhiều hơn chỉ $\tau,m$.
-
-Cần audit:
-
-- norm
-- threshold strategy
-- recurrence rate
-- Theiler window
-- l_min
-- v_min
+Sau khi embedding robustness ổn định, kiểm tra các parameter riêng của từng phương pháp.
 
 ---
 
-## 4.2. Freeze nominal RQA configuration
+# 3.1. RQA robustness
 
-Ghi đầy đủ:
+## Parameters cần audit
 
-- embedding dimension
-- delay
-- distance norm
-- fixed epsilon hay fixed recurrence rate
-- Theiler window
-- l_min
-- v_min
+* distance norm
+* recurrence threshold strategy
+* fixed recurrence rate hay fixed epsilon
+* Theiler window
+* \(l_{min}\)
+* \(v_{min}\)
 
-Đây phải là một reproducibility table.
+Trước hết freeze nominal RQA configuration.
 
 ---
 
-## 4.3. Recurrence threshold sensitivity
+## 3.1.1. Recurrence threshold sensitivity
 
 Nếu dùng fixed recurrence rate:
 
 ví dụ:
 
 $$
-\mathrm{RR} \in \{2.5\%,5\%,7.5\%\}
+RR \in \{2.5\%,\ 5\%,\ 7.5\%\}
 $$
 
-Hoặc dùng range hợp lý quanh nominal.
+hoặc một range phù hợp quanh nominal setting.
 
-Nếu dùng fixed epsilon:
-
-thử ± một mức hợp lý quanh nominal.
-
-### Rerun
+Rerun:
 
 Primary:
 
-- DET
+* DET
 
 Secondary:
 
-- Lmean
-- LAM
-- TT
+* Lmean
+* LAM
+* TT
 
-### Mục tiêu
+Mục tiêu:
 
-DET↓ giữ direction qua recurrence settings.
+> DET ↓ không phụ thuộc vào đúng một recurrence threshold.
 
 ---
 
-## 4.4. Theiler window sensitivity
+## 3.1.2. Theiler window sensitivity
 
 Nominal:
 
@@ -815,63 +391,52 @@ $$
 Sensitivity:
 
 $$
-w_{\mathrm{low}},\quad w,\quad w_{\mathrm{high}}
+w_{low},\quad w,\quad w_{high}
 $$
 
-Các giá trị phải có rationale theo autocorrelation / temporal neighborhood.
+Giá trị phải có methodological rationale.
 
-Không dùng arbitrary range quá rộng.
+Mục tiêu:
 
-### Mục tiêu
-
-DET↓ không phải artifact do temporal autocorrelation gần line of identity.
+> RQA result không bị tạo chủ yếu bởi temporal autocorrelation gần line of identity.
 
 ---
 
-## 4.5. Minimum line-length sensitivity
+## 3.1.3. Minimum line-length sensitivity
 
-Vary:
+Kiểm tra:
 
 $$
-l_{\min}
+l_{min}
 $$
 
 và nếu cần:
 
 $$
-v_{\min}
+v_{min}
 $$
 
 Theo one-factor-at-a-time.
 
-Không cần full Cartesian product.
+Không cần full Cartesian grid.
 
 ---
 
-# 5. Verification E — LLE-Specific Robustness
+# 3.2. LLE robustness
 
-## 5.1. Câu hỏi
+## Parameters cần audit
 
-LLE↓ có phụ thuộc vào adaptive fit rule hay QC criterion hay không?
-
----
-
-## 5.2. Primary LLE setup
-
-Ghi rõ:
-
-- Rosenstein method
-- embedding settings
-- neighborhood definition
-- Theiler window nếu có
-- candidate fitting range
-- minimum fit length
-- linear-region selection rule
-- R² threshold
+* embedding setting
+* neighbor search
+* Theiler window nếu có
+* candidate fit region
+* minimum fit length
+* adaptive fit rule
+* \(R^2\) QC threshold
 
 ---
 
-## 5.3. QC sensitivity
+## 3.2.1. QC sensitivity
 
 Primary:
 
@@ -885,354 +450,374 @@ $$
 R^2 \ge 0.95
 $$
 
-Bạn đã có analysis này.
+So sánh:
 
-Rerun:
-
-- paired Δ
-- CI
-- r_rb
-- direction count
+* median Δ
+* CI
+* effect size
+* direction count
 
 ---
 
-## 5.4. Fit-range sensitivity
+## 3.2.2. Fit-range sensitivity
 
-Test ít nhất một alternative rule.
+Primary:
 
-Ví dụ:
+> adaptive linear region selected by highest \(R^2\)
 
-### Primary
+Sensitivity:
 
-Adaptive region with highest R².
-
-### Sensitivity
-
-- stricter minimum fit length
-- exclude very early divergence points
-- exclude late saturation region
-- hoặc use a predefined plausible fit interval
+* stricter minimum fit length
+* loại early transient
+* loại late saturation
+* hoặc dùng predefined plausible fit range
 
 Mục tiêu:
 
-> LLE↓ không phải sản phẩm của việc chọn fit interval tối ưu nhất cho từng window.
+> LLE ↓ không phải artifact của adaptive fit selection.
 
 ---
 
-# 6. Verification F — Prediction-Specific Robustness
+# 3.3. Prediction robustness
 
-## 6.1. Câu hỏi
+Kiểm tra xem:
 
-CC↓ / NRMSE↑ có phụ thuộc vào một prediction horizon cụ thể hay không?
+$$
+CC\downarrow,\quad NRMSE\uparrow
+$$
+
+có giữ trên prediction horizons hay không.
+
+Nếu final metric là mean across horizons, cần ghi rõ range horizon được sử dụng.
+
+Mục tiêu:
+
+> effect không chỉ xuất hiện ở một prediction horizon duy nhất.
 
 ---
 
-## 6.2. Check horizon dependence
+# 4. Verification D — Window-Length Robustness
 
-Với từng prediction horizon:
+Phần này đã có nhưng được đưa vào verification framework chung.
 
-- compute Awake–Drowsy effect
-- xem direction
+Window lengths:
 
-Nếu final metric là mean across horizons, ghi rõ:
+* 30 s
+* 60 s
+* 120 s
+* 180 s
 
-$$
-\overline{\mathrm{CC}} = \operatorname{mean}\left(\mathrm{CC}(h_1),\ldots,\mathrm{CC}(h_k)\right)
-$$
+Role:
 
-$$
-\overline{\mathrm{NRMSE}} = \operatorname{mean}\left(\mathrm{NRMSE}(h_1),\ldots,\mathrm{NRMSE}(h_k)\right)
-$$
-
-### Mục tiêu
-
-CC↓ và NRMSE↑ không chỉ xuất hiện tại một horizon đơn lẻ.
-
----
-
-# 7. Verification G — Window-Length Robustness
-
-Phần này đã có nhưng cần đưa vào verification framework chung.
-
-Windows:
-
-- 30 s
-- 60 s
-- 120 s
-- 180 s
-
-60 s = primary.
-
-30/120/180 = sensitivity.
+```text
+30 s   → short-window stress test
+60 s   → primary
+120 s  → robustness
+180 s  → robustness
+```
 
 Primary metrics:
 
-- CC
-- NRMSE
-- DET
-- LLE
+* CC
+* NRMSE
+* DET
+* LLE
 
-### Mục tiêu
+Mục tiêu:
 
-Kiểm tra:
+> conclusion không phụ thuộc nghiêm trọng vào một segmentation length duy nhất.
 
-> conclusion có phụ thuộc vào đúng một segmentation length hay không?
+Không yêu cầu absolute metric values giống nhau.
 
-### Interpretation
+Quan trọng hơn là:
 
-30 s:
-
-- same direction
-- higher variance
-
-60 s:
-
-- primary trade-off
-
-120–180 s:
-
-- robustness
-
-Không yêu cầu identical absolute metric values.
+* direction
+* effect magnitude
+* uncertainty
 
 ---
 
-# 8. Verification Master Table
+# 5. Verification E — Strict Subject-Level Sensitivity
 
-Sau khi chạy xong, tạo một bảng tổng hợp:
+## 5.1. Vai trò
 
-| Finding | Label robustness | Subject-level | Embedding robustness | Method-specific robustness | Window robustness |
-|---|---|---|---|---|---|
-| CC ↓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| NRMSE ↑ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| DET ↓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| LLE ↓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+Đây là verification strict nhất và được thực hiện sau cùng.
 
-Có thể dùng:
+Primary study design vẫn sử dụng:
 
-- ✓ robust
-- ~ partial
-- ✕ inconsistent
+> 20 session-level Awake–Drowsy contrasts.
 
-Không dùng p-value làm criterion duy nhất.
+Strict sensitivity hỏi thêm:
+
+> Nếu accounting for việc 20 sessions đến từ 10 subjects, conclusion có còn giữ hay không?
+
+Mục tiêu không phải thay thế session-level primary analysis.
 
 ---
 
-# 9. Verification Decision Rules
+## 5.2. Subject-level aggregation
 
-## Green — có thể freeze result
+Với subject \(i\):
+
+$$
+\Delta_i^{subject}
+=
+median(
+\Delta_{i,session1},
+\Delta_{i,session2}
+)
+$$
+
+Sau aggregation:
+
+$$
+n=10
+$$
+
+subjects.
+
+Rerun:
+
+* CC
+* NRMSE
+* DET
+* LLE
+
+Báo:
+
+* median subject-level Δ
+* bootstrap CI
+* direction count
+* Wilcoxon signed-rank nếu phù hợp
+
+### Lưu ý
+
+Do N giảm từ 20 xuống 10:
+
+> significance có thể giảm dù scientific direction vẫn ổn định.
+
+Do đó ưu tiên:
+
+1. direction
+2. magnitude
+3. subject consistency
+4. CI
+5. p-value
+
+---
+
+## 5.3. Cluster bootstrap
+
+Bootstrap ở subject level.
+
+Mỗi replicate:
+
+```text
+sample 10 subjects with replacement
+→ retain all sessions of selected subject
+→ recompute group effect
+```
+
+Lặp:
+
+$$
+B = 10,000 - 20,000
+$$
+
+Mục tiêu:
+
+> giữ within-subject dependency structure.
+
+---
+
+## 5.4. Optional mixed-effects sensitivity
+
+Nếu cần thêm rigor:
+
+$$
+Y =
+\beta_0
++
+\beta_1 State
++
+u_{subject}
++
+\epsilon
+$$
+
+Optional:
+
+$$
+Y =
+\beta_0
++
+\beta_1 State
++
+\beta_2 Meal
++
+u_{subject}
++
+\epsilon
+$$
+
+Không làm model quá phức tạp do chỉ có 10 subjects.
+
+Mixed model chỉ là sensitivity, không bắt buộc trở thành primary analysis.
+
+---
+
+# 6. Verification Master Matrix
+
+Sau khi hoàn thành, tạo bảng tổng hợp:
+
+| Finding | Label robustness | Embedding robustness | Method-specific robustness | Window robustness | Subject-level strict sensitivity |
+| ------- | ---------------- | -------------------- | -------------------------- | ----------------- | -------------------------------- |
+| CC ↓    |                  |                      |                            |                   |                                  |
+| NRMSE ↑ |                  |                      |                            |                   |                                  |
+| DET ↓   |                  |                      |                            |                   |                                  |
+| LLE ↓   |                  |                      |                            |                   |                                  |
+
+Quy ước:
+
+* ✓ robust
+* ~ partial
+* ✕ inconsistent
+
+Không quyết định chỉ dựa trên significance.
+
+---
+
+# 7. Decision Rules
+
+## GREEN — Freeze finding
+
+Finding có thể được giữ làm core result nếu:
+
+* direction ổn định dưới label sensitivity
+* direction ổn định trên parameter region hợp lý
+* method-specific sensitivity không đảo conclusion
+* window-size robustness giữ direction
+* strict subject-level sensitivity không cho kết quả đối nghịch
+
+---
+
+## YELLOW — Giữ nhưng hạ claim
 
 Nếu:
 
-- strict/conservative labels giữ same direction
-- subject-level analysis giữ same direction
-- parameter grid giữ effect trên phần lớn vùng hợp lý
-- RQA/LLE method sensitivity không đảo result
-- window robustness giữ direction
+* direction giữ nhưng effect magnitude giảm
+* CI rộng hơn
+* significance mất ở stricter analysis
+* một số parameter setting gần zero
 
-→ freeze result và chuyển sang manuscript.
+Khi đó dùng wording:
+
+> directionally consistent but sensitive to analysis conditions
 
 ---
 
-## Yellow — cần investigation
+## RED — Reconsider finding
 
 Nếu:
 
-- effect magnitude giảm mạnh nhưng vẫn same direction
-- significance biến mất do reduced N
-- một vài parameter cells gần zero
-- một session/subject ảnh hưởng đáng kể
+* conservative label analysis đảo direction
+* parameter changes làm direction đảo nhiều lần
+* effect chỉ tồn tại ở nominal setting
+* strict subject-level analysis cho conclusion đối nghịch
+* result bị chi phối bởi rất ít session/subject
 
-→ investigate nhưng không nhất thiết bác bỏ finding.
-
----
-
-## Red — cần xem lại conclusion
-
-Nếu:
-
-- strict label analysis đảo direction
-- subject-level result trái ngược session-level
-- parameter robustness cho nhiều direction reversal
-- DET hoặc LLE chỉ tồn tại ở đúng nominal setting
-- effect bị chi phối bởi 1–2 subject
-
-→ không freeze claim hiện tại.
+Khi đó cần sửa hoặc loại finding khỏi core conclusion.
 
 ---
 
-# 10. Thứ tự thực nghiệm đề xuất
+# 8. Recommended Execution Order
 
-## Phase 1 — Data / Label Verification
+## Phase 1 — Label Verification
 
 1. audit label structure
-2. transition-boundary analysis
+2. transition-boundary exclusion
 3. minimum segment duration
-4. rerun 4 headline metrics
-
-Output:
-- label summary table
-- robustness table
+4. rerun CC / NRMSE / DET / LLE
 
 ---
 
-## Phase 2 — Statistical Independence
+## Phase 2 — Embedding Robustness
+
+1. define \(\tau\) grid
+2. define \(m\) grid
+3. rerun 4 headline metrics
+4. build robustness heatmaps
+
+---
+
+## Phase 3 — Method-Specific Robustness
+
+RQA:
+
+* recurrence setting
+* Theiler window
+* line-length parameters
+
+LLE:
+
+* R² threshold
+* fit-range rule
+
+Prediction:
+
+* horizon consistency
+
+---
+
+## Phase 4 — Window Robustness
+
+Consolidate existing:
+
+* 30 s
+* 60 s
+* 120 s
+* 180 s
+
+---
+
+## Phase 5 — Strict Subject-Level Sensitivity
 
 1. subject-level aggregation
 2. cluster bootstrap
-3. mixed-effects sensitivity
-4. lunch vs dinner consistency
-
-Output:
-- session vs subject comparison
-- cluster-aware CI
-- mixed-model state effect
+3. optional mixed-effects model
+4. compare with session-level primary result
 
 ---
 
-## Phase 3 — Embedding Robustness
+# 9. Final Verification Question
 
-1. τ grid
-2. m grid
-3. rerun CC / NRMSE / DET / LLE
-4. build heatmaps
+Sau cùng, mỗi finding phải trả lời được:
 
-Output:
-- 4 parameter robustness heatmaps
-- summary direction table
+> Nếu thay đổi một giả định hợp lý của analysis, scientific conclusion có còn giữ không?
 
----
-
-## Phase 4 — Method-Specific Robustness
-
-RQA:
-- recurrence threshold/rate
-- Theiler window
-- line-length parameters
-
-LLE:
-- R² criterion
-- fit-selection rule
-
-Prediction:
-- horizon consistency
-
----
-
-## Phase 5 — Final Verification Summary
-
-Create:
-
-1. master robustness table
-2. concise verification figure
-3. final frozen result table
-4. Methods wording
-5. Limitation wording
-6. claim boundary
-
----
-
-# 11. Statistical Questions Phải Tự Trả Lời Được
-
-Trước manuscript submission phải trả lời chắc chắn:
-
-### Median
-
-- Tại sao dùng median?
-- Median của gì?
-- Median session × state khác median paired Δ như thế nào?
-
-### Bootstrap
-
-- resampling unit là gì?
-- bootstrap window, session hay subject?
-- percentile CI nghĩa là gì?
-- bootstrap có xử lý dependence không?
-
-### Wilcoxon signed-rank
-
-- dữ liệu paired ở đâu?
-- test thực sự dùng signed ranks như thế nào?
-- null hypothesis là gì?
-- khác paired t-test ra sao?
-- khác sign test ra sao?
-
-### Rank-biserial effect size
-
-- dấu biểu diễn gì?
-- magnitude biểu diễn gì?
-- liên hệ với Wilcoxon ra sao?
-
-### BH-FDR
-
-- family of hypotheses gồm những metric nào?
-- raw p khác q-value thế nào?
-- FDR khác Bonferroni/FWER thế nào?
-- tại sao CI exclude zero nhưng q vẫn >0.05?
-
-### Repeated measurements
-
-- tại sao 20 sessions không đồng nghĩa 20 independent subjects?
-- cluster bootstrap xử lý gì?
-- mixed model xử lý gì?
-
-### PPS rank test
-
-- tại sao 39 surrogates?
-- vì sao p_min = 0.05 trong two-sided test?
-- original rank được tính như thế nào?
-- reject PPS null thực sự cho phép claim gì?
-
----
-
-# 12. Claim Boundaries Sau Verification
-
-Nếu verification pass:
-
-Có thể claim:
-
-> In this cohort, the Awake–Drowsy transition was consistently associated with reduced forecastability, reduced diagonal recurrence organization, and reduced local trajectory divergence in short-window PPG dynamics.
-
-Có thể claim:
-
-> These findings were robust to multiple reasonable analysis choices.
-
-Không claim:
-
-> The labels represent objective ground truth.
-
-Không claim:
-
-> The findings generalize to all populations.
-
-Không claim:
-
-> Drowsiness causes a universal chaotic transition.
-
-Không claim:
-
-> PPS proves deterministic chaos.
-
----
-
-# 13. Verification Philosophy
-
-Verification không nhằm làm cho tất cả kết quả trở thành significant.
-
-Mục tiêu quan trọng hơn là:
+Mục tiêu cuối cùng không phải:
 
 $$
-\text{same scientific conclusion}
+p < 0.05
 $$
 
-dưới:
+ở mọi analysis.
+
+Mục tiêu là:
 
 $$
-\text{different reasonable assumptions}
+\boxed{
+\text{Stable direction}
++
+\text{Comparable effect}
++
+\text{Cross-analysis consistency}
+}
 $$
-
-Nếu effect direction, magnitude và consistency được giữ, trong khi p-value dao động do sample size hoặc variance, finding vẫn có thể được xem là robust.
 
 Nguyên tắc chốt:
 
 > Robustness of the scientific conclusion is more important than robustness of a single p-value.
+
+```
+```
