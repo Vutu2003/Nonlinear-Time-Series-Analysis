@@ -1,0 +1,36 @@
+{
+  "rules": [
+    "T30",
+    "T60",
+    "S3",
+    "S5"
+  ],
+  "window_s": 60,
+  "overlap_s": 0,
+  "sqi_window_s": 5.0,
+  "sqi_threshold": 4.5,
+  "sqi_scope": "Original processed session, primary session-wide calibration and grid; mask selected by original row",
+  "stationarity_signal": "PPG processed",
+  "stationarity_subwindow_s": 10.0,
+  "stationarity_threshold": 0.5,
+  "gap_factor": 1.5,
+  "transition_exclusion_inclusive": true,
+  "segment_threshold_s": {
+    "S3": 180,
+    "S5": 300
+  },
+  "index_convention": "zero-based, half-open; window indices reference filtered signal CSV",
+  "filtering": "Existing PPG processed unchanged; no refiltering",
+  "p0_regenerated": false,
+  "ntsa_computed": false,
+  "parameter_sources": [
+    "notebook/data_sqi.ipynb",
+    "notebook/data_segmentation.ipynb"
+  ],
+  "numpy_version": "2.4.6",
+  "pandas_version": "3.0.3",
+  "core_sha256": {
+    "src/preprocessing/sqi.py": "64f84e39a9a9793533acc8b2e4001ae8b87a6ce409eba4902e3afa8e764dfb38",
+    "src/segmentation/segmentation.py": "7fc58828941300accb848d6994779a207b9204763ec8fb7697803c621da3eb26"
+  }
+}

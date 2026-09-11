@@ -1,0 +1,5 @@
+rule,n_sessions,input_windows,simplex_success,rqa_success,lle_success,LLE_pass_R2_090,LLE_pass_R2_095,simplex_errors,simplex_error_sessions,rqa_errors,rqa_error_sessions,lle_errors,lle_error_sessions,windows_missing_any_metric,identical_signal_reused
+S3,20,900,900,900,900,871,736,0,,0,,0,,0,0
+S5,20,846,846,846,846,819,689,0,,0,,0,,0,0
+T30,20,860,860,860,860,832,692,0,,0,,0,,0,0
+T60,20,787,787,787,787,762,646,0,,0,,0,,0,0

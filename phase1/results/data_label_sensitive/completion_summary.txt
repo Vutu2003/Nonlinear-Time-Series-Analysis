@@ -1,0 +1,9 @@
+Phase B0 completed: T30, T60, S3, S5; P0 unchanged.
+20 filtered sessions and 20 window tables per rule; 60-s non-overlapping candidate windows.
+SQI: primary session-wide 5-s / 4.5 calibration. Stationarity: processed PPG, 10-s / 0.5.
+T30: Awake 586/610 included; Drowsy 274/290 included; paired sessions 20/20.
+T60: Awake 551/574 included; Drowsy 236/254 included; paired sessions 20/20.
+S3: Awake 609/636 included; Drowsy 291/313 included; paired sessions 20/20.
+S5: Awake 581/606 included; Drowsy 265/286 included; paired sessions 19/20.
+80 rule × session outputs passed saved-file consistency checks.
+No NTSA computation, relabeling, signal refiltering or session exclusion performed.

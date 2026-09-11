@@ -1,0 +1,9 @@
+check,passed
+B0 input count and identities,True
+Original metadata preserved,True
+No duplicate window_id,True
+Correct fs and tau conversion,True
+Fixed parameters,True
+Finite metrics on success,True
+LLE QC flags,True
+Input file hashes unchanged,True
