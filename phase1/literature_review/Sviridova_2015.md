@@ -12,7 +12,7 @@ Nó chưa trả lời:
 
 ### Khoảng trống nghiên cứu
 
-> **Sự tái tổ chức phụ thuộc trạng thái của động lực học phi tuyến PPG vẫn chưa được đặc trưng đầy đủ.**
+> **Sự thay doi dong luc hoc cua trạng thái PPG vẫn chưa được đặc trưng đầy đủ.**
 
 Đặc biệt, vẫn chưa rõ khi chuyển từ **Awake sang Drowsy**, các khía cạnh sau thay đổi như thế nào:
 
