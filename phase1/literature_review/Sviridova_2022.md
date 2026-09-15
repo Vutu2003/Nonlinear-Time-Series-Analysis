@@ -64,3 +64,34 @@ Nghiên cứu hiện tại mở rộng từ:
 Độ tin cậy của short-window dynamics
 →
 Sự thay đổi của short-window dynamics theo trạng thái sinh lý
+
+## Khác biệt về thiết lập RQA so với Sviridova et al. (2022)
+
+Sviridova et al. (2022) sử dụng recurrence threshold cố định theo:
+$$
+\[
+\epsilon = 0.1 \times D_{\max}
+\]
+$$
+
+Trong nghiên cứu hiện tại, recurrence rate được cố định:
+
+$$
+\[
+RR = 2\%
+\]
+$$
+và \(\epsilon\) được điều chỉnh cho từng cửa sổ để đạt recurrence density tương đương.
+
+### Ý nghĩa
+
+Fixed RR giúp giảm ảnh hưởng của khác biệt tổng mật độ recurrence giữa các window/state,
+cho phép tập trung hơn vào sự thay đổi của:
+
+- diagonal recurrence organization;
+- persistence của similar trajectories;
+- laminar / vertical recurrence structures.
+
+Do đó, các khác biệt Awake–Drowsy trong DET, Lmean, LAM và TT được diễn giải chủ yếu
+như sự thay đổi trong **cấu trúc tổ chức của recurrence**, thay vì thay đổi đơn thuần về
+số lượng recurrence points.
