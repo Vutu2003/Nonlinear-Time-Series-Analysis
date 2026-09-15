@@ -1,0 +1,2 @@
+session,state,window_id,window_size_s,start_time_s,representation,stationarity,fs,m,tau_samples,max_follow_s,theiler_rule,theiler_s,theiler_samples,fit_start_s,fit_end_s,lle_per_s,fit_r2,fit_intercept,n_pairs_initial,n_pairs_fit_min,min_initial_pairs,min_fit_pairs,min_r2,valid,qc_reason
+sample_1.csv,Awake,1,60,2.63,processed,processed,50.000000000045475,8,8,5.0,spectral_mean_period,0.5599999999994907,28,0.8199999999992542,1.2999999999988177,0.9161957815827018,0.9895285504568463,4.105525347457788,2944,2816,50,30,0.9,True,ok
