@@ -183,3 +183,23 @@
 - **Tóm tắt phương pháp**:
   - *Cảm biến & Dữ liệu*: Tín hiệu góc xoay và vận tốc vô-lăng (tần số lấy mẫu 60 Hz) thu từ 39 tài xế xe buýt trên trình mô phỏng lái xe (BI301Semi, thu thập 20 giờ 36 phút dữ liệu); gán nhãn trạng thái Alert (KSS 1–6) và Drowsy (KSS 8–9) dựa trên thang đo KSS nhị phân [1, 2].
   - *Xử lý & Mô hình*: Khử hiệu ứng độ cong đoạn đường bằng cửa sổ trượt 3 giây (chồng lấp 1.5 giây); trích xuất 36 đặc trưng miền thời gian và tần số; dung hợp 4 chỉ số lọc (Fisher, Correlation, T-test, Mutual Information) qua hệ mờ thích ứng ANFIS tối ưu hóa bằng thuật toán PSO để chọn đặc trưng; phân loại bằng **Support Vector Machine (SVM)** đạt độ chính xác **98.12%** (AUC = 0.97) chỉ với 5 đặc trưng tối ưu [3-6].
+
+
+
+Đoạn 1: Nói về Drowsiness là một quá trình chuyển pha sinh lý phức tạp và diễn ra từ từ, nhắc đến muốn liên quan giữa Drowsiness với ANS (Peker, 2026), Sau đó nêu ra ưu điểm của việc dùng tín hiệu sinh lý thay vì các phương pháp khác (vì nó mang thông tin bản chất sinh lý, ....) --> EEG, ECG, EMG, ... tuy nhiên PPG là một lựa chọn nổi bật vì tính noninsave, ... --> Đã có rất nhiều nghiên cứu sử dụng PPG cho bài toán drowsiness detection --> tuy nhiên các phương pháp phổ biến lại là time, frequency domain (sẽ nêu cụ thể một số đặc trưng hay sử dụng)  --> nhưng PPG là được coi là một chaotic dataa nên việc dùng các phương pháp trên chưa khai thác hết được bản chất động lực học của PPG trong bài toán trên.
+
+
+
+Đoạn 2: Đang có rất ít nghiên cứu NTSA trên PPG (Charlton, 2023) --> một số nhgien cứu NTSA đã được áp dụng trên PPG -->  tuy nhiên với drowsiness thì còn khá hạn chế --> một số nghiên cứu chỉ dùng nó như một feature extraction sơ sài rồi cho vào một mô hình black box để thu được các con số --->Và chưa có nhiều nghiên cứu chỉ ra mối quan hệ giữa drowsiness với ANS hay PPG với ANS (Peker, 2026) -->  Cần một đánh giá chi tiết hơn về transition  state awake to drowsiness và chỉ ra mối quan hệ giữa PPG, Drowsiness và ANS.
+
+
+
+Đoạn 3: Trong thực tế việc triển khai DDS (Drowsiness Detection System) sẽ phụ thuộc khá lớn vào windowing ---> 2 nghiên cứu của Shaffer  (2017, 2020) đã chỉ ra các khái niệm về UST, .... trong HRV --> Đông thời cũng chỉ ra tính bền vững, ổn định của các miền đặc trưng trên từng kích thước cửa sổ --> Một số nghiên cứu DDS có sử dụng nhiều kích thước khác nhau: từ UST --> kích thước lớn --> Việc chọn cửa sổ ảnh hưởng đến độ trễ của hệ thống và tính real time cũng như sự biểu diễn sinh lý của đặc trưng --> tuy nhiên còn rất hạn chế trong việc phân tích NTSA trên các kích thước cửa sổ --> đặc biệt NTSA là các phương pháp dễ bị tác động bởi tính dừng. 
+
+
+
+Đoạn 4: Trong nỗ lực phân tích NTSA trên PPG, Sviridova 2015 đã áp dụng kết hợp các NTSA như để chứng minh PPG có đặc tính của một hệ chaos --> Đặt tiềm năng NTSA trên PPG trong các bài toán detect mental và physiological conditions. Sau đó, là Sviridova 2018 với sự kiểm định PPG vượt qua được PPS --> Sviridova 2022 đã nêu ra tiềm năng NTSA trên các kích thước cửa sổ ngắn của PPG signal  --> nhưng các nghiên cứu đều được thực hiện với PPG một trạng thái mà chưa hề phân tích NTSA để đánh giá sự thay đổi động lực học qua việc transition state awake to drowsiness và đánh giá chi tiết sự bền vững của NTSA với các kích thước cửa sổ khác nhau.
+
+
+
+Đoạn 5:  Với các nghiên cứu trên, nghiên cứu này đề xuất một framework NTSA trên tín hiệu PPG --> Đề xuất gap + RQs
