@@ -202,4 +202,4 @@
 
 
 
-Đoạn 5:  Với các nghiên cứu trên, nghiên cứu này đề xuất một framework NTSA trên tín hiệu PPG --> Đề xuất gap + RQs
+Đoạn 5:  Với các nghiên cứu trên, nghiên cứu này đề xuất một framework NTSA trên tín hiệu PPG --> Đề xuất gap + RQs.
