@@ -74,3 +74,112 @@
 - **Tóm tắt phương pháp**:
   - *Cảm biến & Dữ liệu*: Thu nhận chuỗi R-R interval (RRI) cửa sổ 2 phút từ 6 tài xế mô phỏng (22 bản ghi) bằng cảm biến đai ngực Polar H7 (ECG) và vòng đeo tay Microsoft Band 2 (PPG); gán nhãn Awake/Drowsy dựa trên video khuôn mặt và hành vi lái xe.
   - *Xử lý & Mô hình*: Chuẩn hóa RRI và biểu diễn thành 3 dạng ma trận lặp lại (Bin-RP, Cont-RP, ReLU-RP); huấn luyện mạng **CNN (tinh chỉnh từ VGG16)** để phân loại. Mô hình **ReLU-RP-CNN** đạt độ chính xác 70% (ECG) và 64% (PPG), vượt trội từ 4–17% so với các thuật toán ML truyền thống sử dụng đặc trưng RQA.
+
+### 9. Charlton et al. (2023): little research on NTSA regarding PPG =--> gap
+- **Tên tác giả**: Peter H. Charlton, John Allen, Raquel Bailón, Stephanie Baker, Joachim A. Behar, Fei Chen, Gari D. Clifford, Harry J. Davies, Cheng Ding, Xiaorong Ding, et al.
+- **Tên bài báo**: *The 2023 wearable photoplethysmography roadmap*
+- **Tạp chí**: *Physiological Measurement*, Tập 44, Số 11, Bài số 111001 (2023)
+- **DOI / Link**: [10.1088/1361-6579/acead0](https://doi.org/10.1088/1361-6579/acead0)
+
+### 10. Jiao et al. (2023)
+- **Tên tác giả**: Yubo Jiao, Ce Zhang, Xiaoyu Chen, Liping Fu, Chaozhe Jiang, Chao Wen
+- **Tên bài báo**: *Driver Fatigue Detection Using Measures of Heart Rate Variability and Electrodermal Activity*
+- **Tạp chí**: *IEEE Transactions on Intelligent Transportation Systems*, Tập 25, Số 5, trang 3888–3898 (2024 / Online 2023)
+- **DOI / Link**: [10.1109/TITS.2023.3333252](https://doi.org/10.1109/TITS.2023.3333252)
+- **Tóm tắt phương pháp**:
+  - *Cảm biến & Dữ liệu*: Thu tín hiệu PPG (64 Hz) và EDA (4 Hz) đồng thời qua vòng đeo tay Empatica E4 kết hợp tự đánh giá thang đo KSS trên tài xế mô phỏng đường sắt đô thị [1, 2].
+  - *Xử lý & Mô hình*: Chia cửa sổ 5 phút (độ phủ 50%) [3]; trích xuất đặc trưng HRV (miền thời gian, tần số, phi tuyến) và 49 đặc trưng EDA [4-6]; áp dụng thuật toán SFS chọn đặc trưng [7]. Mô hình **LightGBM** đạt độ chính xác **88.7%** (nhị phân) và **Random Forest** đạt **85.6%** (phân loại 3 mức) [1].
+
+
+### 11. Shoeibi et al. (2023)
+- **Tên tác giả**: Fatemeh Shoeibi, Esmaeil Najafiaghdam, Afshin Ebrahimi
+- **Tên bài báo**: *Nonlinear features of photoplethysmography signals for Non-invasive blood pressure estimation*
+- **Tạp chí**: *Biomedical Signal Processing and Control*, Tập 85, Bài số 105067 (2023)
+- **DOI / Link**: [10.1016/j.bspc.2023.105067](https://doi.org/10.1016/j.bspc.2023.105067)
+- **Tóm tắt phương pháp**:
+  - *Cảm biến & Dữ liệu*: Sử dụng tập dữ liệu con từ cơ sở dữ liệu MIMIC-II bao gồm 500 bản ghi tín hiệu PPG (125 Hz) và huyết áp động mạch xâm nhập (ABP) làm chuẩn đối chiếu, phân thành các đoạn 10 giây (hơn 28.000 đoạn PPG sạch sau tiền xử lý).
+  - *Xử lý & Mô hình*: Khôi phục không gian pha 2D (Poincaré map) từ PPG với độ trễ (lag) 15 mẫu; trích xuất 101 đặc trưng phi tuyến từ 3 chuỗi thời gian giao điểm đường cắt Poincaré; dùng F-test chọn 73 đặc trưng tối ưu; phân loại/hồi quy huyết áp bằng **Gaussian Process Regression (GPR)** đạt MAE $0.79 \pm 3.08$ mmHg (SBP) và $1.38 \pm 4.53$ mmHg (DBP), đạt chuẩn Grade A (BHS) và đáp ứng tiêu chuẩn AAMI.
+
+### 12. de Pedro-Carracedo et al. (2020)
+- **Tên tác giả**: Javier de Pedro-Carracedo, David Fuentes-Jimenez, Ana P. Gonzalez-Marcos
+- **Tên bài báo**: *Is the PPG Signal Chaotic?*
+- **Tạp chí**: *IEEE Access*, Tập 8, trang 198038–198056 (2020)
+- **DOI / Link**: [10.1109/ACCESS.2020.3034873](https://doi.org/10.1109/ACCESS.2020.3034873)
+- **Tóm tắt phương pháp**:
+  - *Cảm biến & Dữ liệu*: Tín hiệu PPG đo ở ngón tay trỏ tay trái (250 Hz) từ 40 sinh viên trẻ khỏe mạnh (dữ liệu thực tế lên tới 600.000 điểm / 40 phút) cùng các tín hiệu tham chiếu tổng hợp đại diện cho 5 loại động lực học (định kỳ, bán định kỳ, phi định kỳ, hỗn loạn Hénon map, ngẫu nhiên).
+  - *Xử lý & Mô hình*: Xây dựng 2 kiến trúc Deep Neural Network (1D-ResNet CNN phân loại dạng động lực học ở thang thời gian nhỏ 5.000 điểm và lớn 60.000 điểm; RNN-LSTM dự báo chuỗi thời gian). Kết quả khẳng định ở thang thời gian nhỏ PPG chủ yếu có tính bán định kỳ (quasi-periodic), ở thang thời gian lớn xuất hiện động lực phi định kỳ (aperiodic) kết hợp thành phần ngẫu nhiên, và không phát hiện hành vi hỗn loạn (chaotic) đơn thuần.
+
+### 13. Goshvarpour & Goshvarpour (2018)
+- **Tên tác giả**: Atefeh Goshvarpour, Atefeh Goshvarpour
+- **Tên bài báo**: *Poincaré’s section analysis for PPG-based automatic emotion recognition*
+- **Tạp chí**: *Chaos, Solitons & Fractals*, Tập 114, trang 400–407 (2018)
+- **DOI / Link**: [10.1016/j.chaos.2018.07.032](https://doi.org/10.1016/j.chaos.2018.07.032)
+- **Tóm tắt phương pháp**:
+  - *Cảm biến & Dữ liệu*: Tín hiệu PPG (512 Hz, lấy mẫu lại) từ 30 người tham gia trong cơ sở dữ liệu DEAP khi xem các đoạn video nhạc kích thích 3 trạng thái cảm xúc (Love, Hate, Fun).
+  - *Xử lý & Mô hình*: Lọc Butterworth (0.6–30 Hz), chuẩn hóa và phân đoạn theo chu kỳ xung; tái thiết không gian pha 2D ($x_t$ vs $x_{t+4}$) và tạo các mặt cắt Poincaré theo các góc từ $0^\circ$ đến $360^\circ$ (bước $30^\circ$); trích xuất 10 chỉ số hình học (diện tích quỹ đạo, moment, độ lệch chuẩn, số điểm cắt); phân loại bằng **Support Vector Machine (SVM)** với hàm nhân Polynomial đạt độ chính xác tối đa **96.67%** (nhị phân: Love vs Hate) và **91.11%** (đa lớp).
+
+### 14. Szczęsna et al. (2023)
+- **Tên tác giả**: Agnieszka Szczęsna, Dariusz Rafał Augustyn, Henryk Josiński, Katarzyna Harężlak, Adam Świtoński, Paweł Kasprowski
+- **Tên bài báo**: *Chaotic biomedical time signal analysis via wavelet scattering transform*
+- **Tạp chí**: *Journal of Computational Science*, Tập 72, Bài số 102080 (2023)
+- **DOI / Link**: [10.1016/j.jocs.2023.102080](https://doi.org/10.1016/j.jocs.2023.102080)
+- **Tóm tắt phương pháp**:
+  - *Cảm biến & Dữ liệu*: Bộ dữ liệu tín hiệu PPG (32 Hz, các đoạn 1000 mẫu / 31.2s) trong các hoạt động hàng ngày (đi bộ, đạp xe, đá bóng, v.v.), kết hợp dữ liệu cử động mắt (1000 Hz) và động học dáng đi (Vicon capture) cùng 13 hệ thống động lực học tổng hợp (5 hệ hỗn loạn như Rössler/Lorenz và 8 hệ phi hỗn loạn).
+  - *Xử lý & Mô hình*: Áp dụng Biến đổi Wavelet Scattering (WST 2 tầng với sóng Gabor) để trích xuất đặc trưng bất biến dịch chuyển/co giãn từ các cửa sổ 125 mẫu; định nghĩa chỉ số đo độ hỗn loạn (chaos measure); huấn luyện mô hình **SVM (RBF kernel)** phân loại 2 lớp (chaotic / non-chaotic). Kết quả cho thấy WST-SVM phân loại hiệu quả tính hỗn loạn và chịu nhiễu tốt (đạt 99.88% trên tập tổng hợp), đồng thời chỉ số chaos measure ở PPG biến thiên rõ rệt theo từng loại hoạt động thể chất.
+
+### 15. Hernández-Obín et al. (2026)
+- **Tên tác giả**: David Hernández-Obín, Gertrudis Hortensia González-Gómez, Adriana Torres-Machorro, Claudia Lerma
+- **Tên bài báo**: *Recurrence quantification analysis of photoplethysmography time series for assessing patients with peripheral artery disease*
+- **Tạp chí**: *The European Physical Journal Special Topics*, trang 1–15 (2026 / Online May 2026)
+- **DOI / Link**: [10.1140/epjs/s11734-026-02373-0](https://doi.org/10.1140/epjs/s11734-026-02373-0)
+- **Tóm tắt phương pháp**:
+  - *Cảm biến & Dữ liệu*: Chuỗi thời gian các thông số hình thái PPG (PTTp, MSS, Pulse Amplitude) và khoảng inter-beat (RR, pp) ghi nhận từ 40 chân của 25 bệnh nhân mắc bệnh động mạch ngoại biên (PAD), phân nhóm theo chỉ số Ankle-Brachial Index (Normal ABI $\ge 0.9$ vs Altered ABI $< 0.9$).
+  - *Xử lý & Mô hình*: Tái thiết không gian pha ($m=3$, $\tau$ tối ưu) và phân tích định lượng ma trận lặp lại (**Recurrence Quantification Analysis - RQA**) tính toán Determinism, Mean/Max Diagonal Length, Entropy, Laminarity, Vertical Length; kiểm định Wilcoxon, Mann-Whitney U, Spearman và phân tích đường cong ROC. Kết quả chỉ ra động lực học RQA của PPG khác biệt đáng kể so với RR interval, trong đó các chỉ số RQA của $pp$ interval (như Max Diagonal Length, Laminarity, Max Vertical Length) có sự khác biệt có ý nghĩa thống kê giữa nhóm chân bình thường và tổn thương PAD, thể hiện giá trị chẩn đoán tiềm năng.
+
+
+
+### 16. Liu et al. (2023)
+- **Tên tác giả**: Kaipeng Liu, Yubo Jiao, Chen Du, Xiaoyu Zhang, Xiaoyu Chen, Fei Xu, Chaozhe Jiang
+- **Tên bài báo**: *Driver Stress Detection Using Ultra-Short-Term HRV Analysis under Real World Driving Conditions*
+- **Tạp chí**: *Entropy*, Tập 25, Số 2, Bài số 194 (2023)
+- **DOI / Link**: [10.3390/e25020194](https://doi.org/10.3390/e25020194)
+- **Tóm tắt phương pháp**:
+  - *Cảm biến & Dữ liệu*: Tín hiệu ECG từ cơ sở dữ liệu PhysioNet của 17 tài xế lái xe thực tế tại Boston qua 3 kịch bản gây căng thẳng (nghỉ ngơi/thấp, cao tốc/trung bình, thành phố/cao) [1-3].
+  - *Xử lý & Mô hình*: Chia các khung thời gian siêu ngắn (30-s, 1-min, 2-min, 3-min) đối chứng với khung chuẩn 5-min [3, 4]; trích xuất 22 đặc trưng HRV và chọn 4 đặc trưng đại diện tối ưu (MeanNN, SDNN, NN20, MeanHR) bằng kiểm định t-test, tương quan Spearman và phân tích Bland–Altman [4-6]. Phân loại mức độ căng thẳng bằng mô hình **SVM** đạt độ chính xác 85.3% (với cửa sổ 3 phút) và 85.0% (với cửa sổ 30 giây) [4, 7].
+
+
+### 17. Awais et al. (2017)
+- **Tên tác giả**: Muhammad Awais, Nasreen Badruddin, Micheal Drieberg [1]
+- **Tên bài báo**: *A Hybrid Approach to Detect Driver Drowsiness Utilizing Physiological Signals to Improve System Performance and Wearability* [1]
+- **Tạp chí**: *Sensors*, Tập 17, Số 9, Bài số 1991 (2017) [2]
+- **DOI / Link**: [10.3390/s17091991](https://doi.org/10.3390/s17091991)
+- **Tóm tắt phương pháp**:
+  - *Cảm biến & Dữ liệu*: Tín hiệu 19 kênh EEG (Enobio-20) và 1 kênh ECG đeo ở cổ thu từ 22 sinh viên tham gia lái xe mô phỏng 80 phút trong kịch bản đường trường đơn điệu [3-5]; gán nhãn trạng thái Alert/Drowsy dựa trên quan sát video độc lập và đánh giá tự báo cáo theo thang đo KSS [6-8].
+  - *Xử lý & Mô hình*: Cửa sổ phân tích 5 phút; trích xuất đặc trưng thời gian (mean, variance, sample entropy) và tần số (công suất tuyệt đối/tương đối các dải sóng) từ EEG [9-11], cùng các chỉ số HRV (LF, HF, LF/HF) từ ECG [12, 13]; dùng paired t-test chọn đặc trưng có ý nghĩa ($p < 0.05$) [14]; phân loại bằng **Support Vector Machine (SVM)** đạt độ chính xác 70.00% (chỉ ECG), 76.36% (chỉ EEG) và **80.90%** khi dung hợp EEG + ECG [15]; rút gọn cấu hình xuống 2 kênh (1 EEG + 1 ECG) vẫn duy trì độ chính xác 80.90% [16].
+
+### 18. Peng et al. (2024)
+- **Tên tác giả**: Yong Peng, Hong Deng, Guoliang Xiang, Xianhui Wu, Xizhuo Yu, Yingli Li, Tianjian Yu [17-19]
+- **Tên bài báo**: *A Multi-Source Fusion Approach for Driver Fatigue Detection Using Physiological Signals and Facial Image*
+- **Tạp chí**: *IEEE Transactions on Intelligent Transportation Systems*, Tập 25, Số 11, trang 16614–16624 (2024) [20]
+- **DOI / Link**: [10.1109/TITS.2024.3420409](https://doi.org/10.1109/TITS.2024.3420409) [20]
+- **Tóm tắt phương pháp**:
+  - *Cảm biến & Dữ liệu*: Camera Logitech C920 (30Hz) thu video toàn bộ khuôn mặt và đai đeo Empatica E4 thu tín hiệu BVP (32Hz), HR (1Hz), EDA (4Hz) từ 21 tài xế lái xe mô phỏng (tổng cộng 45.480 đoạn dữ liệu 3 giây) [21-24].
+  - *Xử lý & Mô hình*: Khử nhiễu tín hiệu sinh lý bằng lọc Kalman [25]; theo dõi và phân đoạn khuôn mặt tự động bằng MTCNN và Linknet [26]; trích xuất đặc trưng sâu tự động bằng mạng dung hợp đa nguồn **1D CNN + 3D CNN** (không phụ thuộc đặc trưng thủ công) [27, 28]; mô hình đạt độ chính xác **93.15%** (Specificity: 94.04%, Sensitivity: 91.71%) trong cửa sổ tính toán ngắn 3 giây [29, 30].
+
+### 19. Schwarz et al. (2023)
+- **Tên tác giả**: Chris Schwarz, John Gaspar, Reza Yousefian [31, 32]
+- **Tên bài báo**: *Multi-sensor driver monitoring for drowsiness prediction* [31, 32]
+- **Tạp chí**: *Traffic Injury Prevention*, Tập 24, Số sup1, trang S100–S104 (2023) [31]
+- **DOI / Link**: [10.1080/15389588.2023.2164839](https://doi.org/10.1080/15389588.2023.2164839) [31]
+- **Tóm tắt phương pháp**:
+  - *Cảm biến & Dữ liệu*: Dữ liệu hành vi từ hệ thống DMS cột lái (Aisin), dữ liệu vận hành xe từ mô phỏng NADS-1, và tín hiệu BVP/HRV từ vòng đeo Empatica E4 thu từ 40 tài xế lái xe 3 giờ sau ít nhất 16 giờ thức liên tục [32-34]; gán nhãn định kỳ mỗi 10 phút qua KSS và quan sát ORD [32].
+  - *Xử lý & Mô hình*: Ước tính khoảng IBI và tính chỉ số HRV qua Lomb-Scargle periodogram (cửa sổ 5 phút cho HRV, 3 phút cho các chỉ số khác) [35, 36]; xây dựng 9 mô hình phân loại bằng **Random Forest (RF)** [32, 37]; mô hình kết hợp đa nguồn (RCH) đạt độ chính xác **92%** ($0.88 - 0.95$) với PERCLOS và SDNN đóng vai trò quan trọng nhất [38, 39], đồng thời dự báo trạng thái buồn ngủ sớm **6.7 phút** trước khi xảy ra sự kiện chệch làn do buồn ngủ [32, 40].
+
+### 20. Arefnezhad et al. (2019)
+- **Tên tác giả**: Saeed Arefnezhad, S. Samiee, Arno Eichberger, Ali Nahvi
+- **Tên bài báo**: *Driver drowsiness detection based on steering wheel data applying adaptive neuro-fuzzy feature selection*
+- **Tạp chí**: *Sensors*, Tập 19, Số 4, Bài số 943 (2019)
+- **DOI / Link**: [10.3390/s19040943](https://doi.org/10.3390/s19040943)
+- **Tóm tắt phương pháp**:
+  - *Cảm biến & Dữ liệu*: Tín hiệu góc xoay và vận tốc vô-lăng (tần số lấy mẫu 60 Hz) thu từ 39 tài xế xe buýt trên trình mô phỏng lái xe (BI301Semi, thu thập 20 giờ 36 phút dữ liệu); gán nhãn trạng thái Alert (KSS 1–6) và Drowsy (KSS 8–9) dựa trên thang đo KSS nhị phân [1, 2].
+  - *Xử lý & Mô hình*: Khử hiệu ứng độ cong đoạn đường bằng cửa sổ trượt 3 giây (chồng lấp 1.5 giây); trích xuất 36 đặc trưng miền thời gian và tần số; dung hợp 4 chỉ số lọc (Fisher, Correlation, T-test, Mutual Information) qua hệ mờ thích ứng ANFIS tối ưu hóa bằng thuật toán PSO để chọn đặc trưng; phân loại bằng **Support Vector Machine (SVM)** đạt độ chính xác **98.12%** (AUC = 0.97) chỉ với 5 đặc trưng tối ưu [3-6].
