@@ -44,7 +44,7 @@ Cách diễn giải phù hợp:
 
 > **Drowsiness có thể được xem là một transitional state gần với sleep onset, trong đó cardiovascular regulation đang được tái tổ chức; điều này cung cấp physiological context hợp lý cho các thay đổi đa chiều của PPG dynamics trong nghiên cứu hiện tại.**
 
-```
+
 
 ## Physiological foundation
 
@@ -60,4 +60,19 @@ Cách diễn giải phù hợp:
 ### Main implication
 
 > Awake → Drowsy nên được diễn giải như một **multisystem physiological reorganization**, không phải một simple sympathetic/vagal shift.
+
+## Role in Discussion
+
+### RQ1 — Null test
+Cung cấp physiological foundation cho việc PPG có thể chứa dynamical organization phức tạp hơn một noisy pseudoperiodic process, do cardiovascular dynamics chịu ảnh hưởng của nhiều interacting regulatory systems trong wake-to-sleep transition.
+
+### RQ2 — Awake vs Drowsy
+Chỉ cung cấp high-level physiological context rằng drowsiness/sleep onset liên quan đến multisystem reorganization.
+
+Paper này chưa giải thích trực tiếp direction của:
+- CC / NRMSE
+- DET / LAM / TT
+- LLE
+
+→ cần metric-specific literature để giải thích các finding này.
 
