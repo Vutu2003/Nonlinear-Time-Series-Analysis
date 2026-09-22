@@ -46,3 +46,18 @@ Cách diễn giải phù hợp:
 
 ```
 
+## Physiological foundation
+
+- Drowsiness có thể được xem là một **complex transitional regime** gần với **sleep onset**.
+- Wake-to-sleep transition liên quan đến sự tái tổ chức đồng thời của nhiều hệ:
+  - CNS
+  - ANS
+  - respiration
+  - baroreflex
+  - cardiovascular regulation
+- **N1** là sleep stage được chuẩn hóa bằng PSG và đại diện gần nhất cho giai đoạn chuyển tiếp này.
+
+### Main implication
+
+> Awake → Drowsy nên được diễn giải như một **multisystem physiological reorganization**, không phải một simple sympathetic/vagal shift.
+
