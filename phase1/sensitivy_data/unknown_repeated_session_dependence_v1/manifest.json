@@ -1,0 +1,35 @@
+{
+  "status": "complete",
+  "created_utc": "2026-09-30T10:53:45.339391+00:00",
+  "source_sha256": {
+    "phase1/sensitivy_data/primary_simplex_windowfirst_v1/primary_simplex_session_paired_60s_processed_P0_v1.csv": "58d33e413b4f7582ebb0b8627efd3712ab218ed8b210c2263abc06fd361ce90c",
+    "phase1/outputs/rqa/rqa_state_paired_values_60s_processed.csv": "b7c3206322ffbb5ff1ef7a16f0e54e8ab73946c4bdb7260732eb85198754f7dc",
+    "phase1/outputs/lle/lle_session_paired_deltas_60s_processed.csv": "1385247cce74beceee7c7dc1e874593ab5b38d4563be5894ff35ee423f5ec62a",
+    "phase1/sensitivy_data/primary_simplex_windowfirst_v1/primary_bh_fdr_7metrics_windowfirst_P0_v1.csv": "39329fa1cf11d30043349836f8a382a0c2e712befcf28f0024de6260979931c4",
+    "phase1/sensitivy_data/primary_simplex_windowfirst_v1/primary_simplex_statistics_60s_processed_P0_v1.csv": "25e34d028fb2288cfad62ed65de4ef25935de68c8e1ceca892eb163a40dd3be5",
+    "phase1/outputs/bh_fdr/rq2_primary_bh_fdr_60s_processed.csv": "685df31a5282e2cf1fc043071d84d4d9521b00e3cab0c2a4fa4054455aaef3f1",
+    "phase1/sensitivy_data/unknown_repeated_session_dependence_v1/run_analysis.py": "7ed97079ac03ffe457324829d078f3f1e066f46535e59bfc5b0ee5916e6e12fa"
+  },
+  "canonical_sha256": "3cdc90d0bf214244fcced56a44a692bd941432352837fe285d31be0c9f375286",
+  "baseline_sha256": "fd670e41bac202de8718499ab37bec200d570a15ffe12068ad90a8ea72b41556",
+  "protocol_sha256": "06776c76a8661e97624719686fcad276b0776a5a635ac902d57a1fe4c7426980",
+  "method_sha256": "1f824f97e1c39de95e9284b192edf0d05b9ec488275998be639ea2a60535cb05",
+  "output_sha256": {
+    "canonical_20_session_7metric_P0_60s_v1.csv": "3cdc90d0bf214244fcced56a44a692bd941432352837fe285d31be0c9f375286",
+    "corrected_n20_baseline_v1.csv": "fd670e41bac202de8718499ab37bec200d570a15ffe12068ad90a8ea72b41556",
+    "protocol.json": "06776c76a8661e97624719686fcad276b0776a5a635ac902d57a1fe4c7426980",
+    "unknown_repeated_session_dependence_method.md": "1f824f97e1c39de95e9284b192edf0d05b9ec488275998be639ea2a60535cb05",
+    "random_pairings_v1.csv.gz": "571f0ee5a9c64288f68fae87f9f436c6b32767864b2be2c84febbd732d907f9d",
+    "random_pairing_metric_results_v1.csv.gz": "147e2d4aa4d3cbece858653efc108dbd046b96d62a6c6825c4efeed4cdd55a90",
+    "random_pairing_summary_v1.csv": "85e0f30ac467efb8b59698a25117cd6bb424bb4fc962b62505f6313698c94270",
+    "convergence_v1.csv": "37392a3b83e7feb031b429da3db18c93aa01c8e164f24afe3ef49bfa9e0088a7",
+    "adversarial_best_found_v1.csv": "8e66f6dcd4fe37fc22216e63e8ffbeb700b29ee0490542dd9df8a063fe7147ae",
+    "adversarial_local_search_starts_v1.csv": "f65c94458208f5b51a8269d6d3b6879172092c6298d92083a9ab4dd530ee0836",
+    "unknown_repeated_session_dependence_results.md": "7bc37034990685619d24e4866f4172fc9c5a31ab853e6d4f904ccb4f067b58d1"
+  },
+  "completed_utc": "2026-09-30T10:56:56.450498+00:00",
+  "n_generated_matchings": 100000,
+  "n_unique_matchings": 99990,
+  "duplicate_fraction": 0.0001,
+  "results_editorial_verification": "Convergence and local-search interpretation finalized after machine outputs; frozen method, code, inputs, numerical outputs unchanged."
+}
