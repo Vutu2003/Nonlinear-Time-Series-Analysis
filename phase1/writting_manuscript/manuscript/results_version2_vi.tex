@@ -1,14 +1,15 @@
 \section{Results}
 
-Phân tích chính được thực hiện trên các cửa sổ processed PPG hợp lệ dài $60$~s đáp ứng các tiêu chí kiểm soát chất lượng đã định trước. Các kết quả dưới đây lần lượt đánh giá tổ chức động lực học của tín hiệu so với noisy pseudoperiodic null và sau đó so sánh các đặc trưng động lực học giữa trạng thái Awake và Drowsy.
+The primary analysis was performed on valid $60$-s processed-PPG windows that satisfied the predefined quality-control criteria. The following results first examine the dynamical organization of the signal relative to the noisy pseudoperiodic null and then compare the dynamical properties of the Awake and Drowsy states.
+
 
 \subsection{Dynamical Organization Beyond a Noisy Pseudoperiodic Null}
 
-Ở cả Awake và Drowsy, PPG gốc nhìn chung khác với PPS theo một pattern nhất quán trên các nhóm đặc trưng động lực học. Về finite-horizon forecastability, PPG gốc có CC cao hơn và NRMSE thấp hơn tập surrogate. DET và $L_{\mathrm{mean}}$ cao hơn, phản ánh cấu trúc tái diễn theo đường chéo mạnh hơn và kéo dài hơn so với PPS; LLE cũng cao hơn, trong khi LAM và TT nhìn chung thấp hơn. Nhìn chung, các khác biệt này cho thấy tín hiệu gốc và noisy pseudoperiodic ensemble không có cùng tổ chức trên prediction, recurrence structure và local trajectory divergence.
+In both Awake and Drowsy states, the original PPG differed from PPS in a generally consistent pattern across the dynamical measures. For finite-horizon forecastability, the original PPG showed higher Mean CC and lower Mean NRMSE than the surrogate ensemble. DET and $L_{\mathrm{mean}}$ were also higher, indicating stronger and more persistent diagonal recurrence structures relative to PPS; LLE was higher as well, whereas LAM and TT were generally lower. Overall, these differences indicate that the original signal and the noisy pseudoperiodic ensemble differed across prediction, recurrence structure, and local trajectory divergence.
 
-Fig.~\ref{fig:rq1_evidence} tổng hợp độ lệch original-minus-PPS theo session cùng tỷ lệ cửa sổ bác bỏ PPS null. Hướng của các khác biệt được quan sát ở cả Awake và Drowsy và nhìn chung được duy trì trên phần lớn các metric, cho thấy pattern không chỉ giới hạn ở một trạng thái hoặc một estimator riêng lẻ. Tỷ lệ bác bỏ ở cấp cửa sổ cho thấy một phần đáng kể các đoạn PPG quan sát được không được noisy pseudoperiodic null đã kiểm tra tái tạo đầy đủ.
+Fig.~\ref{fig:rq1_evidence} summarizes the session-level original-minus-PPS deviations together with the fraction of windows rejecting the PPS null. The median session-level rejection fraction for Mean CC was $60.7\%$ in Awake and $71.0\%$ in Drowsy. For DET, the median rejection fraction reached $100\%$ in both states.
 
-Tuy nhiên, tỷ lệ bác bỏ này chỉ mô tả bằng chứng ở cấp cửa sổ đối với tested null và không phải là kiểm định paired giữa Awake và Drowsy. Do đó, RQ1 chỉ hỗ trợ kết luận rằng cả hai trạng thái chứa tổ chức động lực học vượt quá những gì được tái tạo bởi noisy pseudoperiodic model đã kiểm tra. Việc bác bỏ PPS không được diễn giải như bằng chứng trực tiếp cho deterministic chaos và cũng không loại trừ mọi giải thích ngẫu nhiên có thể có.
+Rejection of the PPS null indicates that the observed PPG is inconsistent with the null hypothesis of a periodic orbit with uncorrelated noise~\cite{small2001}. This suggests that the signal contains dynamical organization beyond simple noisy pseudoperiodicity, but it does not constitute evidence of deterministic chaos and does not exclude more complex pseudoperiodic dynamics with correlated structure. The rejection fractions describe evidence against the null within each state and were not used as a paired test between Awake and Drowsy.
 
 \begin{figure*}[t]
     \centering
@@ -33,22 +34,23 @@ Tuy nhiên, tỷ lệ bác bỏ này chỉ mô tả bằng chứng ở cấp c�
     \label{fig:rq1_evidence}
 \end{figure*}
 
+
 \subsection{Awake--Drowsy Differences in PPG Dynamics}
 
-Table~\ref{tab:awake_drowsy_statistics} summarizes the paired effects of the seven metrics in the primary $60$~s analysis, while Fig.~\ref{fig:awake_drowsy_paired} illustrates the session-level changes from Awake to Drowsy. A coordinated pattern was observed across the headline metrics, including lower Mean CC, higher Mean NRMSE, lower DET, and lower LLE in Drowsy. For finite-horizon forecastability, Mean CC decreased with a median paired difference of $\Delta=-0.0339$ and $95\%$ CI $[-0.0595,-0.0043]$, whereas Mean NRMSE increased with $\Delta=+0.0294$ and $95\%$ CI $[0.0047,0.0530]$. Both remained supported after BH-FDR correction, with $q_{\mathrm{BH}}=0.0376$ for Mean CC and $q_{\mathrm{BH}}=0.0255$ for Mean NRMSE, indicating lower finite-horizon forecastability in Drowsy.
+Table~\ref{tab:awake_drowsy_statistics} summarizes the paired effects of the seven metrics in the primary $60$-s analysis, while Fig.~\ref{fig:awake_drowsy_paired} illustrates the session-level changes from Awake to Drowsy. The headline metrics showed a coordinated pattern in the Drowsy state: Mean CC decreased, Mean NRMSE increased, DET decreased, and LLE decreased. For finite-horizon forecastability, Mean CC decreased with a median paired difference of $\Delta=-0.0339$ and a $95\%$ CI of $[-0.0595,-0.0043]$, whereas Mean NRMSE increased with $\Delta=+0.0294$ and a $95\%$ CI of $[0.0047,0.0530]$. Both remained statistically supported after BH-FDR correction, with $q_{\mathrm{BH}}=0.0376$ for Mean CC and $q_{\mathrm{BH}}=0.0255$ for Mean NRMSE, indicating lower finite-horizon forecastability in the Drowsy state.
 
 \begin{figure*}[t]
     \centering
     \includegraphics[width=\textwidth]{image/paired_comparison_rq2/paired_awake_drowsy_7metrics_final.pdf}
     \caption{
-    Paired Awake--Drowsy comparison of the seven nonlinear dynamical metrics obtained from the primary $60$-s processed-PPG analysis. Each gray line connects the Awake and Drowsy values from the same session. Blue and orange markers denote Awake and Drowsy states, respectively. The panels show (a) CC, (b) NRMSE, (c) DET, (d) $L_{\mathrm{mean}}$, (e) LAM, (f) TT, and (g) LLE.
+    Paired Awake--Drowsy comparison of the seven nonlinear dynamical metrics obtained from the primary $60$-s processed-PPG analysis. Each gray line connects the Awake and Drowsy values from the same session. Blue and orange markers denote Awake and Drowsy states, respectively. The panels show (a) Mean CC, (b) Mean NRMSE, (c) DET, (d) $L_{\mathrm{mean}}$, (e) LAM, (f) TT, and (g) LLE.
     }
     \label{fig:awake_drowsy_paired}
 \end{figure*}
 
-Về recurrence organization, DET giảm với $\Delta=-0.0186$, $95\%$ CI $[-0.0364,-0.0069]$ và $q_{\mathrm{BH}}=0.0376$, cho thấy tổ chức tái diễn theo đường chéo thấp hơn ở Drowsy tại cấu hình tái dựng nominal. $L_{\mathrm{mean}}$ cũng giảm theo cùng hướng với $\Delta=-0.0630$ và CI không chứa $0$, nhưng không còn được hỗ trợ sau BH-FDR ($q_{\mathrm{BH}}=0.0816$). Ngược lại, LAM và TT có xu hướng tăng, song confidence intervals đều chứa $0$ và các kiểm định tương ứng không được hỗ trợ sau hiệu chỉnh multiple comparisons. Vì vậy, các thay đổi liên quan đến vertical hoặc laminar recurrence được xem là secondary và kém nhất quán hơn so với thay đổi của DET.
+For recurrence organization, DET decreased with $\Delta=-0.0186$, a $95\%$ CI of $[-0.0364,-0.0069]$, and $q_{\mathrm{BH}}=0.0376$, indicating lower diagonal recurrence organization in the Drowsy state under the nominal reconstruction configuration. $L_{\mathrm{mean}}$ also shifted in the same direction, with $\Delta=-0.0630$ and a CI that did not include $0$, but it was no longer supported after BH-FDR correction ($q_{\mathrm{BH}}=0.0816$). In contrast, LAM and TT tended to increase, but their confidence intervals included $0$, and the corresponding effects were not supported after correction for multiple comparisons. These vertical or laminar recurrence changes were therefore treated as secondary and were less consistent than the change in DET.
 
-Về local trajectory divergence, LLE giảm với $\Delta=-0.0376~\mathrm{s}^{-1}$, $95\%$ CI $[-0.0537,-0.0230]~\mathrm{s}^{-1}$, $r_{\mathrm{rb}}=-0.810$ và $q_{\mathrm{BH}}=0.0050$, cho thấy mức phân kỳ quỹ đạo cục bộ ước lượng thấp hơn ở Drowsy. Nhìn chung, kết quả RQ2 cho thấy trạng thái Drowsy liên quan đến sự tái tổ chức phối hợp của PPG trên ba thuộc tính bổ sung: finite-horizon forecastability giảm, tổ chức tái diễn theo đường chéo giảm và mức phân kỳ quỹ đạo cục bộ ước lượng giảm. Các metric còn lại cung cấp bối cảnh bổ sung nhưng không cho thấy mức hỗ trợ thống kê nhất quán tương đương với bốn headline findings.
+For local trajectory divergence, LLE decreased with $\Delta=-0.0376~\mathrm{s}^{-1}$, a $95\%$ CI of $[-0.0537,-0.0230]~\mathrm{s}^{-1}$, $r_{\mathrm{rb}}=-0.810$, and $q_{\mathrm{BH}}=0.0050$, indicating lower estimated local trajectory divergence in the Drowsy state. Overall, RQ2 indicated that drowsiness was associated with coordinated changes across three complementary properties of PPG dynamics: lower finite-horizon forecastability, lower diagonal recurrence organization, and lower estimated local trajectory divergence. The remaining metrics provided additional context but did not show statistical support as consistently as the four headline findings.
 
 \begin{table}[t]
     \centering
@@ -67,13 +69,13 @@ Về local trajectory divergence, LLE giảm với $\Delta=-0.0376~\mathrm{s}^{-
         & $\mathbf{q_{BH}}$ \\
         \midrule
 
-        CC
+        Mean CC
         & $-0.0339$
         & $[-0.0595,-0.0043]$
         & $-0.581$
         & $\mathbf{0.0376}$ \\
 
-        NRMSE
+        Mean NRMSE
         & $+0.0294$
         & $[0.0047,0.0530]$
         & $+0.667$
@@ -120,15 +122,16 @@ Về local trajectory divergence, LLE giảm với $\Delta=-0.0376~\mathrm{s}^{-
     \end{minipage}
 \end{table}
 
-\subsection{Robustness and Inferential Scope}
 
-Mean CC, DET và LLE giữ hướng giảm, còn Mean NRMSE giữ hướng tăng ở Drowsy tại cả bốn độ dài cửa sổ $30$, $60$, $120$ và $180$~s (Fig.~\ref{fig:window_robustness}). Các hướng hiệu ứng được duy trì nhất quán hơn so với độ lớn hiệu ứng. Các ước lượng ở $30$~s có độ bất định lớn hơn. Từ $60$ đến $180$~s, các hiệu ứng nhìn chung ổn định hơn, mặc dù DET tại $180$~s vẫn cho khoảng bất định tương đối rộng. Trong dataset này, $60$~s là một lựa chọn cân bằng thực tế giữa thời lượng quan sát ngắn và độ ổn định của ước lượng, không phải độ dài tối ưu phổ quát. Cả bốn hướng cũng được giữ dưới các label rules P0, T30, T60, S3 và S5 (Table~\ref{tab:label_sensitivity}), cho thấy pattern quan sát được không bị chi phối chủ yếu bởi các cửa sổ gần chuyển tiếp hoặc các episode trạng thái ngắn trong phạm vi đã khảo sát. Trên bốn label rules thay thế, cả $16/16$ headline effects đều giữ hướng kỳ vọng và đạt $q_{\mathrm{BH}}<0.05$, dù bootstrap CI chứa $0$ ở T60--Mean CC và T30--LLE; S5 còn $19$ paired sessions so với $20$ ở các rule còn lại.
+\subsection{Robustness of the Primary Findings}
+
+Mean CC, DET, and LLE remained lower in the Drowsy state, whereas Mean NRMSE remained higher, across all four window lengths of $30$, $60$, $120$, and $180$~s (Fig.~\ref{fig:window_robustness}). The effect directions were more consistent than their magnitudes. Estimates from $30$-s windows showed greater uncertainty, whereas uncertainty was generally lower from $60$ to $180$~s, although DET at $180$~s still showed a relatively wide interval. Within this dataset, $60$~s provided a practical balance between short observation duration and estimation uncertainty rather than a universal optimum. The same four directions were also preserved under the P0, T30, T60, S3, and S5 label rules (Table~\ref{tab:label_sensitivity}), suggesting that the observed pattern was not driven primarily by windows near state transitions or by short state episodes within the tested definitions. Across the four alternative label rules, all $16/16$ headline effects retained the expected direction and had $q_{\mathrm{BH}}<0.05$, although the bootstrap CI included $0$ for T60--Mean CC and T30--LLE; S5 retained $19$ paired sessions compared with $20$ for the other rules. The bootstrap CI summarizes uncertainty in the median paired effect, whereas the signed-rank test is rank based, so the two forms of statistical support need not coincide.
 
 \begin{figure*}[t]
     \centering
     \includegraphics[width=0.78\textwidth]{image/robustness_window/robust_window_primary_metrics.pdf}
     \caption{
-    Robustness of the primary Awake--Drowsy effects across window lengths. Paired effects ($\Delta=\mathrm{Drowsy}-\mathrm{Awake}$) are shown for (a) CC, (b) NRMSE, (c) DET, and (d) LLE using $30$, $60$, $120$, and $180$ s windows. Error bars represent the corresponding $95\%$ bootstrap confidence intervals. All four headline metrics preserve the same direction of change across window lengths, whereas the $30$-s estimates exhibit greater uncertainty.
+    Robustness of the primary Awake--Drowsy effects across window lengths. Paired effects ($\Delta=\mathrm{Drowsy}-\mathrm{Awake}$) are shown for (a) Mean CC, (b) Mean NRMSE, (c) DET, and (d) LLE using $30$, $60$, $120$, and $180$ s windows. Error bars represent the corresponding $95\%$ bootstrap confidence intervals. All four headline metrics preserve the same direction of change across window lengths, whereas the $30$-s estimates exhibit greater uncertainty.
     }
     \label{fig:window_robustness}
 \end{figure*}
@@ -156,11 +159,11 @@ LLE
 \end{tabular}
 \end{table}
 
-Các metric có độ bền khác nhau khi thay đổi tham số (Table~\ref{tab:parameter_sensitivity}). Mean CC, Mean NRMSE và LLE giữ hướng trong grid delay và dimension đã kiểm tra. DET giữ hướng âm tại $m=7$, $8$ và $9$, nhưng nhạy rõ với embedding delay: hiệu ứng âm tại $\tau=0.16$~s tiến gần $0$ và đổi sang dương tại $\tau=0.12$ và $0.20$~s, nên kết quả DET cần được diễn giải gắn với cấu hình nominal. Đối với unknown repeated-session dependence, phân tích bổ sung sau Version~1 lấy mẫu $100{,}000$ cách ghép $20$ sessions thành $10$ hypothetical two-session clusters, do liên kết participant--session thực tế của $10$ người không còn khả dụng. Phân tích này sử dụng một baseline Simplex riêng đã được freeze cho sensitivity analysis, khác kết quả primary trong Table~\ref{tab:awake_drowsy_statistics}. Median hiệu ứng của cả bốn headline metrics giữ hướng trong toàn bộ các cách ghép giả định đã lấy mẫu, nhưng độ lớn và mức hỗ trợ suy luận thay đổi. Tỷ lệ đạt $q_{\mathrm{BH}}<0.05$ là $19.36\%$, $27.82\%$, $22.59\%$ và $79.69\%$ cho Mean CC, Mean NRMSE, DET và LLE, tương ứng. Phân tích này đánh giá độ nhạy với cấu trúc cluster chưa biết, không thay thế suy luận primary ở cấp session. Các cluster giả định không khôi phục danh tính participant, chứng minh tính độc lập giữa các sessions hay xác lập suy luận cấp participant.
+Robustness to parameter choices differed across metrics (Table~\ref{tab:parameter_sensitivity}). Mean CC, Mean NRMSE, and LLE preserved their directions across the tested delay and dimension grid. DET remained negative at $m=7$, $8$, and $9$, but was clearly more sensitive to embedding delay: the negative effect at $\tau=0.16$~s approached $0$ and changed sign at $\tau=0.12$ and $0.20$~s. The DET finding should therefore be interpreted as reconstruction-setting dependent, particularly with respect to embedding delay. To assess sensitivity to unknown repeated-session dependence using the same canonical primary pipeline, $100{,}000$ hypothetical pairings were sampled by grouping the $20$ sessions into $10$ two-session clusters because the actual participant--session linkage was unavailable. The median effects of all four headline metrics preserved their directions across all sampled hypothetical pairings, but their magnitudes and inferential support varied. The proportions with $q_{\mathrm{BH}}<0.05$ were $19.36\%$, $27.82\%$, $22.59\%$, and $79.69\%$ for Mean CC, Mean NRMSE, DET, and LLE, respectively. This analysis assesses sensitivity to unknown participant--session clustering and does not substitute for the primary session-level inference. The hypothetical pairings do not recover participant identity, establish independence between sessions, or support participant-level inference.
 
 \begin{table}[t]
 \centering
-\caption{Sensitivity of the primary effects to phase-space reconstruction parameters. Values are median paired differences $\Delta=\mathrm{Drowsy}-\mathrm{Awake}$. The nominal Mean CC and Mean NRMSE values are the reconstruction-sensitivity estimates reported in Version 1 and differ from the primary estimates in Table~\ref{tab:awake_drowsy_statistics}; they are retained for within-grid sensitivity comparisons and do not replace the primary estimates.}
+\caption{Sensitivity of the primary effects to phase-space reconstruction parameters. Values are median paired differences $\Delta=\mathrm{Drowsy}-\mathrm{Awake}$. The nominal configuration is $\tau=0.16$ s and $m=8$.}
 \label{tab:parameter_sensitivity}
 \footnotesize
 \setlength{\tabcolsep}{3.5pt}
@@ -174,11 +177,11 @@ Các metric có độ bền khác nhau khi thay đổi tham số (Table~\ref{tab
 & 7 & 8 & 9 \\
 \midrule
 Mean CC
-& -0.0317 & -0.0277 & -0.0316
-& -0.0307 & -0.0277 & -0.0251 \\
+& -0.0317 & -0.0339 & -0.0316
+& -0.0307 & -0.0339 & -0.0251 \\
 Mean NRMSE
-& +0.0321 & +0.0319 & +0.0296
-& +0.0377 & +0.0319 & +0.0315 \\
+& +0.0321 & +0.0294 & +0.0296
+& +0.0377 & +0.0294 & +0.0315 \\
 DET
 & +0.0025 & -0.0186 & +0.0015
 & -0.0145 & -0.0186 & -0.0200 \\
@@ -189,7 +192,7 @@ LLE
 \end{tabular}
 \end{table}
 
-Ở lớp hỗ trợ exploratory, symbolic dynamics cho thấy $0V\uparrow$ và $2V\downarrow$ tại $60$, $120$ và $180$~s, trong khi 1V gần $0$ và kém nhất quán hơn (Table~\ref{tab:symbolic_results}; chênh lệch tính bằng điểm phần trăm). Pattern này cung cấp một lớp bằng chứng bổ sung về sự thay đổi động lực học theo trạng thái, nhưng không có hỗ trợ thống kê nhất quán qua các cấu hình và không được diễn giải như phép đo trực tiếp hoạt tính sympathetic hoặc parasympathetic. Nhìn chung, trong các kiểm tra đã thực hiện, hướng của các primary effects ổn định hơn độ lớn và mức hỗ trợ thống kê của chúng. Mức độ robustness phụ thuộc từng metric: Mean CC, Mean NRMSE và LLE duy trì hướng tốt hơn trong parameter grid đã khảo sát, trong khi DET nhạy rõ hơn với embedding delay. Các kết quả repeated-session sensitivity tiếp tục hỗ trợ sự ổn định về hướng, nhưng không loại bỏ bất định liên quan đến participant--session dependence.
+As an exploratory supporting analysis, symbolic dynamics showed $0V\uparrow$ and $2V\downarrow$ at $60$, $120$, and $180$~s, whereas 1V remained close to $0$ and was less consistent (Table~\ref{tab:symbolic_results}; differences are reported in percentage points). This pattern provides additional context for the state-related dynamical changes, but it did not show consistent statistical support across configurations and was not interpreted as a direct measure of sympathetic or parasympathetic activity. Overall, across the robustness analyses performed, the directions of the primary effects were more stable than their exact magnitudes and levels of statistical support. Robustness was metric specific: Mean CC, Mean NRMSE, and LLE showed better directional stability across the tested parameter grid, whereas DET was more sensitive to embedding delay. The repeated-session sensitivity analysis further supported directional stability but did not remove uncertainty related to participant--session dependence.
 
 \begin{table}[t]
     \centering
