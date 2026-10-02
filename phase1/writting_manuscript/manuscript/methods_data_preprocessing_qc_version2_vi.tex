@@ -1,0 +1,33 @@
+\subsection{Dataset, Experimental Protocol, and PPG Preprocessing}
+
+The study used 20 recording sessions from 10 healthy young participants (6 male, 4 female; age $21.8 \pm 1.2$ years). PPG was recorded using a MAX30102 sensor connected to an ESP32. The recording sessions were conducted under limited-motion conditions, and participants were asked to maintain a stable posture to reduce motion artifacts. Awake/Drowsy labels were assigned using video observation together with the Karolinska Sleepiness Scale (KSS)~\cite{akerstedt1990}, with KSS used as the main subjective measure of sleepiness. Drowsy was defined as a state of reduced vigilance according to KSS and cross-checked using video observation. The retained recordings totaled 17.40~h, including 11.33~h of Awake data and 6.07~h of Drowsy data. Participant--recording session linkage was unavailable; the recording session was therefore used as the inferential unit in the subsequent analyses.
+
+Raw PPG was filtered using a second-order Butterworth band-pass filter from 0.5 to 8~Hz, applied forward and backward to achieve zero-phase filtering, consistent with common PPG preprocessing practice~\cite{charlton2023,park2022}. The filter was used to reduce baseline drift, very-low-frequency components, and high-frequency noise while preserving the main oscillatory range of the waveform. The filtered signal (processed PPG) was then used for segmentation, quality control (QC), and subsequent analyses.
+
+\subsection{Awake--Drowsy Segmentation and Quality Control}
+
+Within each recording session, the Awake and Drowsy intervals of the processed PPG were divided into non-overlapping analysis windows while preserving the original labels and segment/gap boundaries. The primary ultra-short PPG window was 60~s, while 30, 120, and 180~s windows were used to assess robustness across window lengths. Finite windows improved temporal localization and supported local quasi-stationarity assessment. Each analysis window was screened using two QC layers: artifact screening and variance stability.
+
+Artifact screening was performed using non-overlapping 5-s subwindows of the processed PPG over the full recording session. For the signal $x$ in each subwindow, two SQI features were calculated: amplitude,
+\[
+A=Q_{0.95}(x)-Q_{0.05}(x),
+\]
+and roughness,
+\[
+R=\sqrt{\mathrm{mean}((\Delta x)^2)},
+\]
+where $Q_p$ denotes the $p$th quantile and $\Delta x$ is the first difference. Each feature $F\in\{A,R\}$ was standardized within each recording session using a median absolute deviation (MAD)-based modified z-score~\cite{iglewicz1993}:
+\[
+z_F=0.6745\,\frac{F-\mathrm{median}(F)}{\max(\mathrm{MAD}(F),\epsilon)},
+\]
+where $\mathrm{MAD}(F)=\mathrm{median}(|F-\mathrm{median}(F)|)$ and $\epsilon$ is machine epsilon. All samples within a subwindow with $z_A>4.5$ or $z_R>4.5$ were marked as artifacts, and any analysis window containing at least one marked sample was excluded.
+
+Because nonlinear time-series analyses can be sensitive to nonstationarity~\cite{witt1998}, quasi-stationarity was assessed using at least two complete, non-overlapping 10-s subwindows within each analysis window. With $v_k=\mathrm{Var}(x_k)$ computed using $\mathrm{ddof}=0$, the variance-stability index was defined as
+\[
+S=\frac{\mathrm{IQR}(v)}{\max(\mathrm{median}(v),\epsilon)},
+\]
+where
+\[
+\mathrm{IQR}(v)=Q_{0.75}(v)-Q_{0.25}(v).
+\]
+An analysis window passed this criterion when $S\leq0.5$; this criterion assessed variance stability only. Only windows that passed both QC layers were retained. Most windows in both states passed QC across the tested window lengths; detailed counts and pass rates are provided in the Supplementary Material.
