@@ -1,0 +1,366 @@
+% EXPERIMENT SETUP AND RESULTS
+\section{Experiment Setup and Results}
+
+\subsection{Experiment Setup}
+
+Phân tích chính được thực hiện trên processed PPG với các cửa sổ không chồng lấp có độ dài $60$ s, trong khi các cửa sổ $30$, $120$ và $180$ s được sử dụng cho robustness analysis. Chỉ các cửa sổ vượt qua cả signal quality assessment và quasi-stationarity validation mới được đưa vào phân tích. Signal quality được đánh giá trên processed PPG bằng các đoạn $5$ s không chồng lấp, sử dụng hai đặc trưng gồm biên độ bền vững $A=Q_{0.95}(x)-Q_{0.05}(x)$ và mức biến thiên cục bộ $R=\sqrt{\mathrm{mean}((\Delta x)^2)}$, sau đó chuẩn hóa theo robust $z$-score trên toàn session; một đoạn được đánh dấu artifact nếu $z_A>4.5$ hoặc $z_R>4.5$, và cửa sổ phân tích bị loại nếu chứa bất kỳ sample nào thuộc artifact mask. Quasi-stationarity được đánh giá dựa trên độ ổn định của phương sai giữa các subwindow $10$ s không chồng lấp, với chỉ số $S=[Q_{0.75}(v)-Q_{0.25}(v)]/\max(\mathrm{median}(v),\epsilon_{\mathrm{mach}})$ và điều kiện chấp nhận $S\leq0.5$. Toàn bộ preprocessing, quality-control, phase-space reconstruction và estimator parameters được xác lập trước khi thực hiện so sánh Awake--Drowsy và không được tối ưu lại dựa trên p-value hoặc độ lớn hiệu ứng của các kết quả downstream. Một cấu hình tái dựng chung với $\tau=0.16$ s và $m=8$ được sử dụng cho tất cả các phương pháp NTSA; với từng sampling frequency, $\tau$ được chuyển sang số mẫu bằng $\mathrm{round}(\tau f_s)$. Table~\ref{tab:analysis_configuration} tóm tắt toàn bộ cấu hình nominal được freeze cho pipeline phân tích.
+
+\begin{table}[t]
+    \centering
+    \caption{Frozen nominal configuration for the primary PPG analysis pipeline.}
+    \label{tab:analysis_configuration}
+    \footnotesize
+    \setlength{\tabcolsep}{4pt}
+    \renewcommand{\arraystretch}{1.08}
+
+    \begin{tabularx}{\columnwidth}{p{0.29\columnwidth} X}
+        \toprule
+        \textbf{Component} & \textbf{Nominal configuration} \\
+        \midrule
+
+        Windowing
+        &
+        \makecell[l]{
+        Primary window: $60$ s \\
+        Non-overlapping windows \\
+        Robustness: $30$, $120$, $180$ s
+        }
+        \\
+
+        \midrule
+
+        Signal quality
+        &
+        \makecell[l]{
+        Processed PPG; $5$ s subwindows \\
+        $A=Q_{0.95}(x)-Q_{0.05}(x)$ \\
+        $R=\sqrt{\mathrm{mean}((\Delta x)^2)}$ \\
+        Robust session-wise $z$-score \\
+        Artifact if $z_A>4.5$ or $z_R>4.5$ \\
+        Reject window if any artifact sample
+        }
+        \\
+
+        \midrule
+
+        Quasi-stationarity
+        &
+        \makecell[l]{
+        Variance stability over $10$ s subwindows \\
+        $v_k=\mathrm{Var}(x_k)$, \texttt{ddof}$=0$ \\
+        $S=\dfrac{Q_{0.75}(v)-Q_{0.25}(v)}
+        {\max(\mathrm{median}(v),\epsilon_{\mathrm{mach}})}$ \\
+        Accept if $S\leq0.5$
+        }
+        \\
+
+        \midrule
+
+        Phase-space reconstruction
+        &
+        \makecell[l]{
+        Delay $\tau=0.16$ s \\
+        Embedding dimension $m=8$ \\
+        $\tau_{\mathrm{samples}}=\mathrm{round}(\tau f_s)$
+        }
+        \\
+
+        \midrule
+
+        Simplex Projection
+        &
+        \makecell[l]{
+        $k=m+1=9$ \\
+        Euclidean distance \\
+        Exponential weighting \\
+        Theiler window $W=1.0$ s \\
+        18 horizons ($0.04$--$4.0$ s) \\
+        Mean CC, mean NRMSE \\
+        Leave-one-out validation
+        }
+        \\
+
+        \midrule
+
+        RQA
+        &
+        \makecell[l]{
+        Fixed $RR=0.02$ \\
+        Window-specific $\varepsilon$ \\
+        $W=(m-1)\tau_{\mathrm{samples}}$ \\
+        $l_{\min}=v_{\min}=2$ \\
+        DET, $L_{\mathrm{mean}}$, LAM, TT
+        }
+        \\
+
+        \midrule
+
+        Rosenstein LLE
+        
+        &
+        \makecell[l]{
+        Spectral-period Theiler window \\
+        Fit interval: $0.80$--$1.30$ s \\
+        Follow time: $5.0$ s \\
+        Fit criterion: $R^2\geq0.90$ \\
+        LLE ($\mathrm{s}^{-1}$)
+        }
+        \\  
+
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+Các metric được tính trên từng cửa sổ hợp lệ và sau đó gộp ở cấp session--state, với session là đơn vị suy luận thống kê. Đối với RQA và LLE, giá trị đại diện được lấy bằng median trên các valid windows. Đối với Simplex Projection, CC và NRMSE được trung bình trên các prediction horizons trong từng cửa sổ để thu được Mean CC và Mean NRMSE, sau đó lấy median trên các valid windows của từng session--state. So sánh Awake--Drowsy được thực hiện bằng two-sided Wilcoxon signed-rank test trên $20$ paired sessions. Kết quả được báo cáo bằng median paired difference $\Delta=\mathrm{median}(D_i-A_i)$, matched-pairs rank-biserial correlation $r_{\mathrm{rb}}$, và percentile bootstrap 95\% confidence interval với $20{,}000$ resamples. Multiple comparisons được kiểm soát bằng BH--FDR trên bảy primary metrics, với $q_{\mathrm{BH}}<0.05$ được xem là có statistical support.
+
+\subsection{Dynamical Organization Beyond a Noisy Pseudoperiodic Null}
+
+Để trả lời RQ1, các đặc trưng động lực học của PPG gốc được so sánh với phân bố tham chiếu tạo bởi pseudoperiodic surrogates ở cấp cửa sổ. Nhìn chung, PPG gốc khác PPS theo một pattern nhất quán trên cả ba nhóm đặc trưng động lực học. Cụ thể, PPG gốc cho giá trị CC cao hơn và NRMSE thấp hơn, cho thấy khả năng dự báo ngắn hạn tốt hơn so với surrogate. Đồng thời, DET và $L_{\mathrm{mean}}$ cao hơn, phản ánh tổ chức recurrence theo đường chéo mạnh hơn, trong khi LLE cũng cao hơn, cho thấy mức độ phân kỳ cục bộ lớn hơn so với noisy pseudoperiodic null. Ngược lại, LAM và TT thấp hơn PPS, cho thấy mức độ laminar trapping thấp hơn trong tín hiệu gốc.
+
+Fig.~\ref{fig:rq1_evidence} trình bày bằng chứng định lượng cho các khác biệt này. Panel bên trái biểu diễn độ lệch giữa giá trị metric của PPG gốc và median của các PPS surrogates theo từng session, trong khi panel bên phải cho thấy tỷ lệ cửa sổ bác bỏ PPS null bằng kiểm định two-sided finite-sample rank test. Hướng thay đổi nhìn chung được duy trì ở cả hai trạng thái Awake và Drowsy, với mức độ nhất quán cao trên phần lớn session và metric.
+
+\begin{figure*}[t]
+    \centering
+
+    \begin{minipage}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{image/statistic_test_rq1/rq1_pps_primary_metrics_60s.pdf}
+        \caption*{\textbf{(A)} Session-level deviation between original PPG and median PPS together with window-level PPS rejection fractions across metrics and states.}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{image/statistic_test_rq1/rq1_pps_rank_rejection_heatmap_60s.pdf}
+        \caption*{\textbf{(B)} Summary of the directional pattern observed for original PPG relative to the PPS null model.}
+    \end{minipage}
+
+    \caption{
+    Results of pseudoperiodic surrogate testing.
+    (A) Original PPG consistently deviated from the PPS ensemble across multiple nonlinear metrics, while a large fraction of windows rejected the noisy pseudoperiodic null in both Awake and Drowsy states.
+    (B) The resulting directional pattern indicates higher forecastability, stronger diagonal recurrence organization, and greater local trajectory divergence in the original PPG, together with lower laminarity-related measures relative to PPS.
+    }
+    \label{fig:rq1_evidence}
+\end{figure*}
+
+Nhìn tổng thể, kết quả cho thấy cả Awake và Drowsy đều chứa tổ chức động lực học vượt quá những gì có thể được giải thích bởi noisy pseudoperiodicity đơn thuần. Pattern quan sát được nhất quán trên ba góc nhìn bổ sung gồm prediction, recurrence organization và local divergence. Tuy nhiên, việc bác bỏ PPS null chỉ cho phép kết luận rằng tín hiệu chứa tổ chức động lực học vượt quá mô hình null đã kiểm tra; kết quả này không được diễn giải như bằng chứng trực tiếp cho deterministic chaos.
+
+\subsection{Awake--Drowsy Differences in PPG Dynamics}
+
+Sau khi xác lập rằng PPG quan sát được chứa tổ chức động lực học vượt quá noisy pseudoperiodic null, RQ2 tập trung vào việc xác định cách các đặc trưng động lực học thay đổi giữa trạng thái Awake và Drowsy. Các metric được tính trên từng cửa sổ hợp lệ và sau đó được gộp bằng median trong từng cặp session--state. Do đó, mỗi session đóng góp một giá trị Awake và một giá trị Drowsy cho mỗi metric, cho phép thực hiện so sánh paired ở cấp session.
+
+Fig.~\ref{fig:awake_drowsy_paired} trình bày các thay đổi paired của bảy metric động lực học trong cấu hình chính với cửa sổ $60$ s. Phần lớn session cho thấy một pattern định hướng nhất quán gồm CC giảm, NRMSE tăng, DET giảm và LLE giảm từ Awake sang Drowsy. Các metric còn lại cho thấy $L_{\mathrm{mean}}$ có xu hướng giảm, trong khi LAM và TT có xu hướng tăng, mặc dù mức độ nhất quán giữa các session thấp hơn.
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=\textwidth]{image/paired_comparison_rq2/paired_awake_drowsy_7metrics_final.pdf}
+    \caption{
+    Paired Awake--Drowsy comparison of the seven nonlinear dynamical metrics obtained from the primary $60$-s processed-PPG analysis. Each gray line connects the Awake and Drowsy values from the same session. Blue and orange markers denote Awake and Drowsy states, respectively. The panels show (a) CC, (b) NRMSE, (c) DET, (d) $L_{\mathrm{mean}}$, (e) LAM, (f) TT, and (g) LLE.
+    }
+    \label{fig:awake_drowsy_paired}
+\end{figure*}
+
+Đối với nonlinear prediction, hai metric cho thấy sự suy giảm nhất quán của khả năng dự báo ngắn hạn khi chuyển từ Awake sang Drowsy. CC giảm với median paired difference $\Delta=-0.0339$ và bootstrap $95\%$ CI $[-0.0595,-0.0043]$, trong khi NRMSE tăng với $\Delta=+0.0294$ và $95\%$ CI $[0.0047,0.0530]$. Cả hai metric vẫn được hỗ trợ sau hiệu chỉnh BH-FDR, với $q_{\mathrm{BH}}=0.0376$ cho CC và $q_{\mathrm{BH}}=0.0255$ cho NRMSE. Hai thay đổi bổ sung này cho thấy trạng thái Drowsy đi kèm với khả năng forecastability của PPG thấp hơn trong cửa sổ chính $60$ s.
+
+Các metric RQA cho thấy sự thay đổi khác nhau giữa cấu trúc recurrence theo đường chéo và cấu trúc laminar. DET giảm từ Awake sang Drowsy với median $\Delta=-0.0186$, $95\%$ CI $[-0.0364,-0.0069]$ và $q_{\mathrm{BH}}=0.0376$, cho thấy mức độ tổ chức recurrence theo đường chéo giảm trong trạng thái Drowsy. $L_{\mathrm{mean}}$ cũng cho một paired shift theo hướng giảm ($\Delta=-0.0630$; $95\%$ CI $[-0.1247,-0.0139]$), nhưng không còn được hỗ trợ sau hiệu chỉnh BH-FDR ($q_{\mathrm{BH}}=0.0816$). Ngược lại, LAM và TT có xu hướng tăng, với median $\Delta=+0.0165$ và $\Delta=+0.0095$, tương ứng. Tuy nhiên, bootstrap CI của cả hai metric đều cắt $0$, và các kiểm định tương ứng không được hỗ trợ sau BH-FDR ($q_{\mathrm{BH}}=0.1667$ đối với LAM và $q_{\mathrm{BH}}=0.2024$ đối với TT).
+
+LLE giảm rõ rệt từ Awake sang Drowsy với median paired difference $\Delta=-0.0376~\mathrm{s}^{-1}$ và bootstrap $95\%$ CI $[-0.0537,-0.0230]~\mathrm{s}^{-1}$. Effect size rank-biserial đạt $r_{rb}=-0.810$, trong khi $q_{\mathrm{BH}}=0.0050$. Kết quả này cho thấy các quỹ đạo lân cận trong không gian trạng thái tái dựng có mức độ phân kỳ cục bộ thấp hơn trong trạng thái Drowsy.
+
+Table~\ref{tab:awake_drowsy_statistics} tổng hợp các paired effects, bootstrap confidence intervals, effect sizes và BH-FDR-adjusted p-values của toàn bộ bảy metric.
+
+\begin{table}[t]
+    \centering
+    \caption{Paired Awake--Drowsy statistical comparison for the primary $60$-s analysis. The paired difference is defined as $\Delta=\mathrm{Drowsy}-\mathrm{Awake}$.}
+    \label{tab:awake_drowsy_statistics}
+    \footnotesize
+    \setlength{\tabcolsep}{3.2pt}
+    \renewcommand{\arraystretch}{1.08}
+
+    \begin{tabular}{lcccc}
+        \toprule
+        \textbf{Metric}
+        & \textbf{Median $\Delta$}
+        & \textbf{95\% CI}
+        & $\mathbf{r_{rb}}$
+        & $\mathbf{q_{BH}}$ \\
+        \midrule
+
+        CC
+        & $-0.0339$
+        & $[-0.0595,-0.0043]$
+        & $-0.581$
+        & $\mathbf{0.0376}$ \\
+
+        NRMSE
+        & $+0.0294$
+        & $[0.0047,0.0530]$
+        & $+0.667$
+        & $\mathbf{0.0255}$ \\
+
+        DET
+        & $-0.0186$
+        & $[-0.0364,-0.0069]$
+        & $-0.581$
+        & $\mathbf{0.0376}$ \\
+
+        $L_{\mathrm{mean}}$
+        & $-0.0630$
+        & $[-0.1247,-0.0139]$
+        & $-0.486$
+        & $0.0816$ \\
+
+        LAM
+        & $+0.0165$
+        & $[-0.0044,0.0635]$
+        & $+0.381$
+        & $0.1667$ \\
+
+        TT
+        & $+0.0095$
+        & $[-0.0034,0.0160]$
+        & $+0.333$
+        & $0.2024$ \\
+
+        LLE
+        & $-0.0376$
+        & $[-0.0537,-0.0230]$
+        & $-0.810$
+        & $\mathbf{0.0050}$ \\
+
+        \bottomrule
+    \end{tabular}
+
+    \vspace{1mm}
+
+    \begin{minipage}{0.97\columnwidth}
+        \footnotesize
+        Bold values indicate metrics supported after Benjamini--Hochberg false-discovery-rate correction ($q_{\mathrm{BH}}<0.05$).
+    \end{minipage}
+\end{table}
+
+Trên cấu hình chính $60$ s, bốn metric CC, NRMSE, DET và LLE được hỗ trợ sau hiệu chỉnh BH-FDR. Nhìn tổng thể, trạng thái Drowsy đi kèm với giảm khả năng dự báo ngắn hạn, suy giảm tổ chức recurrence theo đường chéo và giảm mức độ phân kỳ cục bộ của quỹ đạo. $L_{\mathrm{mean}}$ cho một paired shift theo hướng giảm, trong khi LAM và TT cho xu hướng tăng nhưng chưa nhận được hỗ trợ sau hiệu chỉnh nhiều phép kiểm định. Các kết quả này cho thấy một pattern tái tổ chức động lực học phối hợp của PPG, thay vì một thay đổi đồng nhất có thể được mô tả đơn giản theo một trục ``more chaos''--``less chaos''.
+
+\subsection{Robustness Across Window Lengths}
+
+Để đánh giá mức độ phụ thuộc của các headline findings vào độ dài cửa sổ phân tích, bốn metric được hỗ trợ trong phân tích chính gồm CC, NRMSE, DET và LLE được kiểm tra lại trên các cửa sổ $30$, $60$, $120$ và $180$ s. Với mỗi độ dài cửa sổ, paired effect được xác định theo cùng quy ước $\Delta=\mathrm{Drowsy}-\mathrm{Awake}$ và được tổng hợp ở cấp session.
+
+Fig.~\ref{fig:window_robustness} cho thấy cả bốn metric đều giữ nguyên hướng thay đổi trên toàn bộ khoảng $30$--$180$ s. Cụ thể, CC và DET duy trì paired effect âm, NRMSE duy trì paired effect dương, trong khi LLE tiếp tục giảm ở trạng thái Drowsy. Các cửa sổ $30$ s vẫn cho cùng direction với phân tích chính nhưng có khoảng bất định rộng hơn, cho thấy mức độ biến thiên lớn hơn khi thời lượng quan sát giảm. Từ $60$ đến $180$ s, các effect trở nên ổn định hơn; LLE cho xu hướng giảm rõ hơn khi cửa sổ dài hơn, trong khi DET ở $180$ s vẫn giữ direction nhưng có độ bất định lớn hơn.
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=0.78\textwidth]{image/robustness_window/robust_window_primary_metrics.pdf}
+    \caption{
+    Robustness of the primary Awake--Drowsy effects across window lengths. Paired effects ($\Delta=\mathrm{Drowsy}-\mathrm{Awake}$) are shown for (a) CC, (b) NRMSE, (c) DET, and (d) LLE using $30$, $60$, $120$, and $180$ s windows. Error bars represent the corresponding $95\%$ bootstrap confidence intervals. All four headline metrics preserve the same direction of change across window lengths, whereas the $30$-s estimates exhibit greater uncertainty.
+    }
+    \label{fig:window_robustness}
+\end{figure*}
+
+Nhìn tổng thể, kết quả cho thấy các khác biệt động lực học chính giữa Awake và Drowsy không phụ thuộc nghiêm trọng vào một lựa chọn duy nhất về window length. Cửa sổ $60$ s cung cấp một trade-off thực tế giữa độ ngắn của đoạn tín hiệu và độ ổn định của effect, trong khi các cửa sổ $120$--$180$ s đóng vai trò xác nhận robustness của pattern quan sát được. Việc các effect chính đã xuất hiện ở thang thời gian $60$ s đồng thời hỗ trợ tính khả thi của việc đặc trưng hóa PPG dynamics trên các đoạn ghi ngắn.
+
+\subsection{Symbolic Dynamics for Physiological Interpretation}
+
+Bên cạnh các đặc trưng NTSA chính, symbolic dynamics được sử dụng như một lớp phân tích bổ sung nhằm hỗ trợ diễn giải sinh lý của sự chuyển đổi Awake--Drowsy. Phân tích tập trung vào ba symbolic families gồm 0V, 1V và 2V tại các cửa sổ $60$, $120$ và $180$ s. Paired effect được xác định theo cùng quy ước $\Delta=\mathrm{Drowsy}-\mathrm{Awake}$ và được báo cáo theo đơn vị percentage points (pp). Table~\ref{tab:symbolic_results} cho thấy 0V tăng ở cả ba độ dài cửa sổ, với median $\Delta$ lần lượt là $+4.04$, $+2.32$ và $+4.58$ pp tại $60$, $120$ và $180$ s. Hướng tăng này được duy trì đồng nhất trên cả ba độ dài cửa sổ ở $17/20$ session. Ngược lại, 2V giảm ở cả ba cấu hình, với median $\Delta=-0.91$, $-2.30$ và $-2.67$ pp, đồng thời giữ cùng hướng ở $14/20$ session. Trong khi đó, 1V dao động quanh $0$, có effect size nhỏ và mức độ nhất quán direction thấp hơn, với chỉ $11/20$ session giữ cùng dấu trên cả ba độ dài cửa sổ.
+
+\begin{table}[t]
+    \centering
+    \caption{Awake--Drowsy symbolic dynamics across window lengths. Paired differences are defined as $\Delta=\mathrm{Drowsy}-\mathrm{Awake}$.}
+    \label{tab:symbolic_results}
+    \footnotesize
+    \setlength{\tabcolsep}{4pt}
+    \renewcommand{\arraystretch}{1.10}
+
+    \begin{tabular}{lcccc}
+        \toprule
+        \textbf{Metric}
+        & \textbf{60 s}
+        & \textbf{120 s}
+        & \textbf{180 s}
+        & \textbf{Same direction} \\
+        \midrule
+
+        0V
+        & $+4.04$
+        & $+2.32$
+        & $+4.58$
+        & $17/20$ \\
+
+        1V
+        & $+0.41$
+        & $+0.03$
+        & $-0.06$
+        & $11/20$ \\
+
+        2V
+        & $-0.91$
+        & $-2.30$
+        & $-2.67$
+        & $14/20$ \\
+
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Các point estimates không hoàn toàn giống nhau giữa các độ dài cửa sổ. Tuy nhiên, các phép so sánh trực tiếp giữa window lengths không cung cấp bằng chứng rõ ràng về sự phụ thuộc của effect vào độ dài cửa sổ: toàn bộ confidence intervals của chênh lệch $r_{rb}$ giữa các cấu hình đều chứa $0$, và điều tương tự cũng được quan sát đối với chênh lệch median $\Delta$. Do đó, kết quả hiện tại không cho phép kết luận rằng symbolic effects thay đổi một cách có hệ thống theo window length. Theo framework symbolic dynamics của Guzzetti \textit{et al.}, sự gia tăng 0V thường được liên hệ với tăng sympathetic modulation, trong khi sự giảm của 2V được liên hệ với giảm vagal/parasympathetic modulation. Vì vậy, pattern $0V\uparrow$ và $2V\downarrow$ quan sát được trong nghiên cứu này tương thích với khả năng tồn tại thay đổi trong điều hòa thần kinh tự chủ khi chuyển từ Awake sang Drowsy. Tuy nhiên, symbolic analysis chỉ được sử dụng như một lớp bằng chứng sinh lý bổ sung. Các effect không nhận được statistical support nhất quán qua toàn bộ các cấu hình, và do đó không được diễn giải như phép đo trực tiếp hoạt tính sympathetic hoặc parasympathetic. Thay vào đó, các kết quả này hỗ trợ giả thuyết rằng sự tái tổ chức động lực học của PPG quan sát được có thể đi kèm với thay đổi trong điều hòa tim mạch tự chủ.
+
+\subsection{Robustness to Label Definition and NTSA Parameter Choices}
+
+Để đánh giá mức độ phụ thuộc của các headline findings vào cách xác định Awake--Drowsy, bốn label rules bảo thủ hơn được xây dựng từ labeling ban đầu (P0). Hai transition-exclusion rules, T30 và T60, loại các mẫu nằm trong khoảng tương ứng $\pm30$ s và $\pm60$ s quanh mỗi điểm chuyển trạng thái trước khi phân đoạn lại thành các cửa sổ $60$ s. Hai sustained-state rules, S3 và S5, chỉ giữ các episode Awake hoặc Drowsy liên tục có thời lượng tối thiểu lần lượt $3$ và $5$ min. Các rule này nhằm lần lượt giảm ảnh hưởng của vùng chuyển tiếp không chắc chắn và các episode trạng thái ngắn. Toàn bộ preprocessing, quality control và cấu hình NTSA nominal được giữ nguyên; không có tham số nào được điều chỉnh lại theo kết quả Awake--Drowsy.
+
+\begin{table}[t]
+\centering
+\caption{Sensitivity of the primary Awake--Drowsy effects to alternative label definitions. Values are median paired differences $\Delta=\mathrm{Drowsy}-\mathrm{Awake}$. P0 denotes the primary labeling; T30/T60 exclude samples within $\pm30/\pm60$ s of state transitions; S3/S5 retain only continuous state episodes lasting at least $3/5$ min.}
+\label{tab:label_sensitivity}
+\footnotesize
+\setlength{\tabcolsep}{4.5pt}
+\renewcommand{\arraystretch}{1.08}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Metric} & \textbf{P0} & \textbf{T30} & \textbf{T60} & \textbf{S3} & \textbf{S5} \\
+\midrule
+Mean CC
+& -0.0339 & -0.0482 & -0.0251 & -0.0361 & -0.0337 \\
+Mean NRMSE
+& +0.0294 & +0.0406 & +0.0278 & +0.0357 & +0.0367 \\
+DET
+& -0.0186 & -0.0183 & -0.0167 & -0.0189 & -0.0213 \\
+LLE
+& -0.0376 & -0.0322 & -0.0393 & -0.0344 & -0.0321 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Cả bốn headline metrics đều giữ nguyên hướng dưới toàn bộ các label rules: Mean CC $\downarrow$, Mean NRMSE $\uparrow$, DET $\downarrow$ và LLE $\downarrow$. Trên bốn sensitivity rules, toàn bộ $16/16$ paired effects giữ hướng kỳ vọng và đạt $q_{\mathrm{BH}}<0.05$, trong khi $14/16$ bootstrap 95\% confidence intervals không chứa 0. Hai trường hợp còn lại, T60--Mean CC và T30--LLE, vẫn duy trì cùng hướng effect và statistical support theo signed-rank inference. T30, T60 và S3 duy trì đủ $20$ paired sessions; S5 còn $19$ paired sessions do một session không còn valid Drowsy window sau khi áp dụng rule nghiêm ngặt hơn. Nhìn chung, các kết quả cho thấy những khác biệt Awake--Drowsy chính không bị chi phối chủ yếu bởi các cửa sổ gần transition hoặc các episode trạng thái ngắn trong phạm vi các label definitions đã khảo sát.
+
+Độ nhạy đối với phase-space reconstruction được đánh giá bằng cách thay đổi riêng embedding delay và embedding dimension xung quanh cấu hình nominal $(\tau=0.16~\mathrm{s},\,m=8)$. Delay được khảo sát tại $\tau=\{0.12,0.16,0.20\}$ s với $m=8$ cố định, trong khi dimension được khảo sát tại $m=\{7,8,9\}$ với $\tau=0.16$ s cố định. Các thay đổi được thực hiện one-factor-at-a-time và cấu hình nominal không được lựa chọn lại dựa trên p-value hoặc mức độ phân tách giữa hai trạng thái.
+
+\begin{table}[t]
+\centering
+\caption{Sensitivity of the primary effects to phase-space reconstruction parameters. Values are median paired differences $\Delta=\mathrm{Drowsy}-\mathrm{Awake}$.}
+\label{tab:parameter_sensitivity}
+\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\renewcommand{\arraystretch}{1.08}
+\begin{tabular}{lccc|ccc}
+\toprule
+& \multicolumn{3}{c}{\textbf{Delay $\tau$ (s), $m=8$}}
+& \multicolumn{3}{c}{\textbf{Dimension $m$, $\tau=0.16$ s}} \\
+\textbf{Metric}
+& 0.12 & 0.16 & 0.20
+& 7 & 8 & 9 \\
+\midrule
+Mean CC
+& -0.0317 & -0.0277 & -0.0316
+& -0.0307 & -0.0277 & -0.0251 \\
+Mean NRMSE
+& +0.0321 & +0.0319 & +0.0296
+& +0.0377 & +0.0319 & +0.0315 \\
+DET
+& +0.0025 & -0.0186 & +0.0015
+& -0.0145 & -0.0186 & -0.0200 \\
+LLE
+& -0.0361 & -0.0376 & -0.0464
+& -0.0285 & -0.0376 & -0.0247 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Mean CC, Mean NRMSE và LLE giữ nguyên hướng trên cả ba delay values, trong khi DET nhạy hơn với lựa chọn $\tau$: effect âm xuất hiện tại cấu hình nominal nhưng tiến gần 0 và đổi dấu tại $\tau=0.12$ và $0.20$ s. Khi thay đổi embedding dimension, cả bốn headline metrics đều giữ nguyên hướng tại $m=7$, $8$ và $9$, mặc dù magnitude và statistical support thay đổi giữa các cấu hình. Verification riêng theo estimator cho kết quả tương tự: Simplex Projection ổn định quanh Theiler window nominal; DET giữ hướng dưới các perturbation của recurrence rate và RQA Theiler window; còn LLE duy trì effect âm qua các fit intervals, fit-quality thresholds và local Theiler perturbations được khảo sát. Do đó, các headline findings nhìn chung ổn định đối với label definition và phần lớn các lựa chọn NTSA hợp lý, nhưng robustness phụ thuộc vào từng metric, đặc biệt DET cho thấy sensitivity rõ hơn đối với embedding delay.
