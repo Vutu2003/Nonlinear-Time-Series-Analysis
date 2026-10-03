@@ -1,0 +1,417 @@
+% Phase 3 content fragment: S10--S15 only.
+% Host packages: amsmath, booktabs, array, graphicx. Figure slots contain placeholders.
+\begingroup
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\setcounter{table}{7}
+\setcounter{figure}{6}
+\subsection*{S10. Window-Length Robustness}
+Window-length sensitivity assessed the four headline metrics using 30-, 60-, 120-, and 180-s windows from the same recordings. Paired effects were defined as $\Delta=\mathrm{Drowsy}-\mathrm{Awake}$ and summarized by the median across 20 paired recording sessions at each duration (Table~\ref{tab:supp_window}). Confidence intervals (CIs) are the stored 95\% paired-session percentile bootstrap intervals; raw signed-rank $p$ values and rank-biserial effects $r_{\mathrm{rb}}$ are reported separately. Direction counts describe sessions with a decrease for Mean CC, DET, and LLE or an increase for Mean NRMSE. This sensitivity shares the primary recordings and is not an independent replication.
+
+Mean CC, DET, and LLE had negative median effects and Mean NRMSE had positive median effects at all four durations. Magnitudes differed across durations. The 30-s estimates generally had greater uncertainty, while longer windows generally reduced uncertainty at the cost of fewer eligible windows; the 180-s DET interval remained relatively wide. DET CIs included zero at 30 and 180 s, and the 180-s DET raw p value was 0.053169. Thus, direction preservation did not imply uniform statistical support. The 60-s configuration provided a practical balance between observation duration and uncertainty within this dataset, rather than a universal optimum. No BH-adjusted q values are reported for this duration analysis.
+
+\begin{table*}[p]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.12}
+\caption{Window-length robustness.}
+\label{tab:supp_window}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccccccc}
+\toprule
+Metric & Duration (s) & Awake windows & Drowsy windows & Paired n & Median $\Delta$ & 95\% CI & Raw p & $r_{\mathrm{rb}}$ & Direction count \\
+\midrule
+Mean CC & 30 & 1192 & 610 & 20 & -0.0147 & [-0.0712, -0.0039] & 0.03276825 & -0.543 & 15/20 \\
+Mean CC & 60 & 596 & 305 & 20 & -0.0339 & [-0.0595, -0.0043] & 0.02148438 & -0.581 & 15/20 \\
+Mean CC & 120 & 269 & 136 & 20 & -0.0271 & [-0.0490, -0.0156] & 0.01361656 & -0.619 & 16/20 \\
+Mean CC & 180 & 161 & 77 & 20 & -0.0428 & [-0.0516, -0.0133] & 0.00943565 & -0.648 & 15/20 \\
+Mean NRMSE & 30 & 1192 & 610 & 20 & +0.0203 & [+0.0009, +0.0554] & 0.00943565 & +0.648 & 14/20 \\
+Mean NRMSE & 60 & 596 & 305 & 20 & +0.0294 & [0.0047, 0.0530] & 0.00729561 & +0.667 & 15/20 \\
+Mean NRMSE & 120 & 269 & 136 & 20 & +0.0321 & [+0.0196, +0.0495] & 0.00830841 & +0.657 & 15/20 \\
+Mean NRMSE & 180 & 161 & 77 & 20 & +0.0321 & [+0.0186, +0.0465] & 0.00729561 & +0.667 & 15/20 \\
+DET & 30 & 1192 & 610 & 20 & -0.0169 & [-0.0318, +0.0002] & 0.01531219 & -0.610 & 14/20 \\
+DET & 60 & 596 & 305 & 20 & -0.0186 & [-0.0364, -0.0069] & 0.02148438 & -0.581 & 15/20 \\
+DET & 120 & 269 & 136 & 20 & -0.0201 & [-0.0399, -0.0134] & 0.00638962 & -0.676 & 15/20 \\
+DET & 180 & 161 & 77 & 20 & -0.0248 & [-0.0416, +0.0008] & 0.05316925 & -0.495 & 14/20 \\
+LLE & 30 & 1089 & 549 & 20 & -0.0325 & [-0.0549, -0.0066] & 0.00315285 & -0.724 & 17/20 \\
+LLE & 60 & 579 & 293 & 20 & -0.0376 & [-0.0537, -0.0230] & 0.00070763 & -0.810 & 16/20 \\
+LLE & 120 & 264 & 135 & 20 & -0.0442 & [-0.0591, -0.0216] & 0.00232506 & -0.743 & 18/20 \\
+LLE & 180 & 160 & 77 & 20 & -0.0498 & [-0.0584, -0.0213] & 0.00058556 & -0.819 & 16/20 \\
+\bottomrule
+\end{tabular}
+}
+\par\medskip
+\begin{minipage}{\textwidth}\footnotesize
+Window counts are metric-specific eligible windows; LLE counts include its $R^2\geq0.90$ fit screen (see S2 and S7). Median effects and CIs use s$^{-1}$ for LLE and dimensionless units otherwise. Direction counts use the nominal expected direction, not a requirement that every session agree. The 60-s effects, CIs, and $r_{\mathrm{rb}}$ reproduce Table~\ref{tab:supp_primary}; raw p comes from the saved duration summary. No duration q values were stored.
+\end{minipage}
+\end{table*}
+\begin{figure*}[p]
+\centering
+\fbox{\parbox{0.94\textwidth}{\centering Window-length robustness\\[4pt]A--D: existing four-metric effect/CI panels at 30, 60, 120, and 180 s; annotate paired n and metric-specific Awake/Drowsy window counts from Table~\ref{tab:supp_window}. Optional E: session direction counts from the saved directional-session PDF.}}
+\caption{Window-length sensitivity of the Awake--Drowsy comparison. Median paired effects ($\Delta=\mathrm{Drowsy}-\mathrm{Awake}$) and stored 95\% percentile bootstrap CIs are shown for Mean CC, Mean NRMSE, DET, and LLE at 30, 60, 120, and 180 s. All four median-effect directions are preserved, while magnitudes and uncertainty vary; DET intervals include zero at 30 and 180 s. Each duration has 20 paired sessions, but eligible state-window counts decrease with duration and LLE uses only accepted fits (Table~\ref{tab:supp_window}). Direction counts, if included, summarize session signs separately from uncertainty and statistical support.}
+\label{fig:supp_window}
+\end{figure*}
+% Figure source: phase1/outputs/robust_window/robust_window_primary_metrics.pdf
+% Figure source: phase1/outputs/robust_window/robust_window_directional_sessions.pdf
+% Figure source: phase1/outputs/robust_window/robust_window_summary.csv
+% Figure source: phase1/main/robust_window.ipynb
+\subsection*{S11. Label Sensitivity}
+Alternative definitions tested transition exclusion and minimum same-state episode duration. P0 used the primary recorded labels; T30 and T60 excluded samples within $\pm$30 and $\pm$60 s of transitions, respectively; S3 and S5 retained same-state episodes lasting at least 180 and 300 s. The retained windows were constructed and screened under each rule, so these cohorts need not be nested subsets of P0. Table~\ref{tab:supp_label}A reports state-specific general-QC retention. P0, T30, T60, and S3 had 20 paired sessions; S5 had 19. LLE additionally used its accepted-fit screen.
+
+The four median-effect directions were preserved across all alternative rules, with BH correction applied across the four headline metrics separately within each alternative rule. All 16 alternative-rule tests had $q_{\mathrm{BH}}<0.05$, but magnitudes were not identical. The T60 Mean CC CI $[-0.0561,+0.0059]$ and T30 LLE CI $[-0.0535,+0.0020]$ included zero. Percentile CIs for the median paired effect and rank-based signed-rank/BH support summarize different properties and need not align exactly. P0 remains the fixed manuscript reference with its seven-metric primary family (Table~\ref{tab:supp_primary}).
+
+\begin{table*}[p]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.12}
+\caption{Label rules, retention, and effects.}
+\label{tab:supp_label}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccc}
+\toprule
+\multicolumn{6}{l}{\textbf{Panel A. Rule definitions and general-QC retention}} \\
+\midrule
+Rule & Definition & Awake windows & Drowsy windows & Total windows & Paired n \\
+\midrule
+P0 & Primary recorded labels & 596 & 305 & 901 & 20 \\
+T30 & Exclude samples within $\pm$30 s of transitions & 586 & 274 & 860 & 20 \\
+T60 & Exclude samples within $\pm$60 s of transitions & 551 & 236 & 787 & 20 \\
+S3 & Retain same-state episodes $\geq$180 s & 609 & 291 & 900 & 20 \\
+S5 & Retain same-state episodes $\geq$300 s & 581 & 265 & 846 & 19 \\
+\bottomrule
+\end{tabular}
+}
+\par\medskip
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccccccc}
+\toprule
+\multicolumn{9}{l}{\textbf{Panel B. Four-metric inference}} \\
+\midrule
+Rule & Metric & Paired n & Median $\Delta$ & 95\% CI & Raw p & $q_{\mathrm{BH}}$ & $r_{\mathrm{rb}}$ & Direction count \\
+\midrule
+P0 & Mean CC & 20 & -0.0339 & [-0.0595, -0.0043] & 0.02148438 & 0.0376$^{\dagger}$ & -0.581 & 15/20 \\
+P0 & Mean NRMSE & 20 & +0.0294 & [0.0047, 0.0530] & 0.00729561 & 0.0255$^{\dagger}$ & +0.667 & 15/20 \\
+P0 & DET & 20 & -0.0186 & [-0.0364, -0.0069] & 0.02148438 & 0.0376$^{\dagger}$ & -0.581 & 15/20 \\
+P0 & LLE & 20 & -0.0376 & [-0.0537, -0.0230] & 0.00070763 & 0.0050$^{\dagger}$ & -0.810 & 16/20 \\
+T30 & Mean CC & 20 & -0.0482 & [-0.0689, -0.0152] & 0.0048599 & 0.0097 & -0.695 & 17/20 \\
+T30 & Mean NRMSE & 20 & +0.0406 & [+0.0190, +0.0570] & 0.0031528 & 0.0097 & +0.724 & 16/20 \\
+T30 & DET & 20 & -0.0183 & [-0.0332, -0.0011] & 0.0083084 & 0.0111 & -0.657 & 14/20 \\
+T30 & LLE & 20 & -0.0322 & [-0.0535, +0.0020] & 0.021484 & 0.0215 & -0.581 & 14/20 \\
+T60 & Mean CC & 20 & -0.0251 & [-0.0561, +0.0059] & 0.039989 & 0.0400 & -0.524 & 13/20 \\
+T60 & Mean NRMSE & 20 & +0.0278 & [+0.0027, +0.0479] & 0.013617 & 0.0256 & +0.619 & 14/20 \\
+T60 & DET & 20 & -0.0167 & [-0.0294, -0.0066] & 0.019234 & 0.0256 & -0.590 & 15/20 \\
+T60 & LLE & 20 & -0.0393 & [-0.0636, -0.0075] & 0.0023251 & 0.0093 & -0.743 & 15/20 \\
+S3 & Mean CC & 20 & -0.0361 & [-0.0548, -0.0033] & 0.010689 & 0.0136 & -0.638 & 14/20 \\
+S3 & Mean NRMSE & 20 & +0.0357 & [+0.0032, +0.0457] & 0.0063896 & 0.0128 & +0.676 & 15/20 \\
+S3 & DET & 20 & -0.0189 & [-0.0326, -0.0069] & 0.013617 & 0.0136 & -0.619 & 15/20 \\
+S3 & LLE & 20 & -0.0344 & [-0.0495, -0.0104] & 0.0010166 & 0.0041 & -0.790 & 15/20 \\
+S5 & Mean CC & 19 & -0.0337 & [-0.0495, -0.0077] & 0.01236 & 0.0141 & -0.642 & 14/19 \\
+S5 & Mean NRMSE & 19 & +0.0367 & [+0.0056, +0.0504] & 0.0045776 & 0.0092 & +0.716 & 16/19 \\
+S5 & DET & 19 & -0.0213 & [-0.0305, -0.0049] & 0.014069 & 0.0141 & -0.632 & 15/19 \\
+S5 & LLE & 19 & -0.0321 & [-0.0499, -0.0147] & 0.0014114 & 0.0056 & -0.789 & 14/19 \\
+\bottomrule
+\end{tabular}
+}
+\par\medskip
+\begin{minipage}{\textwidth}\footnotesize
+$^{\dagger}$ P0 q values belong to the fixed seven-metric primary family in Table~\ref{tab:supp_primary}; all alternative-rule q values belong to a four-metric BH family within that rule. No correction is pooled across rules. Direction counts are decreases for Mean CC/DET/LLE and increases for Mean NRMSE. Retention in Panel A precedes LLE fit screening. LLE effects/CIs are in s$^{-1}$; other effects/CIs are dimensionless. Raw p is transcribed at saved precision; alternative-rule q values are rounded to four decimal places.
+\end{minipage}
+\end{table*}
+\begin{figure*}[p]
+\centering
+\fbox{\parbox{0.94\textwidth}{\centering Label sensitivity\\[4pt]A: Awake/Drowsy general-QC retained-window counts for P0/T30/T60/S3/S5. B: four-metric median effects and stored CIs; P0 uses Table~\ref{tab:supp_primary}, alternatives use cell 8/output 0. Plotting pending; no new inference.}}
+\caption{Label-definition sensitivity. (A) General-QC retention by state under P0, transition exclusions T30/T60, and minimum-episode rules S3/S5; LLE has additional fit screening. (B) Median paired effects and stored 95\% percentile CIs for Mean CC, Mean NRMSE, DET, and LLE. P0 is the fixed manuscript reference; alternatives use 20 paired sessions except S5 (19). All alternative median directions are preserved, although magnitudes differ and the T60 Mean CC and T30 LLE CIs include zero. Alternative-rule BH correction covers four metrics within each rule; P0 retains the primary seven-metric family. These are sensitivity analyses of the same recordings.}
+\label{fig:supp_label}
+\end{figure*}
+% Figure source: phase1/results/data_label_sensitive/master_summary.csv
+% Figure source: phase1/verification_result/verification_data/label_sensitive_validation.ipynb
+% Figure source: phase1/writting_manuscript/supplementary/supplementary_phase2B_draft.md
+\subsection*{S12. Reconstruction and Estimator Sensitivity}
+Sensitivity analyses perturbed one reconstruction or estimator setting at a time while retaining the nominal configuration for other choices. They assess dependence on tested settings in the same recordings. They do not establish parameter independence or independent replication.
+
+\subsubsection*{S12.1 Embedding Delay and Dimension}
+Delay was tested at $\tau=0.12,0.16,0.20$ s with $m=8$, and dimension at $m=7,8,9$ with $\tau=0.16$ s (Table~\ref{tab:supp_reconstruction}). Mean CC, Mean NRMSE, and LLE preserved their negative, positive, and negative median-effect directions, respectively, across the tested delays. DET was delay-sensitive: its nominal decrease ($-0.0186$) became close to zero and positive at 0.12 s ($+0.0025$) and 0.20 s ($+0.0015$), with both non-nominal CIs spanning zero and no BH support. DET therefore cannot be described as uniformly stable to embedding delay.
+
+All four median-effect directions were preserved across $m=7$--9, but magnitudes varied, including a meaningful change in the LLE decrease. DET did not meet the four-metric BH criterion at $m=7$ ($q=0.053169$) or $m=9$ ($q=0.058258$), despite negative effects and CIs excluding zero. Some Mean CC and Mean NRMSE CIs also crossed zero under reconstruction perturbations. The stored BH family comprised four headline metrics within each alternative setting. Nominal rows reproduce the fixed manuscript statistics from Table~\ref{tab:supp_primary}, with their original seven-metric q values explicitly identified; they are not replaced by sensitivity-family nominal statistics.
+
+\begin{table*}[p]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.12}
+\caption{Reconstruction sensitivity.}
+\label{tab:supp_reconstruction}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccccccc}
+\toprule
+\multicolumn{9}{l}{\textbf{Panel A. Delay sensitivity at m=8}} \\
+\midrule
+Setting & Metric & Paired n & Median $\Delta$ & 95\% CI & Raw p & $q_{\mathrm{BH}}$ & $r_{\mathrm{rb}}$ & Direction count \\
+\midrule
+0.12 & Mean CC & 20 & -0.0317 & [-0.0522, +0.0094] & 0.036234 & 0.048312 & -0.533 & 13/20 \\
+0.12 & Mean NRMSE & 20 & +0.0321 & [-0.0042, +0.0492] & 0.029575 & 0.048312 & +0.552 & 13/20 \\
+0.12 & DET & 20 & +0.0025 & [-0.0078, +0.0076] & 0.784126 & 0.784126 & +0.076 & 7/20 \\
+0.12 & LLE & 20 & -0.0361 & [-0.0567, +0.0042] & 0.017181 & 0.048312 & -0.600 & 14/20 \\
+0.16$^{\dagger}$ & Mean CC & 20 & -0.0339 & [-0.0595, -0.0043] & 0.02148438 & 0.0376$^{\dagger}$ & -0.581 & 15/20 \\
+0.16$^{\dagger}$ & Mean NRMSE & 20 & +0.0294 & [0.0047, 0.0530] & 0.00729561 & 0.0255$^{\dagger}$ & +0.667 & 15/20 \\
+0.16$^{\dagger}$ & DET & 20 & -0.0186 & [-0.0364, -0.0069] & 0.02148438 & 0.0376$^{\dagger}$ & -0.581 & 15/20 \\
+0.16$^{\dagger}$ & LLE & 20 & -0.0376 & [-0.0537, -0.0230] & 0.00070763 & 0.0050$^{\dagger}$ & -0.810 & 16/20 \\
+0.20 & Mean CC & 20 & -0.0316 & [-0.0529, -0.0008] & 0.015312 & 0.020416 & -0.610 & 14/20 \\
+0.20 & Mean NRMSE & 20 & +0.0296 & [+0.0056, +0.0476] & 0.005581 & 0.011162 & +0.686 & 16/20 \\
+0.20 & DET & 20 & +0.0015 & [-0.0099, +0.0148] & 0.985435 & 0.985435 & +0.010 & 10/20 \\
+0.20 & LLE & 20 & -0.0464 & [-0.0572, -0.0240] & 0.000036 & 0.000145 & -0.933 & 17/20 \\
+\bottomrule
+\end{tabular}
+}
+\par\medskip
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccccccc}
+\toprule
+\multicolumn{9}{l}{\textbf{Panel B. Dimension sensitivity at delay 0.16 s}} \\
+\midrule
+Setting & Metric & Paired n & Median $\Delta$ & 95\% CI & Raw p & $q_{\mathrm{BH}}$ & $r_{\mathrm{rb}}$ & Direction count \\
+\midrule
+7 & Mean CC & 20 & -0.0307 & [-0.0565, +0.0045] & 0.026642 & 0.035522 & -0.562 & 13/20 \\
+7 & Mean NRMSE & 20 & +0.0377 & [-0.0023, +0.0561] & 0.023951 & 0.035522 & +0.571 & 13/20 \\
+7 & DET & 20 & -0.0145 & [-0.0303, -0.0047] & 0.053169 & 0.053169 & -0.495 & 15/20 \\
+7 & LLE & 20 & -0.0285 & [-0.0549, -0.0076] & 0.004860 & 0.019440 & -0.695 & 16/20 \\
+8$^{\dagger}$ & Mean CC & 20 & -0.0339 & [-0.0595, -0.0043] & 0.02148438 & 0.0376$^{\dagger}$ & -0.581 & 15/20 \\
+8$^{\dagger}$ & Mean NRMSE & 20 & +0.0294 & [0.0047, 0.0530] & 0.00729561 & 0.0255$^{\dagger}$ & +0.667 & 15/20 \\
+8$^{\dagger}$ & DET & 20 & -0.0186 & [-0.0364, -0.0069] & 0.02148438 & 0.0376$^{\dagger}$ & -0.581 & 15/20 \\
+8$^{\dagger}$ & LLE & 20 & -0.0376 & [-0.0537, -0.0230] & 0.00070763 & 0.0050$^{\dagger}$ & -0.810 & 16/20 \\
+9 & Mean CC & 20 & -0.0251 & [-0.0492, +0.0055] & 0.029575 & 0.039434 & -0.552 & 13/20 \\
+9 & Mean NRMSE & 20 & +0.0315 & [+0.0043, +0.0483] & 0.008308 & 0.016617 & +0.657 & 15/20 \\
+9 & DET & 20 & -0.0200 & [-0.0321, -0.0052] & 0.058258 & 0.058258 & -0.486 & 15/20 \\
+9 & LLE & 20 & -0.0247 & [-0.0534, -0.0102] & 0.000586 & 0.002342 & -0.819 & 16/20 \\
+\bottomrule
+\end{tabular}
+}
+\par\medskip
+\begin{minipage}{\textwidth}\footnotesize
+Panel A setting is delay in seconds; Panel B setting is dimension. $^{\dagger}$ Nominal rows are fixed Table~\ref{tab:supp_primary} references and use its BH7 q values; alternative settings use their stored BH4 q values, with no correction across settings. Direction counts refer to the nominal expected direction (decrease for Mean CC/DET/LLE; increase for Mean NRMSE), including when the aggregate DET effect reverses sign. All pairs are recording sessions. LLE units are s$^{-1}$; other effect/CI units are dimensionless. Effects/CIs use manuscript rounding; alternative raw p/q retain stored six-decimal precision.
+\end{minipage}
+\end{table*}
+\begin{figure*}[p]
+\centering
+\fbox{\parbox{0.94\textwidth}{\centering Reconstruction sensitivity (optional)\\[4pt]Optional A: four-metric delay effects/CIs from cell 8/output 0, with fixed nominal values from Table~\ref{tab:supp_primary}. Optional B: dimension effects/CIs from cell 11/output 0. Highlight the DET zero line and positive effects at 0.12/0.20 s. Table~\ref{tab:supp_reconstruction} is sufficient; asset production omitted.}}
+\caption{Reconstruction-setting sensitivity. (A) Delay perturbations at $m=8$; (B) dimension perturbations at $\tau=0.16$ s. Points are median paired effects with stored 95\% percentile CIs. Mean CC, Mean NRMSE, and LLE preserve their directions across the tested settings; DET preserves its decrease across dimensions but becomes close to zero and positive at delays 0.12 and 0.20 s. Fixed nominal references are from Table~\ref{tab:supp_primary}. Direction, magnitude, CI uncertainty, and within-setting BH support are separate features of these dependent sensitivity analyses.}
+\label{fig:supp_reconstruction}
+\end{figure*}
+% Figure source: phase1/verification_result/verification_ntsa_parameter/verification_phase_space_reconstruction.ipynb
+% Figure source: phase1/writting_manuscript/supplementary/supplementary_phase2B_draft.md
+\subsubsection*{S12.2 RQA Estimator Settings}
+RQA sensitivity tested target recurrence rates $\mathrm{RR}=0.01,0.02,0.03$ and temporal-exclusion (Theiler) multipliers 0.75, 1.00, and 1.25 relative to nominal $W=(m-1)d$, with $d$ the delay in samples. All settings retained 901 windows and 20 paired sessions. Stored sensitivity inference covers DET, LAM, and TT only (Table~\ref{tab:supp_estimator}A); raw p values are reported without BH correction. DET remained negative across these RR and Theiler perturbations. At RR=0.01 its CI included zero and raw p was 0.082550; thus its direction was stable across tested RQA settings, while statistical support varied. This contrasts with the DET sign changes under delay perturbations in S12.1.
+
+LAM and TT had positive median effects but weaker support: their CIs included zero and their raw p values exceeded 0.05 in every tested RQA setting. They remain secondary findings. $L_{\mathrm{mean}}$ estimator-sensitivity inference was not stored. DET describes recurrence-line organization rather than physical determinism.
+
+\subsubsection*{S12.3 LLE Estimator Settings}
+LLE sensitivity tested fit intervals 0.60--1.10, 0.80--1.30 (nominal), and 1.00--1.50 s; fit-quality thresholds $R^2\geq0.90$ and $R^2\geq0.95$; and Theiler multipliers 0.75, 1.00, and 1.25 relative to its nominal spectral-mean-period exclusion (S7). All settings retained 20 paired sessions. Every median effect remained negative, each stored CI excluded zero, and all raw p values were below 0.05 (Table~\ref{tab:supp_estimator}B). No BH correction was applied across these LLE settings.
+
+Fit intervals retained 802, 872, and 889 of 901 input windows, respectively. Raising the $R^2$ threshold from 0.90 to 0.95 retained 734 rather than 872 windows and reduced the median decrease. The 0.75 and 1.00 Theiler multipliers yielded the same stored effect and retention; the 1.25 multiplier retained 874 windows and changed the effect magnitude. Direction consistency therefore coexists with changes in magnitude and retained-window count; the estimator is not parameter-independent. These finite-window divergence estimates do not establish deterministic chaos.
+
+\begin{table*}[p]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.12}
+\caption{RQA and LLE estimator sensitivity.}
+\label{tab:supp_estimator}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccccccc}
+\toprule
+\multicolumn{10}{l}{\textbf{Panel A. RQA RR and Theiler settings}} \\
+\midrule
+Factor & Setting & Metric & Valid windows & Paired n & Median $\Delta$ & 95\% CI & Raw p & $r_{\mathrm{rb}}$ & Direction count \\
+\midrule
+RR & 0.01 & DET & 901 & 20 & -0.015214 & [-0.033764, +0.002064] & 0.082550 & -0.447619 & 14/20 \\
+RR & 0.01 & LAM & 901 & 20 & 0.014242 & [-0.005819, +0.057725] & 0.132727 & 0.390476 & 13/20 \\
+RR & 0.01 & TT & 901 & 20 & 0.000343 & [-0.000043, +0.004808] & 0.214602 & 0.352941 & 10/20; 4 zero \\
+RR & 0.02 & DET & 901 & 20 & -0.0186 & [-0.0364, -0.0069] & 0.021484 & -0.581 & 15/20 \\
+RR & 0.02 & LAM & 901 & 20 & +0.0165 & [-0.0044, 0.0635] & 0.142906 & +0.381 & 13/20 \\
+RR & 0.02 & TT & 901 & 20 & +0.0095 & [-0.0034, 0.0160] & 0.202450 & +0.333 & 14/20 \\
+RR & 0.03 & DET & 901 & 20 & -0.017813 & [-0.033859, -0.007863] & 0.021484 & -0.580952 & 15/20 \\
+RR & 0.03 & LAM & 901 & 20 & 0.020281 & [-0.005463, +0.051395] & 0.082550 & 0.447619 & 13/20 \\
+RR & 0.03 & TT & 901 & 20 & 0.022063 & [-0.007639, +0.033264] & 0.294252 & 0.276190 & 14/20 \\
+Theiler multiplier & 0.75 & DET & 901 & 20 & -0.019191 & [-0.036836, -0.006809] & 0.021484 & -0.580952 & 15/20 \\
+Theiler multiplier & 0.75 & LAM & 901 & 20 & 0.019785 & [-0.003072, +0.062855] & 0.123093 & 0.400000 & 13/20 \\
+Theiler multiplier & 0.75 & TT & 901 & 20 & 0.009809 & [-0.003114, +0.015962] & 0.189348 & 0.342857 & 14/20 \\
+Theiler multiplier & 1.00 & DET & 901 & 20 & -0.0186 & [-0.0364, -0.0069] & 0.021484 & -0.581 & 15/20 \\
+Theiler multiplier & 1.00 & LAM & 901 & 20 & +0.0165 & [-0.0044, 0.0635] & 0.142906 & +0.381 & 13/20 \\
+Theiler multiplier & 1.00 & TT & 901 & 20 & +0.0095 & [-0.0034, 0.0160] & 0.202450 & +0.333 & 14/20 \\
+Theiler multiplier & 1.25 & DET & 901 & 20 & -0.019033 & [-0.037873, -0.007730] & 0.017181 & -0.600000 & 15/20 \\
+Theiler multiplier & 1.25 & LAM & 901 & 20 & 0.019372 & [-0.005161, +0.062616] & 0.132727 & 0.390476 & 12/20 \\
+Theiler multiplier & 1.25 & TT & 901 & 20 & 0.009844 & [-0.002347, +0.017601] & 0.176853 & 0.352381 & 14/20 \\
+\bottomrule
+\end{tabular}
+}
+\par\medskip
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccccccccc}
+\toprule
+\multicolumn{11}{l}{\textbf{Panel B. LLE fit, quality, and Theiler settings}} \\
+\midrule
+Factor & Setting & Passing / input & Awake windows & Drowsy windows & Paired n & Median $\Delta$ & 95\% CI & Raw p & $r_{\mathrm{rb}}$ & Decrease count \\
+\midrule
+Fit interval (s) & 0.60--1.10 & 802/901 & 542 & 260 & 20 & -0.034980 & [-0.064607, -0.019121] & 0.000261 & -0.857143 & 18/20 \\
+Fit interval (s) & 0.80--1.30 & 872/901 & 579 & 293 & 20 & -0.0376 & [-0.0537, -0.0230] & 0.000708 & -0.810 & 16/20 \\
+Fit interval (s) & 1.00--1.50 & 889/901 & 588 & 301 & 20 & -0.030357 & [-0.045778, -0.003941] & 0.008308 & -0.657143 & 15/20 \\
+R2 threshold & 0.90 & 872/901 & 579 & 293 & 20 & -0.0376 & [-0.0537, -0.0230] & 0.000708 & -0.810 & 16/20 \\
+R2 threshold & 0.95 & 734/901 & 500 & 234 & 20 & -0.030618 & [-0.041701, -0.013987] & 0.002325 & -0.742857 & 16/20 \\
+Theiler multiplier & 0.75 & 872/901 & 579 & 293 & 20 & -0.037570 & [-0.053698, -0.022976] & 0.000708 & -0.809524 & 16/20 \\
+Theiler multiplier & 1.00 & 872/901 & 579 & 293 & 20 & -0.0376 & [-0.0537, -0.0230] & 0.000708 & -0.810 & 16/20 \\
+Theiler multiplier & 1.25 & 874/901 & 580 & 294 & 20 & -0.029763 & [-0.056095, -0.016331] & 0.002325 & -0.742857 & 16/20 \\
+\bottomrule
+\end{tabular}
+}
+\par\medskip
+\begin{minipage}{\textwidth}\footnotesize
+Both panels use raw p only; no BH correction is added within or across estimator settings. All settings retain 20 paired recording sessions. In Panel A direction counts are decreases for DET and increases for LAM/TT; RR=0.01 TT has four zero differences, which are removed for signed-rank/rank-biserial calculation. DET/LAM are dimensionless and TT uses sample-index line lengths. In Panel B all effect/CI units are s$^{-1}$ and passing counts use the 901 input-window denominator. R2 denotes $R^2$; Theiler settings multiply each estimator's own nominal exclusion. Nominal effect/CI/r values reproduce Table~\ref{tab:supp_primary} at manuscript precision; perturbation values retain stored six-decimal precision. No q values are implied by Table~\ref{tab:supp_primary} cross-reference.
+\end{minipage}
+\end{table*}
+\subsection*{S13. Unknown Repeated-Session Dependence}
+The actual participant--session mapping was unavailable. A hypothetical dependence sensitivity analysis grouped the 20 recording sessions into 10 two-session clusters using random perfect matchings. Sampling with replacement drew random permutations of the 20 sessions and paired adjacent entries, producing 100,000 sampled matchings and 99,990 unique matchings out of 654,729,075 theoretically possible perfect matchings. These hypothetical clusters do not recover participant identity or establish actual session independence.
+
+For each matching, the cluster difference was the arithmetic mean of its two session differences. The metric effect was the median of the 10 cluster differences. A two-sided conditional signed-rank test discarded differences within $10^{-12}$ of zero and used average ranks for absolute-value ties; rank-biserial effects used the positive and negative rank sums. BH correction was applied across all seven metrics within each matching. No bootstrap was performed inside matchings. Table~\ref{tab:supp_repeated}A reports the resulting hypothetical matching distribution; its 2.5th--97.5th percentile ranges describe variation across matchings and are not bootstrap CIs.
+
+All four headline median-effect directions were preserved in every sampled matching, while the fractions with $q_{\mathrm{BH}}<0.05$ were 19.36\% for Mean CC, 27.82\% for Mean NRMSE, 22.59\% for DET, and 79.69\% for LLE. Direction was more stable than inferential support when the number of effective units was reduced to 10 hypothetical clusters. LLE retained the strongest inferential support within this analysis. These frequencies describe sampled hypothetical matchings under the specified design; they are not probabilities that the true result is significant and do not support participant-level inference. The saved 50,000- and 100,000-draw summaries were similar (Table~\ref{tab:supp_repeated}B), indicating Monte Carlo stability for the sampled design without resolving the unknown linkage.
+
+\begin{table*}[p]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.12}
+\caption{Hypothetical repeated-session dependence.}
+\label{tab:supp_repeated}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccc}
+\toprule
+\multicolumn{6}{l}{\textbf{Panel A. Hypothetical matching distribution, 100,000 draws}} \\
+\midrule
+Metric & Nominal direction & Sign preserved (\%) & $q_{\mathrm{BH}}<0.05$ (\%) & Median matching $\Delta$ & 2.5th--97.5th percentile range \\
+\midrule
+Mean CC & Decrease & 100.00 & 19.36 & -0.0242 & [-0.0359, -0.0147] \\
+Mean NRMSE & Increase & 100.00 & 27.82 & +0.0263 & [+0.0185, +0.0343] \\
+DET & Decrease & 100.00 & 22.59 & -0.0181 & [-0.0255, -0.0100] \\
+$L_{\mathrm{mean}}$ & Decrease & 100.00 & 2.41 & -0.0657 & [-0.1000, -0.0333] \\
+LAM & Increase & 99.63 & 2.94 & +0.0227 & [+0.0063, +0.0402] \\
+TT & Increase & 99.25 & 0.04 & +0.0076 & [+0.0012, +0.0137] \\
+LLE & Decrease & 100.00 & 79.69 & -0.0356 & [-0.0446, -0.0266] \\
+\bottomrule
+\end{tabular}
+}
+\par\medskip
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccc}
+\toprule
+\multicolumn{6}{l}{\textbf{Panel B. Cumulative Monte Carlo summaries}} \\
+\midrule
+Draws & Metric & Sign preserved (\%) & $q_{\mathrm{BH}}<0.05$ (\%) & Median matching $\Delta$ & 2.5th--97.5th percentile range \\
+\midrule
+50000 & Mean CC & 100.00 & 19.44 & -0.0242 & [-0.0360, -0.0147] \\
+50000 & Mean NRMSE & 100.00 & 27.94 & +0.0263 & [+0.0185, +0.0342] \\
+50000 & DET & 100.00 & 22.69 & -0.0181 & [-0.0256, -0.0100] \\
+50000 & LLE & 100.00 & 79.69 & -0.0356 & [-0.0446, -0.0266] \\
+100000 & Mean CC & 100.00 & 19.36 & -0.0242 & [-0.0359, -0.0147] \\
+100000 & Mean NRMSE & 100.00 & 27.82 & +0.0263 & [+0.0185, +0.0343] \\
+100000 & DET & 100.00 & 22.59 & -0.0181 & [-0.0255, -0.0100] \\
+100000 & LLE & 100.00 & 79.69 & -0.0356 & [-0.0446, -0.0266] \\
+\bottomrule
+\end{tabular}
+}
+\par\medskip
+\begin{minipage}{\textwidth}\footnotesize
+Sign preservation compares each matching's median cluster effect with the nominal direction. The q-support family has all seven metrics within each matching. Percentile ranges are hypothetical matching-distribution ranges, not bootstrap CIs or participant-effect intervals. Effects have sample-index units for $L_{\mathrm{mean}}$/TT, s$^{-1}$ for LLE, and dimensionless units otherwise. The 50k and 100k rows are cumulative prefixes of the same sampled sequence. No participant mapping is inferred.
+\end{minipage}
+\end{table*}
+\begin{figure*}[p]
+\centering
+\fbox{\parbox{0.94\textwidth}{\centering Hypothetical repeated-session dependence\\[4pt]A: fractions of 100,000 hypothetical matchings with $q_{\mathrm{BH}}<0.05$ for the four headline metrics. B: cumulative q-support frequencies at stored 1k/10k/50k/100k prefixes. Label both panels “hypothetical matching distribution”; no error bars presented as bootstrap CIs. Plotting pending.}}
+\caption{Hypothetical repeated-session dependence sensitivity. (A) Fractions of sampled perfect matchings with $q_{\mathrm{BH}}<0.05$ after reducing 20 sessions to 10 hypothetical two-session clusters: Mean CC 19.36\%, Mean NRMSE 27.82\%, DET 22.59\%, and LLE 79.69\%. All four median-effect directions were preserved in every sampled matching. (B) Cumulative q-support frequencies over the stored Monte Carlo prefixes, including 50,000 and 100,000 draws. The hypothetical matching distribution reflects the specified pairing design; the frequencies are not probabilities of true significance, and the pairings do not recover participant identity. BH correction covers seven metrics within each matching; no nested bootstrap CI is plotted.}
+\label{fig:supp_repeated}
+\end{figure*}
+% Figure source: phase1/sensitivy_data/unknown_repeated_session_dependence_v1/random_pairing_summary_v1.csv
+% Figure source: phase1/sensitivy_data/unknown_repeated_session_dependence_v1/convergence_v1.csv
+% Figure source: phase1/sensitivy_data/unknown_repeated_session_dependence_v1/protocol.json
+% Figure source: phase1/sensitivy_data/unknown_repeated_session_dependence_v1/manifest.json
+\subsection*{S14. Symbolic Dynamics}
+An exploratory supporting analysis encoded PPG-derived peak-to-peak intervals (PPI) at 60, 120, and 180 s. Peaks were detected in each processed waveform without extra smoothing, using minimum separation $\lceil0.30 f_s\rceil$ samples and prominence 0.20 times its 95th--5th percentile amplitude range. PPI equaled successive peak-index differences divided by $f_s$. Accepted windows required finite PPI, no intervals outside 0.30--2.00 s, peak-span coverage of at least 90\% of the window, and at least $\max\{3,\lceil T/2\rceil-2\}$ intervals for duration $T$ in seconds. Relative changes above 0.20 were diagnostic and did not cause rejection.
+
+Within each accepted window, PPI was quantized into six equal-width levels between its minimum and maximum; internal-edge values entered the upper bin, and a constant sequence used level zero. Overlapping three-symbol words were assigned to 0V when both adjacent differences were zero, 1V when exactly one was zero, and 2V when both were nonzero. The 2V category combined same-sign (2LV) and opposite-sign (2UV) nonzero changes. Percentages were occurrence proportions among all overlapping words. The three category proportions sum to 100\% within a window, although separate session-state medians need not. Session-state summaries were medians across accepted windows, followed by paired session comparisons.
+
+Table~\ref{tab:supp_symbolic} retains all nine category-by-duration results and the stored BH correction across three categories within each duration. Median 0V effects were positive and 2V effects negative at every duration, while 1V was close to zero and changed aggregate sign at 180 s. None of the nine tests met its within-duration BH criterion. The 60-s 0V CI and 180-s 2V CI excluded zero; the latter raw p was 0.048441, but its q was 0.145323. These uncertainty and raw-test features do not override the exploratory multiplicity result.
+
+The within-session paired effect had the same sign across all three durations in 17/20 sessions for 0V, 11/20 for 1V, and 14/20 for 2V. These counts include consistently positive or consistently negative sessions and describe sign consistency only; they neither require the aggregate expected direction nor establish equal magnitude across durations. PPG-derived symbolic occurrence proportions provide directional context and are not interpreted as direct sympathetic/vagal balance or as validated ECG-derived autonomic measures. They are outside the primary four-metric claim.
+
+\begin{table*}[p]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.12}
+\caption{Symbolic supporting results.}
+\label{tab:supp_symbolic}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccccccc}
+\toprule
+Category & Duration (s) & Paired n & $\Delta$ (pp) & 95\% CI (pp) & Raw p & $q_{\mathrm{BH}}$ & $r_{\mathrm{rb}}$ & Direction count \\
+\midrule
+0V & 60 & 20 & +4.04 & [+0.35, +7.18] & 0.053169 & 0.113777 & +0.495 & 14/20 \\
+1V & 60 & 20 & +0.41 & [-1.47, +2.23] & 0.498009 & 0.498009 & +0.181 & 10/20 \\
+2V & 60 & 20 & -0.91 & [-6.40, +0.37] & 0.075851 & 0.113777 & -0.457 & 13/20 \\
+0V & 120 & 20 & +2.32 & [-2.64, +5.63] & 0.474905 & 0.712358 & +0.190 & 13/20 \\
+1V & 120 & 20 & +0.03 & [-1.67, +2.13] & 0.927279 & 0.927279 & +0.029 & 10/20 \\
+2V & 120 & 20 & -2.30 & [-4.68, +1.78] & 0.329983 & 0.712358 & -0.257 & 12/20 \\
+0V & 180 & 20 & +4.58 & [-1.12, +13.94] & 0.164957 & 0.247436 & +0.362 & 13/20 \\
+1V & 180 & 20 & -0.06 & [-4.31, +1.95] & 0.956329 & 0.956329 & -0.019 & 10/20 \\
+2V & 180 & 20 & -2.67 & [-5.37, -0.44] & 0.048441 & 0.145323 & -0.505 & 15/20 \\
+\bottomrule
+\end{tabular}
+}
+\par\medskip
+\begin{minipage}{\textwidth}\footnotesize
+All nine tests are exploratory; BH correction covers the three categories separately within each duration. pp denotes percentage points; effects are median paired Drowsy-minus-Awake changes in occurrence proportions. Direction counts are positive for 0V/1V and negative for 2V; 1V uses a positive reporting convention even though its 180-s median is slightly negative. Same-sign-across-duration counts are 17/20 (0V), 11/20 (1V), and 14/20 (2V); these include consistently opposite-direction sessions and do not imply equal magnitude. Effects/CIs are rounded to two decimal places, raw p/q to six, and rank-biserial effects to three.
+\end{minipage}
+\end{table*}
+\begin{figure*}[p]
+\centering
+\fbox{\parbox{0.94\textwidth}{\centering Symbolic supporting evidence\\[4pt]A--C: combine the existing paired 0V/2V state panels at 60, 120, and 180 s. Preserve the existing session-pair display. 1V remains in Table~\ref{tab:supp_symbolic}; asset combination pending.}}
+\caption{Exploratory/supporting symbolic analysis of PPG-derived peak-to-peak intervals. Existing paired session-state 0V and 2V occurrence proportions are shown at (A) 60, (B) 120, and (C) 180 s after six-level PPI quantization and construction of overlapping three-symbol words. Median paired changes are positive for 0V and negative for 2V at each duration; all nine category-by-duration tests, including 1V in Table~\ref{tab:supp_symbolic}, lack within-duration BH support. Percentages describe symbolic occurrence proportions and are not direct measures of sympathetic or vagal activity. The analysis provides supporting directional context using the same recordings.}
+\label{fig:supp_symbolic}
+\end{figure*}
+% Figure source: phase1/outputs/symbolic/60/symbolic_0V_2V_state_60s.pdf
+% Figure source: phase1/outputs/symbolic/120/symbolic_0V_2V_state_120s.pdf
+% Figure source: phase1/outputs/symbolic/180/symbolic_0V_2V_state_180s.pdf
+\subsection*{S15. Overall Robustness Summary}
+Table~\ref{tab:supp_summary} separates the fixed nominal results, preservation of effect directions, uncertainty, and variation in statistical support. Mean CC decreased and Mean NRMSE increased under the nominal configuration, with those directions maintained across tested window lengths, label rules, delays, and dimensions. Magnitudes and CIs varied across settings, and hypothetical grouping attenuated BH support. These patterns concern finite-horizon forecastability within the tested configurations.
+
+DET decreased nominally and retained its negative direction across window lengths, label rules, and dimensions, as well as the tested RR/Theiler RQA settings. Its near-zero positive effects at non-nominal delays make embedding-delay dependence an explicit qualification. Neither this nominal decrease nor direction stability under other settings establishes physical determinism. Statistical support varied with settings and was attenuated under hypothetical grouping.
+
+LLE decreased across the tested window, label, reconstruction, and estimator settings. It retained the strongest inferential support in the hypothetical-grouping analysis, while its effect magnitude and number of accepted windows varied with fit and quality settings. This describes a finite-window local-divergence estimate, not an estimator independent of parameter choices. Symbolic dynamics remained exploratory and offered directional context outside the primary four-metric claim.
+
+The sensitivity branches reuse the same recordings and are supportive analyses rather than independent replications. Unknown participant--session linkage remains a limitation: hypothetical repeated-session grouping does not restore that mapping or yield participant-level inference. No pooled significance, robustness score, or ranking of metrics is inferred from the evidence matrix.
+
+\begin{table*}[p]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.12}
+\caption{Overall robustness summary.}
+\label{tab:supp_summary}
+\begin{tabular}{p{0.08	extwidth}p{0.10	extwidth}p{0.11	extwidth}p{0.10	extwidth}p{0.13	extwidth}p{0.15	extwidth}p{0.12	extwidth}p{0.10	extwidth}}
+\toprule
+Metric & Nominal 60-s & Window length & Label rules & $\tau/m$ & Metric-specific estimator settings & Hypothetical grouping & Interpretation limit \\
+\midrule
+Mean CC & Decrease; BH support & Direction preserved; uncertainty varies & Direction preserved; T60 CI spans zero & Direction preserved; some CIs span zero & Not tested separately here & Direction preserved; support attenuated & Magnitude/support depend on setting; session-level forecastability \\
+Mean NRMSE & Increase; BH support & Direction preserved; magnitude varies & Direction preserved; magnitudes differ & Direction preserved; some CIs span zero & Not tested separately here & Direction preserved; support attenuated & Magnitude/support depend on setting; session-level forecastability \\
+DET & Decrease; BH support & Direction preserved; 30/180-s CIs span zero & Direction preserved; magnitudes differ & Delay-sensitive; dimension direction preserved & RR/Theiler direction preserved; RR=0.01 support weaker & Direction preserved; support attenuated & Delay-dependent recurrence-line organization; not physical determinism \\
+LLE & Decrease; BH support & Direction preserved; uncertainty varies & Direction preserved; T30 CI spans zero & Direction preserved; magnitude varies & Direction preserved; fit/QC retention and magnitude vary & Direction preserved; strongest support retained in this analysis & Finite-window divergence; QC changes cohort; no participant inference \\
+Symbolic & Exploratory; no BH support & 0V/2V directional context at 60/120/180 s & Not tested & Not tested & Not tested & Not tested & Outside primary claim; no direct autonomic interpretation \\
+\bottomrule
+\end{tabular}
+\par\medskip
+\begin{minipage}{\textwidth}\footnotesize
+Descriptors summarize the tested settings and distinguish median direction from CI uncertainty and multiplicity-adjusted support. The nominal four-metric results belong to the seven-metric primary BH family. Symbolic tests use separate exploratory within-duration families. Untested cells do not imply stability. Participant--session mapping remains unknown; no pooled p value, robustness score, or independent-replication claim is assigned.
+\end{minipage}
+\end{table*}
+\endgroup

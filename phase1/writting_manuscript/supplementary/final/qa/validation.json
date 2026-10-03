@@ -1,0 +1,238 @@
+{
+  "failures": [],
+  "parity": {
+    "parallel_nodes": 117,
+    "compared_text_blocks": 2086,
+    "table_cells": 1760,
+    "ordered_numeric_tokens": 2401,
+    "inline_math_blocks": 202,
+    "display_equations": 12,
+    "mismatches": []
+  },
+  "tables": {
+    "1": {
+      "rows": 21,
+      "panels": 1,
+      "numeric_cells_match_approved_draft": true,
+      "source": "supplementary_phase2A_draft.md"
+    },
+    "2": {
+      "rows": 8,
+      "panels": 1,
+      "numeric_cells_match_approved_draft": true,
+      "source": "supplementary_phase2A_draft.md"
+    },
+    "3": {
+      "rows": 18,
+      "panels": 2,
+      "numeric_cells_match_approved_draft": true,
+      "source": "supplementary_phase2A_draft.md"
+    },
+    "4": {
+      "rows": 8,
+      "panels": 3,
+      "numeric_cells_match_approved_draft": true,
+      "source": "supplementary_phase2A_draft.md"
+    },
+    "5": {
+      "rows": 25,
+      "panels": 2,
+      "numeric_cells_match_approved_draft": true,
+      "source": "supplementary_phase2B_draft.md"
+    },
+    "6": {
+      "rows": 26,
+      "panels": 2,
+      "numeric_cells_match_approved_draft": true,
+      "source": "supplementary_phase2B_draft.md"
+    },
+    "7": {
+      "rows": 7,
+      "panels": 1,
+      "numeric_cells_match_approved_draft": true,
+      "source": "supplementary_phase2B_draft.md"
+    },
+    "8": {
+      "rows": 16,
+      "panels": 1,
+      "numeric_cells_match_approved_draft": true,
+      "source": "supplementary_phase3_draft.md"
+    },
+    "9": {
+      "rows": 25,
+      "panels": 2,
+      "numeric_cells_match_approved_draft": true,
+      "source": "supplementary_phase3_draft.md"
+    },
+    "10": {
+      "rows": 24,
+      "panels": 2,
+      "numeric_cells_match_approved_draft": true,
+      "source": "supplementary_phase3_draft.md"
+    },
+    "11": {
+      "rows": 26,
+      "panels": 2,
+      "numeric_cells_match_approved_draft": true,
+      "source": "supplementary_phase3_draft.md"
+    },
+    "12": {
+      "rows": 15,
+      "panels": 2,
+      "numeric_cells_match_approved_draft": true,
+      "source": "supplementary_phase3_draft.md"
+    },
+    "13": {
+      "rows": 9,
+      "panels": 1,
+      "numeric_cells_match_approved_draft": true,
+      "source": "supplementary_phase3_draft.md"
+    },
+    "14": {
+      "rows": 5,
+      "panels": 1,
+      "numeric_cells_match_approved_draft": true,
+      "source": "supplementary_phase3_draft.md"
+    }
+  },
+  "compiled": {
+    "en": {
+      "pages": 38,
+      "errors": {
+        "compile_errors": 0,
+        "undefined_references": 0,
+        "duplicate_labels_or_destinations": 0,
+        "overfull_boxes": 0,
+        "missing_glyphs": 0
+      },
+      "underfull_hboxes": 1,
+      "pdf_version_warnings": 8,
+      "clipped_text": [],
+      "blank_pages": [],
+      "resolved_labels": 42,
+      "ref_occurrences": 87,
+      "page_map": {
+        "sec:supp_1": 1,
+        "tab:supp_dataset": 1,
+        "sec:supp_2": 2,
+        "tab:supp_qc": 3,
+        "sec:supp_3": 3,
+        "tab:supp_nominal": 3,
+        "sec:supp_4": 4,
+        "fig:supp_qc": 5,
+        "tab:supp_reconstruction_evidence": 6,
+        "fig:supp_reconstruction_evidence": 7,
+        "sec:supp_5": 8,
+        "tab:supp_simplex": 8,
+        "sec:supp_6": 9,
+        "sec:supp_7": 10,
+        "fig:supp_simplex": 11,
+        "fig:supp_rqa": 11,
+        "sec:supp_8": 12,
+        "fig:supp_lle": 13,
+        "tab:supp_pps": 14,
+        "sec:supp_9": 16,
+        "fig:supp_pps": 17,
+        "tab:supp_primary": 18,
+        "sec:supp_10": 19,
+        "tab:supp_window": 20,
+        "sec:supp_11": 21,
+        "tab:supp_label": 21,
+        "fig:supp_window": 22,
+        "sec:supp_12": 24,
+        "sec:supp_12_1": 24,
+        "fig:supp_label": 25,
+        "tab:supp_reconstruction": 26,
+        "sec:supp_12_2": 28,
+        "sec:supp_12_3": 28,
+        "tab:supp_estimator": 29,
+        "sec:supp_13": 31,
+        "tab:supp_repeated": 32,
+        "fig:supp_repeated": 33,
+        "sec:supp_14": 34,
+        "tab:supp_symbolic": 35,
+        "sec:supp_15": 36,
+        "fig:supp_symbolic": 37,
+        "tab:supp_summary": 38
+      }
+    },
+    "vi": {
+      "pages": 38,
+      "errors": {
+        "compile_errors": 0,
+        "undefined_references": 0,
+        "duplicate_labels_or_destinations": 0,
+        "overfull_boxes": 0,
+        "missing_glyphs": 0
+      },
+      "underfull_hboxes": 0,
+      "pdf_version_warnings": 4,
+      "clipped_text": [],
+      "blank_pages": [],
+      "resolved_labels": 42,
+      "ref_occurrences": 87,
+      "page_map": {
+        "sec:supp_1": 1,
+        "tab:supp_dataset": 1,
+        "sec:supp_2": 2,
+        "tab:supp_qc": 3,
+        "sec:supp_3": 3,
+        "tab:supp_nominal": 3,
+        "fig:supp_qc": 4,
+        "sec:supp_4": 5,
+        "tab:supp_reconstruction_evidence": 6,
+        "fig:supp_reconstruction_evidence": 7,
+        "sec:supp_5": 8,
+        "tab:supp_simplex": 8,
+        "sec:supp_6": 9,
+        "sec:supp_7": 10,
+        "fig:supp_simplex": 11,
+        "fig:supp_rqa": 11,
+        "sec:supp_8": 12,
+        "fig:supp_lle": 13,
+        "tab:supp_pps": 14,
+        "sec:supp_9": 16,
+        "fig:supp_pps": 17,
+        "tab:supp_primary": 18,
+        "sec:supp_10": 19,
+        "tab:supp_window": 20,
+        "sec:supp_11": 21,
+        "tab:supp_label": 21,
+        "fig:supp_window": 22,
+        "sec:supp_12": 24,
+        "sec:supp_12_1": 24,
+        "fig:supp_label": 25,
+        "tab:supp_reconstruction": 26,
+        "sec:supp_12_2": 28,
+        "sec:supp_12_3": 28,
+        "tab:supp_estimator": 29,
+        "sec:supp_13": 31,
+        "tab:supp_repeated": 32,
+        "fig:supp_repeated": 33,
+        "sec:supp_14": 34,
+        "tab:supp_symbolic": 35,
+        "sec:supp_15": 36,
+        "fig:supp_symbolic": 37,
+        "tab:supp_summary": 38
+      }
+    }
+  },
+  "manuscript": {
+    "primary_table_fields_checked": 28,
+    "primary_match": true,
+    "label_effect_fields_checked": 20,
+    "reconstruction_effect_fields_checked": 24,
+    "symbolic_effect_fields_checked": 9,
+    "symbolic_same_sign_counts_checked": 3,
+    "hypothetical_support_fields_checked": 4
+  },
+  "preexisting_files": {
+    "checked": 23,
+    "changed": []
+  },
+  "figures": {
+    "present": 10,
+    "hashes_verified": 10,
+    "missing": 0
+  }
+}

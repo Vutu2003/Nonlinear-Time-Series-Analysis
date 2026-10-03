@@ -1,0 +1,111 @@
+[
+  {
+    "figure": 1,
+    "asset": "phase1/writting_manuscript/supplementary/final/figures/figure_S01.pdf",
+    "kind": "Vector assembly plus saved-count plot",
+    "sources": [
+      "phase1/outputs/data_audit/preprocessing/ppg_before_after_filtering.pdf",
+      "phase1/writting_manuscript/supplementary/supplementary_phase2A_draft.md, Table S2"
+    ],
+    "details": "Filtering axes/data preserved; counts transcribed from approved Table S2. Optional pre-QC availability panel omitted for focus.",
+    "sha256": "240ccd4a81d36a06719c0ad0e91492c8b6b3c7fd42384c77c76d45cb89f3f128"
+  },
+  {
+    "figure": 2,
+    "asset": "phase1/writting_manuscript/supplementary/final/figures/figure_S02.pdf",
+    "kind": "Vector assembly",
+    "sources": [
+      "phase1/outputs/phase_space/figures/phase_space_ami_60s_processed.pdf",
+      "phase1/outputs/phase_space/figures/phase_space_fnn_60s_processed_awake.pdf",
+      "phase1/outputs/phase_space/figures/phase_space_fnn_60s_processed_drowsy.pdf"
+    ],
+    "details": "Three original panels retained, with external panel/state labels; landscape presentation.",
+    "sha256": "178d328bab963a605bbfd7e474065e716b0930a06aef3787a6eacab60e9e78fb"
+  },
+  {
+    "figure": 3,
+    "asset": "phase1/writting_manuscript/supplementary/final/figures/figure_S03.pdf",
+    "kind": "Unmodified PDF copy",
+    "sources": [
+      "phase1/outputs/prediction/prediction_horizon_60s_processed.pdf"
+    ],
+    "details": "Original axes, numerical data, and panel typography preserved.",
+    "sha256": "faf93487d90f65c53ba29c5fcb301a0e1955d1b96be890b896e58650284b8b90"
+  },
+  {
+    "figure": 4,
+    "asset": "phase1/writting_manuscript/supplementary/final/figures/figure_S04.pdf",
+    "kind": "Unmodified PDF copy",
+    "sources": [
+      "phase1/outputs/rqa/recurrence_plot_session_1_60s_processed.pdf"
+    ],
+    "details": "Original axes, numerical data, and panel typography preserved.",
+    "sha256": "d7318d45fb615cedc4baf9f0abd1b486982084bc30237e995f50f2e4d6264a9d"
+  },
+  {
+    "figure": 5,
+    "asset": "phase1/writting_manuscript/supplementary/final/figures/figure_S05.pdf",
+    "kind": "Unmodified PDF copy",
+    "sources": [
+      "phase1/outputs/lle/lle_session_1_60s_processed_awake_window_1.pdf"
+    ],
+    "details": "Original axes, numerical data, and panel typography preserved.",
+    "sha256": "2f202ffb4642b63c7a49d980c9c70ce5d1d9044832799dd078c429f300ecf0cd"
+  },
+  {
+    "figure": 6,
+    "asset": "phase1/writting_manuscript/supplementary/final/figures/figure_S06.pdf",
+    "kind": "Vector assembly",
+    "sources": [
+      "phase1/outputs/pps/pps_visual_sanity_check_session_01_60s_window_0_15s_processed.pdf",
+      "phase1/outputs/statistic/rq1_pps_rank_rejection_heatmap_60s.pdf"
+    ],
+    "details": "PPS 15-s illustrative view above heatmaps; heatmap letters changed to B/C. No surrogate regenerated and no rejection data altered.",
+    "sha256": "987abf7c0a0d21d02927fccfe61f8b2798837105a4fcb7a61be9dd854326b5fd"
+  },
+  {
+    "figure": 7,
+    "asset": "phase1/writting_manuscript/supplementary/final/figures/figure_S07.pdf",
+    "kind": "Unmodified PDF copy",
+    "sources": [
+      "phase1/outputs/robust_window/robust_window_primary_metrics.pdf"
+    ],
+    "details": "Original axes, numerical data, and panel typography preserved.",
+    "sha256": "910ca87f9338944647c59857a43bbe98e781906c7112664d6350f5a57f56d4cf"
+  },
+  {
+    "figure": 8,
+    "asset": "phase1/writting_manuscript/supplementary/final/figures/figure_S08.pdf",
+    "kind": "Plot of approved stored summaries",
+    "sources": [
+      "phase1/results/data_label_sensitive/master_summary.csv",
+      "phase1/verification_result/verification_data/label_sensitive_validation.ipynb, cell 8/output 0",
+      "phase1/writting_manuscript/supplementary/supplementary_phase2B_draft.md, Table S7"
+    ],
+    "details": "Retention and four-metric effects/CIs transcribed from approved Tables S7/S9; no testing or CI computation.",
+    "sha256": "3eacc2266728dc1c063177ac00c8f8faf807e202631a8b7ea5de2d97bdc82f84"
+  },
+  {
+    "figure": 9,
+    "asset": "phase1/writting_manuscript/supplementary/final/figures/figure_S09.pdf",
+    "kind": "Plot of saved matching summaries",
+    "sources": [
+      "phase1/sensitivy_data/unknown_repeated_session_dependence_v1/random_pairing_summary_v1.csv",
+      "phase1/sensitivy_data/unknown_repeated_session_dependence_v1/convergence_v1.csv"
+    ],
+    "details": "Final figure formerly S10; percentages are display conversions of saved fractions. No matching sampled, no inference recomputed, no bootstrap CI plotted.",
+    "sha256": "d7bd0950bfa228d91609da7508295238f4a1f2e5717f21e58f04339592f0ab15"
+  },
+  {
+    "figure": 10,
+    "asset": "phase1/writting_manuscript/supplementary/final/figures/figure_S10.pdf",
+    "kind": "Vector assembly",
+    "sources": [
+      "phase1/outputs/symbolic/60/symbolic_0V_2V_state_60s.pdf",
+      "phase1/outputs/symbolic/120/symbolic_0V_2V_state_120s.pdf",
+      "phase1/outputs/symbolic/180/symbolic_0V_2V_state_180s.pdf"
+    ],
+    "details": "Final figure formerly S11. Original paired state axes/data preserved; repeated source letters removed and duration letters A/B/C added.",
+    "sha256": "597bc6ea86fdd289cc3a6d44a6b7f7b00ca94ca5757d6d7a7110e7006bd08443"
+  }
+]

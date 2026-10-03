@@ -1,0 +1,19 @@
+note: using only cached resource files
+note: Running TeX ...
+warning: Trying to include PDF file with version (1.7), which is newer than current output PDF setting (1.5).
+warning: Trying to include PDF file with version (1.7), which is newer than current output PDF setting (1.5).
+warning: Trying to include PDF file with version (1.7), which is newer than current output PDF setting (1.5).
+warning: supplementary_final_en.tex:455: Underfull \hbox (badness 1275) in paragraph at lines 454--455
+warning: Trying to include PDF file with version (1.7), which is newer than current output PDF setting (1.5).
+note: Rerunning TeX because "supplementary_final_en.aux" changed ...
+warning: Trying to include PDF file with version (1.7), which is newer than current output PDF setting (1.5).
+warning: Trying to include PDF file with version (1.7), which is newer than current output PDF setting (1.5).
+warning: Trying to include PDF file with version (1.7), which is newer than current output PDF setting (1.5).
+warning: supplementary_final_en.tex:455: Underfull \hbox (badness 1275) in paragraph at lines 454--455
+warning: Trying to include PDF file with version (1.7), which is newer than current output PDF setting (1.5).
+warning: warnings were issued by the TeX engine; use --print and/or --keep-logs for details.
+note: Running xdvipdfmx ...
+note: Writing `supplementary_final_en.pdf` (3.496522903442383 MiB)
+note: Writing `supplementary_final_en.log` (22.98046875 KiB)
+note: Writing `supplementary_final_en.out` (3.7880859375 KiB)
+note: Writing `supplementary_final_en.aux` (22.8671875 KiB)

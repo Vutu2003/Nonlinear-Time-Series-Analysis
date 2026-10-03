@@ -1,0 +1,239 @@
+# Supplementary Material — Phase 2B
+
+## S5. Simplex Projection
+
+Finite-horizon forecastability was assessed in the 901 retained processed-PPG windows. Each waveform $x$ was normalized within its window as $u=(x-\bar{x})/\sigma_x$, where $\sigma_x$ is the whole-window population standard deviation ($\mathrm{ddof}=0$). The common reconstruction used $m=8$ and $\tau=0.16$ s, with delay $d=\mathrm{round}(\tau f_s)$ samples.
+
+Using forward delay coordinates, let $\mathbf{z}_i=[u_i,u_{i+d},\ldots,u_{i+(m-1)d}]$ and let $t_i=i+(m-1)d$ denote the time index of the final coordinate. For a horizon $T_p$, the integer offset was $h=\mathrm{round}(T_p f_s)$ and the target was $u_{t_i+h}$. Only vectors and targets that remained within the same window were eligible, so the query and neighbor endpoints were restricted separately for each horizon. There was no cross-window prediction library.
+
+Leave-one-out prediction used the $k=m+1=9$ nearest admissible states under Euclidean distance. Self-matches were excluded, and neighbors were required to satisfy $|t_j-t_i|>\mathrm{round}(f_s W)$, with $W=1.0$ s. If $D_j$ is the distance to neighbor $j$ and $D_1$ is the smallest distance, the prediction was
+
+\[
+w_j=\frac{\exp(-D_j/D_1)}{\sum_{r=1}^{9}\exp(-D_r/D_1)},\qquad \widehat{u}_{t_i+h}=\sum_{j=1}^{9}w_j u_{t_j+h}.
+\]
+
+When one or more selected neighbor distances were no greater than machine epsilon, those neighbors shared the full weight equally and the other selected neighbors received zero weight. Predictions required all nine admissible neighbors. For valid observed/predicted target pairs $y_i$ and $\widehat{y}_i$, Pearson correlation (CC) and normalized root-mean-square error (NRMSE) were
+
+\[
+\mathrm{CC}=\frac{\sum_i(y_i-\bar{y})(\widehat{y}_i-\bar{\widehat{y}})}{\sqrt{\sum_i(y_i-\bar{y})^2\sum_i(\widehat{y}_i-\bar{\widehat{y}})^2}},\qquad \mathrm{NRMSE}=\frac{\sqrt{n^{-1}\sum_i(y_i-\widehat{y}_i)^2}}{\sigma_u}.
+\]
+
+Here, $n$ is the number of valid prediction pairs and $\sigma_u$ is the population standard deviation of the entire normalized window, equal to one up to numerical precision. The denominator was not recomputed from the horizon-specific target subset. Higher CC and lower NRMSE indicate greater forecastability. Mean CC and Mean NRMSE were computed across the 18 horizons within each window, then summarized by the median of valid windows in each session and state, as specified in the manuscript. The 901 windows yielded 16,218 horizon-level outputs.
+
+Table S5A lists the 18 physical-time horizons and their integer offsets at nominal sampling rates. Temporal-exclusion calibration considered $W\in\{0,0.2,0.4,0.6,0.8,1.0,1.5,2.0\}$ s. The saved adjacent-setting summaries pooled 120 session–state–duration combinations (20 sessions, two states, and 60-, 120-, and 180-s windows). They describe absolute calibration changes, not Awake–Drowsy effects. The largest transition occurred from 0.6 to 0.8 s. The 1.0-s setting was the first sustained stable setting after that transition (Table S5B). No per-setting state-effect test was used for this calibration.
+
+**Table S5 (TS05). Simplex horizons and temporal-exclusion calibration.**
+
+**Panel A. Physical horizons and sample offsets**
+
+| Horizon (s) | 25-Hz offset (samples) | 50-Hz offset (samples) |
+| --- | --- | --- |
+| 0.04 | 1 | 2 |
+| 0.08 | 2 | 4 |
+| 0.12 | 3 | 6 |
+| 0.16 | 4 | 8 |
+| 0.20 | 5 | 10 |
+| 0.28 | 7 | 14 |
+| 0.40 | 10 | 20 |
+| 0.60 | 15 | 30 |
+| 0.80 | 20 | 40 |
+| 1.00 | 25 | 50 |
+| 1.20 | 30 | 60 |
+| 1.60 | 40 | 80 |
+| 2.00 | 50 | 100 |
+| 2.40 | 60 | 120 |
+| 2.80 | 70 | 140 |
+| 3.20 | 80 | 160 |
+| 3.60 | 90 | 180 |
+| 4.00 | 100 | 200 |
+
+**Panel B. Adjacent-setting calibration**
+
+| Adjacent W (s) | Median absolute ΔCC | Median absolute ΔNRMSE | Minimum support | Stability / selection |
+| --- | --- | --- | --- | --- |
+| 0.0 → 0.2 | 0.003550 | 0.003370 | 1.00 | Stable; before transition |
+| 0.2 → 0.4 | 2.204e-06 | 2.213e-06 | 1.00 | Stable; before transition |
+| 0.4 → 0.6 | 0.002137 | 0.002059 | 1.00 | Stable; before transition |
+| 0.6 → 0.8 | 0.020254 | 0.015614 | 1.00 | Largest transition; unstable |
+| 0.8 → 1.0 | 0.003605 | 0.003260 | 1.00 | Selected: W=1.0 s; sustained |
+| 1.0 → 1.5 | 0.008894 | 0.007937 | 1.00 | Stable; sustained |
+| 1.5 → 2.0 | 0.007034 | 0.006442 | 1.00 | Stable; sustained |
+
+Panel A offsets are illustrative for 25/50 Hz; actual offsets use the estimated session $f_s$. Panel B changes are median absolute differences between adjacent $W$ settings, not paired state effects. Each row summarizes 120 combinations. Support is the minimum valid-prediction fraction across these combinations. Stability required both change rates (absolute change divided by the interval in $W$, normalized to their respective largest rate) to be $\leq0.25$ and minimum support $\geq0.95$. Sustained stability required all subsequent pairs to pass; the selected upper setting was 1.0 s.
+
+### Figure S3 (FS03) — placeholder
+
+**Intended panels:** Panel A: CC/NRMSE horizon behavior from the existing PDF. Optional panel B: adjacent temporal-exclusion calibration changes from the saved summary. Plot no new state-effect tests.
+
+**Exact existing sources (project-relative):**
+
+- A: `phase1/outputs/prediction/prediction_horizon_60s_processed.pdf`.
+- Optional B: `phase1/results/simplex_projection/theiler_sensitive/processed_theiler_sensitivity_summary.csv`.
+
+**Draft publication caption.** Simplex prediction across physical-time horizons in processed 60-s PPG windows. (A) CC and NRMSE over the 18 horizons from 0.04 to 4.00 s, using the common embedding and 1.0-s temporal exclusion. If included, (B) absolute calibration changes between adjacent exclusion settings across 120 session–state–duration combinations; the selected 1.0-s setting follows the largest transition at 0.6–0.8 s. Panel B describes calibration stability, not state effects.
+
+## S6. Recurrence Quantification Analysis
+
+Recurrence Quantification Analysis (RQA) used the common reconstructed state space with $m=8$ and $\tau=0.16$ s. Euclidean distances were computed within each window. A separate threshold $\varepsilon$ was calibrated from eligible pairwise distances to target recurrence rate $\mathrm{RR}=0.02$. Pairs with distance $\leq\varepsilon$ were recurrent. The line of identity and all pairs with $|i-j|\leq W$ were excluded, where $W=(m-1)d$ and $d=\mathrm{round}(\tau f_s)$. This gave 28 samples at approximately 25 Hz and 56 samples at 50 Hz, corresponding to approximately 1.12 s. Eligible distances were counted once in the upper triangle when calibrating recurrence density. At a tied boundary, attainable recurrence counts below and at the boundary were compared with the target; the closer RR was selected, with lower RR preferred on equal error. Equal distances were included or excluded together, so achieved RR could differ slightly from its target.
+
+Let $C_{\mathrm{upper}}$ be the number of recurrent points in the eligible upper triangle, and let $P_d(l)$ be the number of maximal diagonal runs of length $l$ in that triangle. With $l_{\min}=2$, diagonal recurrence-line organization (DET) and mean qualifying diagonal-line length were
+
+\[
+\mathrm{DET}=\frac{\sum_{l\geq2}lP_d(l)}{C_{\mathrm{upper}}},\qquad L_{\mathrm{mean}}=\frac{\sum_{l\geq2}lP_d(l)}{\sum_{l\geq2}P_d(l)}.
+\]
+
+Vertical runs were counted column-wise in the full symmetric recurrence matrix after the same exclusion mask. Let $C_{\mathrm{full}}$ be its total recurrent-point count and $P_v(v)$ its number of maximal vertical runs of length $v$. With $v_{\min}=2$, laminarity (LAM) and trapping time (TT) were
+
+\[
+\mathrm{LAM}=\frac{\sum_{v\geq2}vP_v(v)}{C_{\mathrm{full}}},\qquad \mathrm{TT}=\frac{\sum_{v\geq2}vP_v(v)}{\sum_{v\geq2}P_v(v)}.
+\]
+
+The DET and LAM denominators included all recurrent points in their respective counting domains, including points in runs shorter than two. $L_{\mathrm{mean}}$ and TT averaged only qualifying runs and were measured in sample-index line lengths, not seconds. The implementation returned zero when no qualifying runs were present, and zero fractions when the relevant recurrence count was zero. DET describes diagonal recurrence-line organization; LAM and TT describe vertical recurrence organization. These metrics do not directly measure physical determinism or autonomic activity. Complete nominal state-comparison statistics are reported in Table S7. RR and temporal-exclusion sensitivity belong to S12.
+
+### Figure S4 (FS04) — placeholder
+
+**Intended panels:** Reuse the state-specific recurrence example. An estimator-sensitivity panel may be added when S12 is produced; no sensitivity panel is prepared in Phase 2B.
+
+**Exact existing sources (project-relative):**
+
+- A: `phase1/outputs/rqa/recurrence_plot_session_1_60s_processed.pdf`.
+
+**Draft publication caption.** Illustrative recurrence plots for processed 60-s PPG windows from recording session 01 in Awake and Drowsy. Recurrences use the common embedding, target RR of 0.02, and exclusion $W=(m-1)d$. Diagonal lines contribute to DET and $L_{\mathrm{mean}}$; vertical lines contribute to LAM and TT. The plots illustrate recurrence geometry; nominal state-comparison statistics are reported in Table S7.
+
+## S7. Rosenstein Largest Lyapunov Exponent
+
+The Rosenstein estimator used the same embedding ($m=8$, $\tau=0.16$ s) to estimate local trajectory divergence within each window. Its temporal exclusion was based on the spectral mean period of the demeaned processed waveform. A one-sided discrete Fourier spectrum was used, with power equal to squared Fourier magnitude. DC was excluded, and all positive-frequency bins through Nyquist were retained without an additional frequency mask. With $P_k$ denoting power at positive frequency $f_k$,
+
+\[
+\bar{f}=\frac{\sum_{k:f_k>0}f_kP_k}{\sum_{k:f_k>0}P_k},\qquad T=\bar{f}^{-1},\qquad W=\max\{1,\mathrm{round}(f_sT)\}.
+\]
+
+For each reconstructed state, the first nearest Euclidean neighbor satisfying $|j-i|>W$ was selected. Distances no greater than $\delta=10\epsilon_{\mathrm{machine}}\max\{\mathrm{std}(\mathbf{Z}),1\}\sqrt{m}$ were excluded, where $\mathrm{std}(\mathbf{Z})$ is the population standard deviation across the embedded-state matrix. This screening occurred after neighbor selection, without replacing the selected neighbor. Admissible pairs were followed for at most 5 s. At each lag, pairs whose evolved endpoints remained inside the window and whose distance was finite and above $\delta$ contributed to the mean log-distance curve,
+
+\[
+L(t)=\frac{1}{n_t}\sum_{j\in\mathcal{P}_t}\ln\|\mathbf{z}_{j+\ell}-\mathbf{z}_{\nu(j)+\ell}\|,\qquad t=\ell/f_s.
+\]
+
+Here, $\nu(j)$ is the selected neighbor, $\mathcal{P}_t$ is the valid pair set at lag $\ell$, and $n_t$ is its size. A linear regression of $L(t)$ against time in seconds over the inclusive interval 0.80–1.30 s gave the LLE slope in s$^{-1}$. Acceptance required at least 50 initial pairs, at least 30 contributing pairs at each fit point, at least three finite fit points, a finite slope, and $R^2\geq0.90$.
+
+This fit-quality screen accepted 872 of the 901 nominal QC-retained input windows (96.78%): 579 Awake and 293 Drowsy. Across all 901 input windows, the minimum initial pair count was 1,471, the minimum pair count at a fit point was 1,366, and the median fit $R^2$ was 0.973. Thus, pair support was well above the operational minima in every input window. The 29 rejected windows (17 Awake and 12 Drowsy) failed the $R^2$ criterion, rather than the pair-support criteria. The support summary includes rejected fits; LLE state comparisons use only accepted fits. This is a finite-data local trajectory-divergence estimate and does not establish deterministic chaos. The primary result is reported in Table S7; fit-interval, $R^2$, and temporal-exclusion sensitivity belong to S12.
+
+### Figure S5 (FS05) — placeholder
+
+**Intended panels:** Reuse the existing representative mean log-distance curve and linear fit. Keep the 0.80–1.30-s interval and fit-quality annotation visible.
+
+**Exact existing sources (project-relative):**
+
+- A: `phase1/outputs/lle/lle_session_1_60s_processed_awake_window_1.pdf`.
+
+**Draft publication caption.** Example Rosenstein divergence curve from a processed 60-s Awake window in recording session 01. Mean log-distance is plotted against evolution time; the linear fit uses 0.80–1.30 s. Nominal acceptance requires adequate pair support and $R^2\geq0.90$. The fitted slope is the finite-window LLE estimate in s$^{-1}$; it does not establish deterministic chaos.
+
+## S8. Pseudoperiodic Surrogate Testing
+
+Pseudoperiodic surrogates (PPS) tested a noisy pseudoperiodic null. Each processed waveform was forward-embedded with $m=8$ and $\tau=0.16$ s. An initial index was drawn uniformly from the embedded states. For the current state $\mathbf{s}$, candidate indices $j$ included all embedded states with an observed successor. Their transition probabilities were
+
+\[
+\Pr(j\mid\mathbf{s})=\frac{\exp[-(\|\mathbf{z}_j-\mathbf{s}\|-D_{\min})/\rho]}{\sum_{r=0}^{N_e-2}\exp[-(\|\mathbf{z}_r-\mathbf{s}\|-D_{\min})/\rho]},
+\]
+
+where $N_e$ is the number of embedded states and $D_{\min}$ is the smallest candidate distance. Subtracting $D_{\min}$ stabilized the exponential calculation without changing the normalized probabilities. After drawing $j$, the surrogate continued at the observed successor $j+1$. Self and temporally adjacent candidates were allowed; the last embedded state was excluded as a candidate because it had no successor. The first coordinate of each visited state was emitted until the surrogate contained exactly the original window length. There was no boundary wrapping.
+
+The window-specific radius $\rho$ was taken from the saved calibration. Selection maximized the mean number of maximal consecutive source-index runs of length at least two, using three independent trials at each of 21 candidate radii; the first maximum was selected in a tie. Each tested window was compared with $M=39$ surrogates. The six non-LLE metrics shared a PPS ensemble; LLE used a separately generated ensemble. For LLE, the original-window temporal exclusion was reused for its surrogates, and the original $R^2\geq0.90$ acceptance threshold was not imposed on surrogate fits. LLE comparisons were restricted to the 579 Awake and 293 Drowsy original windows with accepted nominal fits.
+
+For original metric value $a$ and surrogate values $s_1,\ldots,s_M$, the implemented two-sided finite-sample test included ties in both tails:
+
+\[
+p=\min\left\{1,\frac{2\min\left(1+\#\{s_b\leq a\},\;1+\#\{s_b\geq a\}\right)}{M+1}\right\}.
+\]
+
+With $M=39$, the smallest attainable $p$ was $2/40=0.05$, and rejection used $p\leq0.05$. Window-level $p$ values were unadjusted. There were 24 exact original–surrogate ties across the six-metric window comparisons; none altered rejection at the 0.05 threshold. No ties occurred in the included LLE comparisons.
+
+Table S6A reports all seven metrics by state. Pooled rejection percentages divide rejected windows by eligible windows. Session rejection fractions were computed separately within each session and state, then summarized by their median and interquartile range across 20 sessions. These summaries have different weighting and should be interpreted separately. For example, CC rejected in 374/596 Awake windows (62.75% pooled; 60.66% median session fraction) and 229/305 Drowsy windows (75.08% pooled; 71.01% median session fraction). Expected original-minus-PPS directions were positive for CC, DET, $L_{\mathrm{mean}}$, and LLE, and negative for NRMSE, LAM, and TT. One Drowsy LAM rejection was in the opposite direction; all other rejections followed the expected direction.
+
+Table S6B presents the separate session-level original-minus-PPS gap inference for the six non-LLE metrics. For each window, the gap was the original value minus the median of its 39 surrogate values. Gaps were aggregated by the median within each session and state. Their overall median, bootstrap CI, signed-rank test, and rank-biserial effect were then calculated across 20 sessions, with BH-FDR applied once to the 12 metric–state tests. The accompanying rejection fraction is descriptive. LLE is included in the window-rejection panel only; no LLE gap CI, $p$, or $q$ is added to this family.
+
+PPS rejection indicates that the observed organization was not fully reproduced by the tested noisy pseudoperiodic null. It does not establish deterministic chaos or exclude every stochastic or structured pseudoperiodic model. Rejection fractions within each state are not a paired Awake–Drowsy test.
+
+**Table S6 (TS06). Complete PPS evidence.**
+
+**Panel A. Window-level rejection summaries**
+
+| Metric | State | Valid windows | Rejected n | Pooled (%) | Session median (%) | IQR (pp) | Expected-direction n | Opposite-direction n |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| CC | Awake | 596 | 374 | 62.75 | 60.66 | 16.98 | 374 | 0 |
+| CC | Drowsy | 305 | 229 | 75.08 | 71.01 | 23.31 | 229 | 0 |
+| NRMSE | Awake | 596 | 542 | 90.94 | 91.59 | 12.57 | 542 | 0 |
+| NRMSE | Drowsy | 305 | 291 | 95.41 | 100.00 | 7.27 | 291 | 0 |
+| DET | Awake | 596 | 595 | 99.83 | 100.00 | 0.00 | 595 | 0 |
+| DET | Drowsy | 305 | 305 | 100.00 | 100.00 | 0.00 | 305 | 0 |
+| $L_{\mathrm{mean}}$ | Awake | 596 | 594 | 99.66 | 100.00 | 0.00 | 594 | 0 |
+| $L_{\mathrm{mean}}$ | Drowsy | 305 | 305 | 100.00 | 100.00 | 0.00 | 305 | 0 |
+| LAM | Awake | 596 | 537 | 90.10 | 95.50 | 16.36 | 537 | 0 |
+| LAM | Drowsy | 305 | 273 | 89.51 | 92.38 | 18.59 | 272 | 1 |
+| TT | Awake | 596 | 580 | 97.32 | 100.00 | 4.31 | 580 | 0 |
+| TT | Drowsy | 305 | 295 | 96.72 | 100.00 | 7.28 | 295 | 0 |
+| LLE | Awake | 579 | 545 | 94.13 | 96.30 | 7.28 | 545 | 0 |
+| LLE | Drowsy | 293 | 287 | 97.95 | 100.00 | 0.76 | 287 | 0 |
+
+CC and NRMSE denote the window-level horizon means used for PPS testing. Pooled (%) = rejected/valid windows $\times100$. Session median (%) and IQR (percentage points) summarize the 20 session-specific rejection fractions after scaling by 100. Expected signs refer to original minus PPS: positive for CC, DET, $L_{\mathrm{mean}}$, and LLE; negative for NRMSE, LAM, and TT. LLE eligibility is 579/293 original windows, versus 596/305 for each other metric.
+
+**Panel B. Session-level original-minus-PPS gaps**
+
+| Metric | State | Sessions | Median gap | 95% CI | Raw p | qBH | rrb | Session median rejection (%) |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| CC | Awake | 20 | +0.1192 | [0.1034, 0.1278] | 1.90735e-6 | 1.90735e-6 | +1.000 | 60.66 |
+| CC | Drowsy | 20 | +0.1441 | [0.1245, 0.1906] | 1.90735e-6 | 1.90735e-6 | +1.000 | 71.01 |
+| NRMSE | Awake | 20 | -0.1321 | [-0.1658, -0.1273] | 1.90735e-6 | 1.90735e-6 | -1.000 | 91.59 |
+| NRMSE | Drowsy | 20 | -0.1557 | [-0.1901, -0.1370] | 1.90735e-6 | 1.90735e-6 | -1.000 | 100.00 |
+| DET | Awake | 20 | +0.1833 | [0.1727, 0.1939] | 1.90735e-6 | 1.90735e-6 | +1.000 | 100.00 |
+| DET | Drowsy | 20 | +0.1885 | [0.1713, 0.1971] | 1.90735e-6 | 1.90735e-6 | +1.000 | 100.00 |
+| $L_{\mathrm{mean}}$ | Awake | 20 | +1.1528 | [1.0947, 1.1891] | 1.90735e-6 | 1.90735e-6 | +1.000 | 100.00 |
+| $L_{\mathrm{mean}}$ | Drowsy | 20 | +1.1508 | [1.1023, 1.1815] | 1.90735e-6 | 1.90735e-6 | +1.000 | 100.00 |
+| LAM | Awake | 20 | -0.1244 | [-0.1411, -0.1130] | 1.90735e-6 | 1.90735e-6 | -1.000 | 95.50 |
+| LAM | Drowsy | 20 | -0.1266 | [-0.1282, -0.1091] | 1.90735e-6 | 1.90735e-6 | -1.000 | 92.38 |
+| TT | Awake | 20 | -0.1139 | [-0.1367, -0.0855] | 1.90735e-6 | 1.90735e-6 | -1.000 | 100.00 |
+| TT | Drowsy | 20 | -0.1188 | [-0.1283, -0.1077] | 1.90735e-6 | 1.90735e-6 | -1.000 | 100.00 |
+
+Panel B contains only the saved six-metric $\times$ two-state family ($n=20$ sessions per test). CI is the percentile 95% interval from 20,000 session bootstrap resamples; $p$ is the two-sided Wilcoxon value, $q$ is BH-adjusted across all 12 tests, and $r_{\mathrm{rb}}$ is the matched-pairs rank-biserial correlation. Gap units are dimensionless for CC, NRMSE, DET, and LAM, and samples for $L_{\mathrm{mean}}$ and TT. Rejection summaries are descriptive. All 12 saved $p$ and $q$ values are $1.9073486328125\times10^{-6}$, displayed as $1.90735\times10^{-6}$.
+
+### Figure S6 (FS06) — placeholder
+
+**Intended panels:** Panel A: one illustrative original/PPS waveform, choosing the full-window source or its 15-s detail. Panel B: seven-metric session/state rejection heatmap. Use one waveform view; no new surrogate is generated.
+
+**Exact existing sources (project-relative):**
+
+- A, full-window source: `phase1/outputs/pps/pps_visual_sanity_check_session_01_60s_processed.pdf`.
+- A, optional 15-s detail: `phase1/outputs/pps/pps_visual_sanity_check_session_01_60s_window_0_15s_processed.pdf`.
+- B: `phase1/outputs/statistic/rq1_pps_rank_rejection_heatmap_60s.pdf`.
+
+**Draft publication caption.** PPS illustration and rejection patterns for processed 60-s PPG. (A) An original waveform from recording session 01 and an illustrative pseudoperiodic surrogate. (B) Session-specific fractions of eligible windows rejecting the tested noisy pseudoperiodic null for each metric and state. Tests use 39 surrogates, tie-inclusive two-sided ranks, and unadjusted $p\leq0.05$. LLE fractions use accepted original fits. The waveform is illustrative, and the heatmap describes within-state rejection rather than paired state effects.
+
+## S9. Statistical Framework and Multiplicity
+
+The computational unit was a valid analysis window; the primary inferential unit was a recording session. Each metric was summarized by the median across valid windows in each session and state. For Simplex, the window metric was first averaged across the 18 horizons, as described in S5. Each of the 20 sessions contributed a paired difference,
+
+\[
+\Delta_i=\mathrm{Drowsy}_i-\mathrm{Awake}_i,\qquad \Delta=\mathrm{median}_i(\Delta_i).
+\]
+
+State effects were tested using the two-sided Wilcoxon signed-rank test. Zero differences were removed before ranking; the Simplex implementation treated absolute differences $\leq10^{-12}$ as zero, while the RQA and LLE implementations removed exact zeros. Equal absolute differences received average ranks. Simplex used the exact conditional signed-rank distribution; RQA and LLE used the automatic signed-rank method with zero removal and no continuity correction. None of the seven nominal comparisons contained a zero difference.
+
+The matched-pairs rank-biserial correlation was $r_{\mathrm{rb}}=(W_+-W_-)/(W_++W_-)$, where $W_+$ and $W_-$ are the positive and negative rank sums after zero removal. Confidence intervals for the median paired difference used 20,000 resamples of the paired-session difference vector with replacement and the 2.5th and 97.5th percentiles of the bootstrap medians. Participant–session linkage was unavailable, so the inferential unit and bootstrap unit remained the recording session.
+
+Benjamini–Hochberg FDR adjustment was applied once across the seven nominal 60-s metrics: Mean CC, Mean NRMSE, DET, $L_{\mathrm{mean}}$, LAM, TT, and LLE. Statistical support used $q_{\mathrm{BH}}<0.05$. The PPS window tests were unadjusted, and the PPS session-gap tests formed the separate 12-test family in Table S6B. Other correction families are listed in Table S3B. Percentile intervals describe uncertainty in the median paired effect, whereas the signed-rank test uses the signed rank distribution; their conclusions need not agree exactly.
+
+Table S7 reproduces the nominal results. Mean CC decreased and Mean NRMSE increased in Drowsy, indicating lower finite-horizon forecastability. DET decreased under the nominal reconstruction, indicating reduced diagonal recurrence organization, and LLE decreased, indicating reduced estimated local trajectory divergence. These four metrics met the seven-metric BH criterion. $L_{\mathrm{mean}}$ had a negative median effect and a CI excluding zero but did not meet that criterion; LAM and TT also lacked BH support. These findings concern complementary finite-window properties rather than a common scale of chaos. Sensitivity analyses share source recordings and do not constitute independent replications.
+
+**Table S7 (TS07). Complete primary 60-s statistics.**
+
+| Metric | Paired n | Median Δ | 95% CI | Raw p | qBH | rrb | Direction count |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Mean CC | 20 | -0.0339 | [-0.0595, -0.0043] | 0.02148438 | 0.0376 | -0.581 | 15/20 lower |
+| Mean NRMSE | 20 | +0.0294 | [0.0047, 0.0530] | 0.00729561 | 0.0255 | +0.667 | 15/20 higher |
+| DET | 20 | -0.0186 | [-0.0364, -0.0069] | 0.02148438 | 0.0376 | -0.581 | 15/20 lower |
+| $L_{\mathrm{mean}}$ | 20 | -0.0630 | [-0.1247, -0.0139] | 0.05825806 | 0.0816 | -0.486 | 16/20 lower |
+| LAM | 20 | +0.0165 | [-0.0044, 0.0635] | 0.14290619 | 0.1667 | +0.381 | 13/20 higher |
+| TT | 20 | +0.0095 | [-0.0034, 0.0160] | 0.20244980 | 0.2024 | +0.333 | 14/20 higher |
+| LLE | 20 | -0.0376 | [-0.0537, -0.0230] | 0.00070763 | 0.0050 | -0.810 | 16/20 lower |
+
+All rows use 20 paired recording sessions. General QC retained 596 Awake and 305 Drowsy windows (901 total); LLE used 579 Awake and 293 Drowsy accepted fits (872 total). Direction is the number of sessions with the sign of the reported median effect; no nominal differences were zero. $\Delta$ is the median paired difference, not the difference of marginal state medians. $\Delta$ and CI units are samples for $L_{\mathrm{mean}}$ and TT, s$^{-1}$ for LLE, and dimensionless otherwise. Raw $p$ values are displayed to eight decimal places; manuscript effect, CI, $r_{\mathrm{rb}}$, and $q$ rounding is preserved.
