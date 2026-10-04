@@ -1,894 +1,336 @@
-\documentclass[11pt,a4paper]{article}
-\usepackage{fontspec}
-\setmainfont[Path=fonts/,BoldFont=NotoSerif-Bold.ttf,ItalicFont=NotoSerif-Italic.ttf,BoldItalicFont=NotoSerif-BoldItalic.ttf]{NotoSerif-Regular.ttf}
-\setsansfont[Path=fonts/,BoldFont=NotoSans-Bold.ttf,ItalicFont=NotoSans-Italic.ttf,BoldItalicFont=NotoSans-BoldItalic.ttf]{NotoSans-Regular.ttf}
-\usepackage[a4paper,margin=20mm]{geometry}
-\usepackage{amsmath,amssymb,booktabs,array,longtable,pdflscape,graphicx,caption,hyperref}
-\hypersetup{hidelinks}
-\captionsetup{font=small,labelfont=bf}
+\documentclass[conference,a4paper]{IEEEtran}
+\IEEEoverridecommandlockouts
+% --- PACKAGES ---
+% Pass this option before todonotes/TikZ can load xcolor.
+\PassOptionsToPackage{table}{xcolor}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\graphicspath{{image/supplementary/}}
+\usepackage{textcomp}
+\usepackage[T5]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{makecell}
+\usepackage[disable,colorinlistoftodos,textsize=tiny]{todonotes}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage[table]{xcolor}
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage{placeins}
+\usepackage{subcaption}
+\usepackage{tabularx}
+\usepackage{soul}
+\usepackage{tikz}
+\usepackage{adjustbox}
+\usepackage{changes}
+\usepackage{flushend}
+\usepackage{color}
+\flushend
+\setlength{\marginparwidth}{2cm}
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
 \renewcommand{\thetable}{S\arabic{table}}
 \renewcommand{\thefigure}{S\arabic{figure}}
-\newcounter{supptablepanel}
-\renewcommand{\theHtable}{\arabic{table}.\arabic{supptablepanel}}
-\renewcommand{\thesubsection}{S\arabic{subsection}}
-\renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{5pt}
-\setlength{\LTpre}{8pt}
-\setlength{\LTpost}{8pt}
-\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\captionsetup{font=footnotesize,labelfont=bf}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\setlength{\emergencystretch}{1em}
 \begin{document}
-\setlength{\emergencystretch}{2em}
-\renewcommand{\tablename}{Bảng}\renewcommand{\figurename}{Hình}
-\special{pdf:minorversion 7}
-\begin{center}\Large\textbf{Tài liệu bổ sung}\end{center}
-\subsection{Dữ liệu, gán nhãn và tính toàn vẹn dữ liệu}\label{sec:supp_1}
-Phân tích gồm 20 session ghi nhận từ 10 người tham gia, theo báo cáo trong bản thảo chính. Tổng thời lượng ghi nhận là 17.40 h: 11.33 h Awake và 6.07 h Drowsy. Nhãn được gán bằng Karolinska Sleepiness Scale (KSS), kết hợp quan sát video để đối chiếu. Không có thông tin liên kết người tham gia--session. Vì vậy, suy luận chính sử dụng các session ghi nhận và không xác lập hiệu ứng ở cấp người tham gia.
+\twocolumn[{
+\begin{center}
+{\Large\bfseries Tài liệu bổ sung}\\[4pt]
+{\normalsize cho bài báo ``Ultra-Short PPG Dynamics Across the Wakefulness-to-Drowsiness Transition:
+A Nonlinear Time-Series Analysis''}
+\end{center}
+}]
 
-Dữ liệu gồm 1,620,038 mẫu. Session ghi nhận 01 có tần số lấy mẫu 50 Hz, các session còn lại khoảng 25 Hz. Tần số lấy mẫu được ước tính bằng nghịch đảo của trung vị khoảng thời gian dương giữa các dấu thời gian liên tiếp. Kiểm tra tính toàn vẹn cho thấy dấu thời gian tăng nghiêm ngặt, không có mẫu trùng hoặc nhãn không hợp lệ, và không có giá trị tín hiệu/thời gian bị thiếu, không phải số hoặc vô hạn. PPG thô, PPG đã xử lý và nhãn được căn chỉnh trên cùng trục hàng. Tất cả session đều đạt kiểm tra tính toàn vẹn và điều kiện tham gia phân tích (Bảng~\ref{tab:supp_dataset}).
+\renewcommand{\tablename}{Bảng}
+\renewcommand{\figurename}{Hình}
+\section{Kiểm tra tính toàn vẹn dữ liệu và số window được giữ lại}\label{sec:supp_1}
+Dữ liệu gồm 20 session ghi nhận với tổng cộng 1,620,038 mẫu. Session 01 có tần số lấy mẫu 50 Hz; các session còn lại khoảng 25 Hz. Không phát hiện giá trị tín hiệu hoặc thời gian bị thiếu, không phải số hay vô hạn; dấu thời gian không trùng lặp và nhãn đều hợp lệ. Có 69 khoảng gián đoạn dài hơn $1.5$ lần khoảng lấy mẫu trung vị. Không nội suy qua các khoảng gián đoạn, và window phân tích không cắt qua chúng.
 
-Có 69 khoảng gián đoạn thời gian vượt quá 1.5 lần khoảng lấy mẫu trung vị; 62 khoảng vượt quá hai lần khoảng này và không có khoảng nào vượt quá năm lần. Các khoảng gián đoạn được giữ nguyên, không nội suy. Nhãn có 86 lần chuyển trạng thái, không có lần nào đi qua khoảng gián đoạn. Tách dữ liệu tại các lần chuyển trạng thái và khoảng gián đoạn tạo ra 175 đoạn trạng thái liên tục (93 Awake, 82 Drowsy), với thời lượng trung vị 260.04 s; 60 đoạn ngắn hơn 60 s, 78 đoạn ngắn hơn 180 s và 94 đoạn ngắn hơn 300 s.
+Bảng~\ref{tab:supp_retained} liệt kê số window còn lại sau bước sàng lọc nhiễu trên các khối 5-s và kiểm tra độ ổn định phương sai trên các khối 10-s theo bài báo chính. Tiêu chí phương sai chỉ đánh giá độ ổn định của phương sai, không xác lập tính dừng đầy đủ của tín hiệu.
 
-\begingroup\small
-\setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.18}
-\stepcounter{supptablepanel}
-\begin{longtable}{L{\dimexpr0.12048\linewidth-1.68675\tabcolsep\relax}L{\dimexpr0.16867\linewidth-2.36145\tabcolsep\relax}L{\dimexpr0.15663\linewidth-2.19277\tabcolsep\relax}L{\dimexpr0.25301\linewidth-3.54217\tabcolsep\relax}L{\dimexpr0.08434\linewidth-1.18072\tabcolsep\relax}L{\dimexpr0.09639\linewidth-1.34940\tabcolsep\relax}L{\dimexpr0.12048\linewidth-1.68675\tabcolsep\relax}}
-\caption{Tóm tắt dữ liệu và tính toàn vẹn.}\label{tab:supp_dataset}\\
-\toprule
-Session & Số mẫu & fs ước tính (Hz) & Số mẫu Awake /\allowbreak  Drowsy & Gián đoạn & Toàn vẹn & Đủ điều kiện phân tích\\
-\midrule\endfirsthead
-\multicolumn{7}{l}{Bảng~\ref{tab:supp_dataset} (tiếp theo)}\\
-\toprule
-Session & Số mẫu & fs ước tính (Hz) & Số mẫu Awake /\allowbreak  Drowsy & Gián đoạn & Toàn vẹn & Đủ điều kiện phân tích\\
-\midrule\endhead
-\bottomrule\endfoot
-\bottomrule\endlastfoot
-01 & 117,828 & 50.000 & 77,805 /\allowbreak  40,023 & 0 & Đạt & Có\\
-04 & 75,416 & 24.992 & 46,897 /\allowbreak  28,519 & 3 & Đạt & Có\\
-05 & 91,211 & 25.003 & 59,235 /\allowbreak  31,976 & 4 & Đạt & Có\\
-06 & 79,179 & 24.993 & 51,240 /\allowbreak  27,939 & 5 & Đạt & Có\\
-07 & 79,768 & 24.994 & 59,225 /\allowbreak  20,543 & 3 & Đạt & Có\\
-08 & 77,595 & 24.994 & 61,405 /\allowbreak  16,190 & 4 & Đạt & Có\\
-09 & 119,272 & 25.001 & 83,631 /\allowbreak  35,641 & 8 & Đạt & Có\\
-10 & 60,386 & 24.998 & 45,365 /\allowbreak  15,021 & 3 & Đạt & Có\\
-11 & 61,582 & 24.994 & 33,062 /\allowbreak  28,520 & 2 & Đạt & Có\\
-12 & 89,853 & 24.989 & 34,376 /\allowbreak  55,477 & 2 & Đạt & Có\\
-13 & 76,473 & 25.000 & 40,272 /\allowbreak  36,201 & 2 & Đạt & Có\\
-14 & 85,948 & 24.994 & 54,871 /\allowbreak  31,077 & 5 & Đạt & Có\\
-15 & 69,362 & 24.996 & 54,511 /\allowbreak  14,851 & 6 & Đạt & Có\\
-17 & 68,752 & 24.993 & 45,601 /\allowbreak  23,151 & 2 & Đạt & Có\\
-18 & 69,937 & 24.997 & 30,634 /\allowbreak  39,303 & 3 & Đạt & Có\\
-19 & 73,041 & 24.996 & 54,123 /\allowbreak  18,918 & 4 & Đạt & Có\\
-21 & 69,660 & 25.000 & 41,549 /\allowbreak  28,111 & 2 & Đạt & Có\\
-22 & 74,710 & 25.001 & 50,359 /\allowbreak  24,351 & 3 & Đạt & Có\\
-23 & 109,452 & 24.997 & 87,703 /\allowbreak  21,749 & 3 & Đạt & Có\\
-25 & 70,613 & 24.996 & 46,905 /\allowbreak  23,708 & 5 & Đạt & Có\\
-Tổng & 1,620,038 & Hỗn hợp & 1,058,769 /\allowbreak  561,269 & 69 & 20/\allowbreak 20 & 20/\allowbreak 20\\
-\end{longtable}
-\endgroup
-{\small Thành phần trạng thái là số mẫu, không phải ước tính thời lượng. Khoảng gián đoạn dùng ngưỡng 1.5 lần khoảng dấu thời gian trung vị. Đủ điều kiện phân tích không hàm ý mọi mẫu đều vào window được giữ lại.}\par
-{\small Thời lượng theo trạng thái trong tóm tắt tính toàn vẹn sử dụng khoảng thời gian gắn với mẫu, chặn khoảng gián đoạn ở khoảng lấy mẫu trung vị và gán một khoảng trung vị cho mẫu cuối. Tổng thời lượng ghi nhận trong văn bản theo bản thảo chính.}\par
-\subsection{Tiền xử lý, kiểm soát chất lượng và số window được giữ lại}\label{sec:supp_2}
-PPG thô được nhân với $-1$ rồi xử lý bằng bộ lọc thông dải Butterworth bậc hai (0.5--8 Hz), áp dụng xuôi và ngược để đạt pha bằng không. Tất cả bước QC và phân tích phi tuyến sau đó đều sử dụng PPG đã xử lý.
-
-Sàng lọc nhiễu sử dụng các khối 5-s hoàn chỉnh, không chồng lấp, gồm $\mathrm{round}(5f_s)$ mẫu trong từng session ghi nhận. Biên độ và độ gồ ghề được định nghĩa là
-
-\[\begin{gathered}A=Q_{0.95}(x)-Q_{0.05}(x),\\ R=\sqrt{\mathrm{mean}((\Delta x)^2)}.\end{gathered}\]
-Trong đó, $Q_p$ là phân vị thứ $p$ và $\Delta x$ là sai phân bậc nhất. Mỗi đặc trưng $F\in\{A,R\}$ được chuẩn hóa trên các khối hoàn chỉnh của cùng session:
-
-\[\begin{gathered}z_F=0.6745\,\frac{F-\mathrm{median}(F)}{\max(\mathrm{MAD}(F),\epsilon)}.\end{gathered}\]
-Với $\mathrm{MAD}(F)=\mathrm{median}(|F-\mathrm{median}(F)|)$ và epsilon máy $\epsilon$, khối được đánh dấu khi $z_A>4.5$ hoặc $z_R>4.5$. Toàn bộ mẫu của khối được đánh dấu; bất kỳ window phân tích nào chứa mẫu đã đánh dấu đều bị loại. Khối không hoàn chỉnh ở cuối không được sàng lọc.
-
-Trong mỗi chuỗi cùng trạng thái, các window 60-s hoàn chỉnh, không chồng lấp sử dụng $\mathrm{round}(60f_s)$ mẫu. Phần dư không hoàn chỉnh bị bỏ và không tạo window vượt qua ranh giới trạng thái. Window ứng viên chứa khoảng thời gian giữa dấu thời gian lớn hơn $1.5/f_s$ bị loại, còn vị trí các window sau đó vẫn neo theo chuỗi trạng thái ban đầu. Quy trình tương tự được áp dụng ở 120 và 180 s.
-
-Window đạt sàng lọc nhiễu và gián đoạn được đánh giá độ ổn định phương sai bằng các subwindow 10-s hoàn chỉnh, không chồng lấp, gồm $\mathrm{round}(10f_s)$ mẫu; cần ít nhất hai subwindow. Với $v_k=\mathrm{Var}(x_k)$ được tính bằng $\mathrm{ddof}=0$, chỉ số là
-
-\[\begin{gathered}S=\frac{\mathrm{IQR}(v)}{\max(\mathrm{median}(v),\epsilon)},\\ \mathrm{IQR}(v)=Q_{0.75}(v)-Q_{0.25}(v).\end{gathered}\]
-Điều kiện chấp nhận là $S\leq0.5$. Sàng lọc này hỗ trợ tính gần dừng cục bộ thông qua độ ổn định phương sai, thay vì xác lập tính dừng đầy đủ. Ở 60 s, sàng lọc phương sai giữ lại 596 window Awake và 305 window Drowsy từ 623 và 328 window đạt sàng lọc nhiễu/gián đoạn. Tổng dữ liệu cuối cùng gồm 901, 405 và 238 window tại 60, 120 và 180 s (Bảng~\ref{tab:supp_qc}).
-
-Dữ liệu 30-s gồm hai nửa liên tiếp của mỗi window cha 60-s đã được chấp nhận. Các nửa này kế thừa QC của window cha và không được sàng lọc phương sai độc lập, tạo ra 1,192 window Awake và 610 window Drowsy (tổng 1,802). Điều kiện chấp nhận phép khớp LLE được áp dụng riêng (Mục~\ref{sec:supp_7}); mức giữ lại danh định là 872/901 (96.78\%). Toàn bộ số lượng theo từng thước đo nằm trong Bảng~\ref{tab:supp_qc}, còn minh họa tiền xử lý/giữ lại dữ liệu nằm trong Hình~\ref{fig:supp_qc}.
-
-\begingroup\small
-\setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.18}
-\stepcounter{supptablepanel}
-\begin{longtable}{L{\dimexpr0.10526\linewidth-1.47368\tabcolsep\relax}L{\dimexpr0.09474\linewidth-1.32632\tabcolsep\relax}L{\dimexpr0.11579\linewidth-1.62105\tabcolsep\relax}L{\dimexpr0.17895\linewidth-2.50526\tabcolsep\relax}L{\dimexpr0.10526\linewidth-1.47368\tabcolsep\relax}L{\dimexpr0.20000\linewidth-2.80000\tabcolsep\relax}L{\dimexpr0.20000\linewidth-2.80000\tabcolsep\relax}}
-\caption{Các bước QC và số window được giữ lại theo từng thước đo.}\label{tab:supp_qc}\\
-\toprule
-Thời lượng (s) & Trạng thái & Sau SQI/\allowbreak gián đoạn & Đạt phương sai /\allowbreak  non-LLE cuối & LLE hợp lệ & Tỷ lệ đạt phương sai & Tỷ lệ đạt LLE\\
-\midrule\endfirsthead
-\multicolumn{7}{l}{Bảng~\ref{tab:supp_qc} (tiếp theo)}\\
-\toprule
-Thời lượng (s) & Trạng thái & Sau SQI/\allowbreak gián đoạn & Đạt phương sai /\allowbreak  non-LLE cuối & LLE hợp lệ & Tỷ lệ đạt phương sai & Tỷ lệ đạt LLE\\
-\midrule\endhead
-\bottomrule\endfoot
-\bottomrule\endlastfoot
-30 & Awake & Không áp dụng & 1,192 & 1,089 & Không áp dụng & 1089/\allowbreak 1192 (91.36\%)\\
-30 & Drowsy & Không áp dụng & 610 & 549 & Không áp dụng & 549/\allowbreak 610 (90.00\%)\\
-60 & Awake & 623 & 596 & 579 & 596/\allowbreak 623 (95.67\%) & 579/\allowbreak 596 (97.15\%)\\
-60 & Drowsy & 328 & 305 & 293 & 305/\allowbreak 328 (92.99\%) & 293/\allowbreak 305 (96.07\%)\\
-120 & Awake & 284 & 269 & 264 & 269/\allowbreak 284 (94.72\%) & 264/\allowbreak 269 (98.14\%)\\
-120 & Drowsy & 148 & 136 & 135 & 136/\allowbreak 148 (91.89\%) & 135/\allowbreak 136 (99.26\%)\\
-180 & Awake & 168 & 161 & 160 & 161/\allowbreak 168 (95.83\%) & 160/\allowbreak 161 (99.38\%)\\
-180 & Drowsy & 86 & 77 & 77 & 77/\allowbreak 86 (89.53\%) & 77/\allowbreak 77 (100.00\%)\\
-\end{longtable}
-\endgroup
-{\small Tỷ lệ đạt sàng lọc phương sai chia số non-LLE cuối cho số sau SQI/gián đoạn. Tỷ lệ đạt LLE chia số phép khớp được chấp nhận cho số non-LLE cuối. SQI là sàng lọc chất lượng tín hiệu theo biên độ/độ gồ ghề.}\par
-{\small Ở 30 s, các bước sau SQI/gián đoạn và đạt phương sai độc lập không áp dụng vì QC được kế thừa từ window cha. Dữ liệu ở các thời lượng dùng chung bản ghi nguồn.}\par
-\begin{figure}[p]
+\begin{table}[t]
 \centering
-\includegraphics[width=\linewidth,height=.75\textheight,keepaspectratio]{figures/figure_S01.pdf}
-\caption{Tiền xử lý và số window được giữ lại. (A) PPG thô sau đảo dấu và (B) PPG đã xử lý bằng bộ lọc Butterworth pha bằng không 0.5--8 Hz. (C) Số window đạt QC chung và có LLE hợp lệ theo trạng thái và thời lượng, như trong Bảng~\ref{tab:supp_qc}. Window 30-s là hai nửa liên tiếp của window cha 60-s đã được chấp nhận và kế thừa QC của window cha.}\label{fig:supp_qc}
-\end{figure}
-\subsection{Cấu hình phân tích danh định đã cố định}\label{sec:supp_3}
-Cấu hình tái dựng danh định chung và thiết lập riêng của từng thước đo được tóm tắt trong Bảng~\ref{tab:supp_nominal}A. Hai trạng thái sử dụng cùng cấu hình nhúng. Window là đơn vị tính toán, còn session ghi nhận là đơn vị suy luận chính. Các họ hiệu chỉnh được liệt kê trong Bảng~\ref{tab:supp_nominal}B và được giữ riêng giữa các phân tích và cấu hình.
-
-\begingroup\small
+\caption{Số window được giữ lại theo thời lượng và trạng thái.}\label{tab:supp_retained}
+\footnotesize
 \setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.18}
-\stepcounter{supptablepanel}
-\begin{longtable}{L{\dimexpr0.17647\linewidth-0.70588\tabcolsep\relax}L{\dimexpr0.82353\linewidth-3.29412\tabcolsep\relax}}
-\caption{Cấu hình danh định và các họ hiệu chỉnh đa kiểm định.}\label{tab:supp_nominal}\\
-\multicolumn{2}{l}{\textbf{Panel A. Cấu hình bộ ước lượng danh định}}\\
+\renewcommand{\arraystretch}{1.05}
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrrr@{}}
 \toprule
-Thành phần & Cấu hình\\
-\midrule\endfirsthead
-\multicolumn{2}{l}{Bảng~\ref{tab:supp_nominal} (tiếp theo)}\\
-\toprule
-Thành phần & Cấu hình\\
-\midrule\endhead
-\bottomrule\endfoot
-\bottomrule\endlastfoot
-Đầu vào và tạo window & PPG đã xử lý; window 60-s không chồng lấp; 596 Awake + 305 Drowsy = 901.\\
-Nhúng & $\tau=0.16$ s; $m=8$; $\tau_{\mathrm{samples}}=\mathrm{round}(\tau f_s)$ (4/\allowbreak 8 mẫu ở 25/\allowbreak 50 Hz).\\
-Simplex Projection & $k=m+1=9$; khoảng cách Euclidean; trọng số mũ chuẩn hóa; dự báo leave-one-out; loại trừ theo thời gian $W=1.0$ s; 18 chân trời thời gian thực từ 0.04 đến 4.00 s, chuyển đổi bằng $\mathrm{round}(T_p f_s)$. Mean CC và Mean NRMSE là trung bình qua chân trời trong mỗi window.\\
-RQA & Khoảng cách Euclidean; ngưỡng riêng theo window hướng đến $\mathrm{RR}=0.02$; loại trừ $W=(m-1)\tau_{\mathrm{samples}}$; $l_{\min}=v_{\min}=2$. Đầu ra: DET, $L_{\mathrm{mean}}$, LAM, TT. DET mô tả tổ chức đường chéo tái diễn.\\
-Rosenstein LLE & Láng giềng Euclidean gần nhất hợp lệ; loại trừ theo chu kỳ trung bình phổ; theo dõi tối đa 5 s; khoảng khớp 0.80--1.30 s; $\geq$50 cặp ban đầu; $\geq$30 cặp mỗi điểm khớp; $\geq$3 điểm khớp; phép khớp hữu hạn; $R^2\geq0.90$. Đơn vị: s$^{-1}$.\\
-PPS & $M=39$ surrogate mỗi window được kiểm định; giả thuyết không giả tuần hoàn có nhiễu đã kiểm định; kiểm định thứ hạng hai phía hữu hạn mẫu.\\
-Tổng hợp và hiệu ứng & Trung vị session-trạng thái của thước đo window hợp lệ; ghép cặp $\Delta_i=\mathrm{Drowsy}_i-\mathrm{Awake}_i$; báo cáo trung vị sai khác ghép cặp. Tổng hợp Simplex theo trung bình chân trời trong window ở trên.\\
-Thống kê chính & Kiểm định Wilcoxon signed-rank hai phía; rank-biserial correlation cho cặp ghép; 20,000 lần bootstrap session ghép cặp; CI phân vị 95\% của trung vị sai khác ghép cặp; BH-FDR một lần trên bảy thước đo danh định 60-s.\\
-\end{longtable}
-\addtocounter{table}{-1}
-\stepcounter{supptablepanel}
-\begin{longtable}{L{\dimexpr0.17647\linewidth-0.70588\tabcolsep\relax}L{\dimexpr0.82353\linewidth-3.29412\tabcolsep\relax}}
-\multicolumn{2}{l}{\textbf{Panel B. Các họ thống kê}}\\
-\toprule
-Họ phân tích & Báo cáo hiệu chỉnh đa kiểm định\\
-\midrule\endfirsthead
-\multicolumn{2}{l}{Bảng~\ref{tab:supp_nominal} (tiếp theo)}\\
-\toprule
-Họ phân tích & Báo cáo hiệu chỉnh đa kiểm định\\
-\midrule\endhead
-\bottomrule\endfoot
-\bottomrule\endlastfoot
-RQ2 chính & BH một lần trên 7 thước đo danh định 60-s\\
-Độ nhạy nhãn & BH trên 4 thước đo trọng tâm trong mỗi quy tắc thay thế\\
-Độ nhạy độ trễ/\allowbreak số chiều & BH trên 4 thước đo trọng tâm trong mỗi thiết lập\\
-Độ nhạy RR/\allowbreak Theiler của RQA & Chỉ p thô\\
-Độ nhạy LLE & Chỉ p thô\\
-Độ ổn định theo độ dài window & Chỉ p thô\\
-Độ nhạy session lặp lại & BH trên 7 thước đo mỗi ghép cặp giả định\\
-Động lực học ký hiệu & BH trên 3 thước đo mỗi thời lượng\\
-Kiểm định thứ hạng PPS cấp window & Không hiệu chỉnh\\
-Họ sai lệch PPS cấp session & BH trên 12 kiểm định: 6 thước đo $\times$ 2 trạng thái\\
-\end{longtable}
-\endgroup
-{\small Bảy thước đo chính là Mean CC, Mean NRMSE, DET, $L_{\mathrm{mean}}$, LAM, TT và LLE. Bốn thước đo trọng tâm là Mean CC, Mean NRMSE, DET và LLE. Hiệu chỉnh Benjamini--Hochberg kiểm soát tỷ lệ phát hiện sai trong từng họ xác định; không gộp họ qua các thiết lập.}\par
-{\small Họ sai lệch PPS theo session gồm sáu thước đo không phải LLE trong mỗi trạng thái. Hàng tham chiếu danh định trong bảng độ nhạy giữ họ chính gồm bảy thước đo.}\par
-\subsection{Tái dựng không gian pha: AMI và FNN}\label{sec:supp_4}
-Average Mutual Information (AMI) được tính riêng cho từng window PPG đã xử lý dài 60-s bằng bộ ước lượng KSG 1 với $k=3$, khoảng cách Chebyshev trong không gian kết hợp và đơn vị log tự nhiên (nats). Độ trễ ứng viên trải từ một mẫu đến $\mathrm{round}(f_s\times1.0~\mathrm{s})$ mẫu. Quy tắc chọn dùng cực tiểu cục bộ nghiêm ngặt đầu tiên ở bên trong miền, không dùng điểm biên làm phương án thay thế; cả 901 window đều chọn được độ trễ (Bảng~\ref{tab:supp_reconstruction_evidence}A).
+\makecell{Thời lượng\\(s)} & Awake & Drowsy & Tổng\\
+\midrule
+30 & 1,192 & 610 & 1,802\\
+60 & 596 & 305 & 901\\
+120 & 269 & 136 & 405\\
+180 & 161 & 77 & 238\\
+\bottomrule
+\end{tabular*}
+\end{table}
+\section{Cơ sở lựa chọn tham số nhúng}\label{sec:supp_2}
+AMI được ước lượng bằng KSG ($k=3$); độ trễ được chọn tại cực tiểu cục bộ đầu tiên nằm bên trong khoảng khảo sát và có giá trị thấp hơn cả hai điểm liền kề. AMI xác định được độ trễ cho toàn bộ 901/901 window đã xử lý dài 60-s. Trung vị của các trung vị theo session là cơ sở chọn độ trễ chung $\tau=0.16$ s; 14/20 trung vị session nằm trong khoảng $0.16\pm0.04$ s. FNN duy trì thấp quanh $m=7$--9, do đó $m=8$ được chọn làm số chiều nhúng chung. Đây là các lựa chọn thực hành dùng cho cả hai trạng thái, không phải bộ tham số tối ưu duy nhất hay được tối ưu riêng theo trạng thái; các kết quả chẩn đoán này không chứng minh hỗn loạn.
 
-Độ trễ được chọn có trung vị 0.160 s ở Awake (Q25--Q75: 0.120--0.260 s) và 0.120 s ở Drowsy (0.120--0.160 s). Trung vị của 20 trung vị theo session hỗ trợ độ trễ vận hành chung $\tau=0.16$ s; 14/20 trung vị theo session nằm trong $0.16\pm0.04$ s. Độ trễ này được dùng chung giữa hai trạng thái và không được tối ưu hóa để tạo khác biệt trạng thái.
+\section{Chi tiết triển khai và hiệu chuẩn Simplex}\label{sec:supp_3}
+Thư viện và các đích dự báo đều nằm trong từng window đã chuẩn hóa. Dự báo dùng khoảng cách Euclidean, trọng số láng giềng theo hàm mũ được chuẩn hóa và quy trình leave-one-out. Bảng~\ref{tab:supp_simplex} liệt kê cấu hình cùng toàn bộ horizon dự báo; Mean CC và Mean NRMSE được tính theo định nghĩa trong bài báo chính. Khi hiệu chuẩn khoảng loại trừ theo thời gian, $W=0$--2 s được khảo sát; thay đổi lớn nhất giữa hai mức liền kề xảy ra tại $0.6\to0.8$ s. Chọn $W=1.0$ s vì đây là mức đầu tiên mà kết quả hiệu chuẩn tiếp tục ổn định ở tất cả các mức lớn hơn đã thử. Hiệu chuẩn này mô tả đặc tính của bộ ước lượng, không bổ sung kiểm định về khác biệt giữa hai trạng thái.
 
-False Nearest Neighbors (FNN) được đánh giá trên số chiều 1--10 bằng láng giềng gần nhất theo khoảng cách Euclidean và tiêu chí kiểu Kennel. Láng giềng được xem là giả nếu độ tách ở tọa độ bổ sung chia cho khoảng cách $m$ chiều $R_m$ vượt quá 15, hoặc khoảng cách đầy đủ $(m+1)$ chiều chia cho độ lệch chuẩn tín hiệu vượt quá 2. Loại các tự ghép và khoảng cách bằng hoặc gần bằng không; chẩn đoán này không áp dụng loại trừ theo thời gian.
-
-Ở độ trễ danh định, trung vị FNN trên 20 đường cong theo session là 0.900\%, 0.886\% và 1.008\% tại $m=7,8,9$ (Bảng~\ref{tab:supp_reconstruction_evidence}B). Số chiều chung $m=8$ được chọn trong vùng FNN thấp này. Ở $m=8$, độ trễ 0.12, 0.16 và 0.20 s cho trung vị FNN 0.593\%, 0.886\% và 1.284\%, với 19/20, 11/20 và 7/20 đường cong theo session dưới 1\% (Bảng~\ref{tab:supp_reconstruction_evidence}C). Không tham số nào được xem là tối ưu duy nhất; cấu hình danh định không đòi hỏi mọi session có FNN dưới 1\%. Các chẩn đoán này mô tả hành vi tái dựng phục vụ phân tích (Hình~\ref{fig:supp_reconstruction_evidence}); độ nhạy suy luận được trình bày tại Mục~\ref{sec:supp_12_1}.
-
-\begingroup\small
-\setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.18}
-\stepcounter{supptablepanel}
-\begin{longtable}{L{\dimexpr0.14706\linewidth-1.76471\tabcolsep\relax}L{\dimexpr0.14706\linewidth-1.76471\tabcolsep\relax}L{\dimexpr0.14706\linewidth-1.76471\tabcolsep\relax}L{\dimexpr0.14706\linewidth-1.76471\tabcolsep\relax}L{\dimexpr0.14706\linewidth-1.76471\tabcolsep\relax}L{\dimexpr0.26471\linewidth-3.17647\tabcolsep\relax}}
-\caption{Bằng chứng AMI và FNN cho cấu hình tái dựng chung.}\label{tab:supp_reconstruction_evidence}\\
-\multicolumn{6}{l}{\textbf{Panel A. Độ trễ được chọn bằng AMI}}\\
-\toprule
-Trạng thái & Window & Trung vị $\tau$ (s) & Q25 (s) & Q75 (s) & Số chọn thành công\\
-\midrule\endfirsthead
-\multicolumn{6}{l}{Bảng~\ref{tab:supp_reconstruction_evidence} (tiếp theo)}\\
-\toprule
-Trạng thái & Window & Trung vị $\tau$ (s) & Q25 (s) & Q75 (s) & Số chọn thành công\\
-\midrule\endhead
-\bottomrule\endfoot
-\bottomrule\endlastfoot
-Awake & 596 & 0.160 & 0.120 & 0.260 & 596/\allowbreak 596\\
-Drowsy & 305 & 0.120 & 0.120 & 0.160 & 305/\allowbreak 305\\
-\end{longtable}
-\addtocounter{table}{-1}
-\stepcounter{supptablepanel}
-\begin{longtable}{L{\dimexpr0.27273\linewidth-2.18182\tabcolsep\relax}L{\dimexpr0.27273\linewidth-2.18182\tabcolsep\relax}L{\dimexpr0.22727\linewidth-1.81818\tabcolsep\relax}L{\dimexpr0.22727\linewidth-1.81818\tabcolsep\relax}}
-\multicolumn{4}{l}{\textbf{Panel B. FNN theo số chiều tại $\tau$ = 0.16 s}}\\
-\toprule
-Số chiều & Trung vị FNN (\%) & Q25 (\%) & Q75 (\%)\\
-\midrule\endfirsthead
-\multicolumn{4}{l}{Bảng~\ref{tab:supp_reconstruction_evidence} (tiếp theo)}\\
-\toprule
-Số chiều & Trung vị FNN (\%) & Q25 (\%) & Q75 (\%)\\
-\midrule\endhead
-\bottomrule\endfoot
-\bottomrule\endlastfoot
-7 & 0.900 & 0.679 & 1.155\\
-8 & 0.886 & 0.613 & 1.132\\
-9 & 1.008 & 0.666 & 1.298\\
-\end{longtable}
-\addtocounter{table}{-1}
-\stepcounter{supptablepanel}
-\begin{longtable}{L{\dimexpr0.24390\linewidth-1.46341\tabcolsep\relax}L{\dimexpr0.34146\linewidth-2.04878\tabcolsep\relax}L{\dimexpr0.41463\linewidth-2.48780\tabcolsep\relax}}
-\multicolumn{3}{l}{\textbf{Panel C. Độ nhạy độ trễ tại m = 8}}\\
-\toprule
-$\tau$ (s) & Trung vị FNN (\%) & Đường cong session <1\%\\
-\midrule\endfirsthead
-\multicolumn{3}{l}{Bảng~\ref{tab:supp_reconstruction_evidence} (tiếp theo)}\\
-\toprule
-$\tau$ (s) & Trung vị FNN (\%) & Đường cong session <1\%\\
-\midrule\endhead
-\bottomrule\endfoot
-\bottomrule\endlastfoot
-0.12 & 0.593 & 19/\allowbreak 20\\
-0.16 & 0.886 & 11/\allowbreak 20\\
-0.20 & 1.284 & 7/\allowbreak 20\\
-\end{longtable}
-\endgroup
-{\small Panel A tóm tắt độ trễ được chọn trên các window trong mỗi trạng thái; số chọn thành công dùng mẫu số window hợp lệ. Panel B/C tóm tắt đường cong theo session được tạo từ trung vị FNN qua window ở mỗi số chiều. Trung vị/phân vị và số lượng dưới ngưỡng được tính trên 20 session ghi nhận. FNN được báo cáo dưới dạng phần trăm.}\par
-\begin{landscape}
-\begin{figure}[p]
+\begin{table}[t]
 \centering
-\includegraphics[width=\linewidth,height=.75\textheight,keepaspectratio]{figures/figure_S02.pdf}
-\caption{Bằng chứng tái dựng từ PPG đã xử lý dài 60-s. (A) Độ trễ được chọn bằng AMI, với $\tau=0.16$ s dùng chung. (B) Đường cong FNN ở Awake và (C) ở Drowsy, với $m=8$ trong vùng FNN thấp. Hai trạng thái sử dụng cùng cấu hình tái dựng. Những chẩn đoán này hỗ trợ lựa chọn vận hành, thay vì một giá trị tối ưu phổ quát.}\label{fig:supp_reconstruction_evidence}
-\end{figure}
-\end{landscape}
-\subsection{Simplex Projection}\label{sec:supp_5}
-Khả năng dự báo trên chân trời hữu hạn được đánh giá trên 901 window được giữ lại. Mỗi dạng sóng được chuẩn hóa thành $u=(x-\bar{x})/\sigma_x$, dùng độ lệch chuẩn tổng thể của toàn window ($\mathrm{ddof}=0$). Tái dựng chung sử dụng $m=8$, $\tau=0.16$ s và $d=\mathrm{round}(\tau f_s)$ mẫu.
-
-Vector tọa độ trễ tiến là $\mathbf{z}_i=[u_i,u_{i+d},\ldots,u_{i+(m-1)d}]$, với chỉ số tọa độ cuối $t_i=i+(m-1)d$. Tại chân trời $T_p$, độ dịch $h=\mathrm{round}(T_pf_s)$ xác định đích $u_{t_i+h}$. Điểm cuối của truy vấn và láng giềng được giới hạn riêng tại từng chân trời để vector và đích đều nằm trong cùng window. Không dùng thư viện dự báo xuyên window.
-
-Dự báo leave-one-out sử dụng $k=m+1=9$ láng giềng Euclidean gần nhất hợp lệ. Tự ghép bị loại và yêu cầu $|t_j-t_i|>\mathrm{round}(f_sW)$ với $W=1.0$ s. Với khoảng cách láng giềng $D_j$ và khoảng cách nhỏ nhất $D_1$, trọng số và dự báo là
-
-\[\begin{gathered}w_j=\frac{\exp(-D_j/D_1)}{\sum_{r=1}^{9}\exp(-D_r/D_1)},\\ \widehat{u}_{t_i+h}=\sum_{j=1}^{9}w_j u_{t_j+h}.\end{gathered}\]
-Nếu khoảng cách đã chọn không lớn hơn epsilon máy, các láng giềng đó chia đều toàn bộ trọng số, còn các láng giềng được chọn khác có trọng số bằng không. Dự báo cần đủ cả chín láng giềng hợp lệ. Với các cặp đích quan sát/dự báo hợp lệ, CC và NRMSE là
-
-\[\begin{gathered}\mathrm{CC}=\frac{\sum_i(y_i-\bar{y})(\widehat{y}_i-\bar{\widehat{y}})}{\sqrt{\sum_i(y_i-\bar{y})^2\sum_i(\widehat{y}_i-\bar{\widehat{y}})^2}},\\ \mathrm{NRMSE}=\frac{\sqrt{n^{-1}\sum_i(y_i-\widehat{y}_i)^2}}{\sigma_u}.\end{gathered}\]
-Trong đó, $n$ là số cặp dự báo hợp lệ và $\sigma_u$ là độ lệch chuẩn tổng thể của toàn window đã chuẩn hóa, bằng một trong giới hạn độ chính xác số. Đại lượng này không được tính lại trên tập đích riêng của từng chân trời. CC cao hơn và NRMSE thấp hơn biểu thị khả năng dự báo cao hơn. Mean CC và Mean NRMSE được lấy trung bình trên 18 chân trời trong mỗi window, sau đó tổng hợp bằng trung vị các window hợp lệ trong từng session và trạng thái, theo bản thảo. 901 window tạo ra 16,218 kết quả ở cấp chân trời.
-
-Bảng~\ref{tab:supp_simplex}A liệt kê chân trời theo thời gian thực và độ dịch nguyên ở tần số lấy mẫu danh định. Hiệu chuẩn loại trừ theo thời gian thử $W\in\{0,0.2,0.4,0.6,0.8,1.0,1.5,2.0\}$ s. Tóm tắt giữa các thiết lập liền kề gộp 120 tổ hợp session--trạng thái--thời lượng (20 session, hai trạng thái, 60/120/180 s) và mô tả thay đổi hiệu chuẩn tuyệt đối, không phải hiệu ứng trạng thái. Thay đổi lớn nhất xuất hiện từ 0.6 đến 0.8 s; 1.0 s là thiết lập ổn định duy trì đầu tiên sau thay đổi này (Bảng~\ref{tab:supp_simplex}B). Hành vi theo chân trời được minh họa trong Hình~\ref{fig:supp_simplex}.
-
-\begingroup\small
+\caption{Cấu hình Simplex và danh sách đầy đủ các horizon dự báo.}\label{tab:supp_simplex}
+\footnotesize
 \setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.18}
-\stepcounter{supptablepanel}
-\begin{longtable}{L{\dimexpr0.25000\linewidth-1.50000\tabcolsep\relax}L{\dimexpr0.37500\linewidth-2.25000\tabcolsep\relax}L{\dimexpr0.37500\linewidth-2.25000\tabcolsep\relax}}
-\caption{Các chân trời dự báo Simplex và hiệu chuẩn loại trừ theo thời gian.}\label{tab:supp_simplex}\\
-\multicolumn{3}{l}{\textbf{Panel A. Chân trời thời gian thực và độ dịch mẫu}}\\
+\renewcommand{\arraystretch}{1.05}
+\begin{tabularx}{\linewidth}{@{}lY@{}}
 \toprule
-Chân trời (s) & Độ dịch 25-Hz (mẫu) & Độ dịch 50-Hz (mẫu)\\
-\midrule\endfirsthead
-\multicolumn{3}{l}{Bảng~\ref{tab:supp_simplex} (tiếp theo)}\\
-\toprule
-Chân trời (s) & Độ dịch 25-Hz (mẫu) & Độ dịch 50-Hz (mẫu)\\
-\midrule\endhead
-\bottomrule\endfoot
-\bottomrule\endlastfoot
-0.04 & 1 & 2\\
-0.08 & 2 & 4\\
-0.12 & 3 & 6\\
-0.16 & 4 & 8\\
-0.20 & 5 & 10\\
-0.28 & 7 & 14\\
-0.40 & 10 & 20\\
-0.60 & 15 & 30\\
-0.80 & 20 & 40\\
-1.00 & 25 & 50\\
-1.20 & 30 & 60\\
-1.60 & 40 & 80\\
-2.00 & 50 & 100\\
-2.40 & 60 & 120\\
-2.80 & 70 & 140\\
-3.20 & 80 & 160\\
-3.60 & 90 & 180\\
-4.00 & 100 & 200\\
-\end{longtable}
-\addtocounter{table}{-1}
-\stepcounter{supptablepanel}
-\begin{longtable}{L{\dimexpr0.16667\linewidth-1.66667\tabcolsep\relax}L{\dimexpr0.19444\linewidth-1.94444\tabcolsep\relax}L{\dimexpr0.19444\linewidth-1.94444\tabcolsep\relax}L{\dimexpr0.13889\linewidth-1.38889\tabcolsep\relax}L{\dimexpr0.30556\linewidth-3.05556\tabcolsep\relax}}
-\multicolumn{5}{l}{\textbf{Panel B. Hiệu chuẩn thiết lập liền kề}}\\
-\toprule
-W liền kề (s) & Trung vị tuyệt đối ΔCC & Trung vị tuyệt đối ΔNRMSE & Hỗ trợ tối thiểu & Ổn định /\allowbreak  lựa chọn\\
-\midrule\endfirsthead
-\multicolumn{5}{l}{Bảng~\ref{tab:supp_simplex} (tiếp theo)}\\
-\toprule
-W liền kề (s) & Trung vị tuyệt đối ΔCC & Trung vị tuyệt đối ΔNRMSE & Hỗ trợ tối thiểu & Ổn định /\allowbreak  lựa chọn\\
-\midrule\endhead
-\bottomrule\endfoot
-\bottomrule\endlastfoot
-0.0 $\to$ 0.2 & 0.003550 & 0.003370 & 1.00 & Ổn định; trước chuyển đổi\\
-0.2 $\to$ 0.4 & $2.204\times10^{-6}$ & $2.213\times10^{-6}$ & 1.00 & Ổn định; trước chuyển đổi\\
-0.4 $\to$ 0.6 & 0.002137 & 0.002059 & 1.00 & Ổn định; trước chuyển đổi\\
-0.6 $\to$ 0.8 & 0.020254 & 0.015614 & 1.00 & Chuyển đổi lớn nhất; chưa ổn định\\
-0.8 $\to$ 1.0 & 0.003605 & 0.003260 & 1.00 & Đã chọn: W=1.0 s; duy trì\\
-1.0 $\to$ 1.5 & 0.008894 & 0.007937 & 1.00 & Ổn định; duy trì\\
-1.5 $\to$ 2.0 & 0.007034 & 0.006442 & 1.00 & Ổn định; duy trì\\
-\end{longtable}
-\endgroup
-{\small Độ dịch ở Panel A minh họa cho 25/50 Hz; độ dịch thực dùng $f_s$ ước tính theo session. Panel B cho trung vị thay đổi tuyệt đối giữa thiết lập liền kề trên 120 tổ hợp, với mức hỗ trợ là tỷ lệ dự báo hợp lệ nhỏ nhất.}\par
-{\small Ổn định đòi hỏi cả hai tốc độ thay đổi, chuẩn hóa theo tốc độ lớn nhất tương ứng, đều $\leq0.25$ và mức hỗ trợ tối thiểu $\geq0.95$. Tốc độ thay đổi bằng thay đổi tuyệt đối chia cho khoảng cách theo $W$. Ổn định duy trì đòi hỏi mọi cặp tiếp theo đều đạt; thiết lập trên được chọn là 1.0 s. Các đại lượng hiệu chuẩn này không phải kiểm định hiệu ứng trạng thái.}\par
-\begin{figure}[p]
+Tham số & Cấu hình\\
+\midrule
+Nhúng & $m=8$, $\tau=0.16$ s\\
+Láng giềng & $k=m+1=9$; thư viện trong window\\
+Loại trừ & $W=1.0$ s\\
+Horizon & \makecell[l]{0.04, 0.08, 0.12, 0.16, 0.20, 0.28,\\0.40, 0.60, 0.80, 1.00, 1.20, 1.60,\\2.00, 2.40, 2.80, 3.20, 3.60, 4.00 s}\\
+Chỉ số & Mean CC; Mean NRMSE\\
+\bottomrule
+\end{tabularx}
+\end{table}
+\section{Chẩn đoán bộ ước lượng RQA và LLE}\label{sec:supp_4}
+RQA sử dụng ngưỡng khoảng cách Euclidean riêng cho từng window để đạt $\mathrm{RR}=0.02$, với khoảng loại trừ $W=(m-1)\tau_{\mathrm{samples}}$ và $l_{\min}=v_{\min}=2$. RR thực tế gần với giá trị mục tiêu. Các chỉ số đường chéo (DET/$L_{\mathrm{mean}}$) và đường thẳng đứng (LAM/TT) mô tả cấu trúc tái diễn; độ dài đường được tính theo chỉ số mẫu. DET không đo tính tất định vật lý của hệ.
+
+LLE theo phương pháp Rosenstein sử dụng khoảng loại trừ dựa trên chu kỳ trung bình phổ, thời gian theo dõi tối đa 5 s và khoảng khớp 0.80--1.30 s. Phép khớp được chấp nhận khi $R^2\geq0.90$, có ít nhất 50 cặp ban đầu, 30 cặp tại mỗi điểm khớp và ba điểm khớp có giá trị hữu hạn. Trong 901 window đầu vào, 872 window đạt yêu cầu. Số cặp ban đầu và số cặp tại điểm khớp nhỏ nhất lần lượt là 1,471 và 1,366; trung vị $R^2$ của phép khớp là 0.973. Các window bị loại do không đạt tiêu chí $R^2$, không phải do thiếu cặp quỹ đạo. LLE ước lượng mức phân kỳ quỹ đạo cục bộ trong một window hữu hạn.
+
+\section{Bằng chứng từ pseudoperiodic surrogates}\label{sec:supp_5}
+Mỗi window được so sánh với $M=39$ PPS theo giả thuyết không pseudoperiodic có nhiễu đã kiểm định. Kiểm định thứ hạng hai phía cho mẫu hữu hạn tính các giá trị bằng nhau vào cả hai đuôi. Giá trị $p$ nhỏ nhất có thể đạt là 0.05; tiêu chí bác bỏ là $p\leq0.05$, không hiệu chỉnh ở cấp window. Sáu chỉ số ngoài LLE dùng chung một tập PPS. LLE dùng một tập riêng, với 579 phép khớp gốc Awake/293 Drowsy đã được chấp nhận; các phép khớp LLE trên surrogate không áp dụng tiêu chí $R^2$ của dữ liệu gốc.
+
+Bảng~\ref{tab:supp_pps} phân biệt tỷ lệ bác bỏ gộp với trung vị tỷ lệ bác bỏ theo session, đồng thời giữ các trường hợp bác bỏ ngược hướng. Cả 12 so sánh ở cấp session về chênh lệch giữa giá trị gốc và trung vị PPS (sáu chỉ số ngoài LLE ở cả hai trạng thái) đều có $q_{\mathrm{BH}}<0.05$ sau hiệu chỉnh BH12. Kết quả bác bỏ PPS cho thấy dữ liệu lệch khỏi giả thuyết không pseudoperiodic có nhiễu đã kiểm định. Điều này không đồng nghĩa với việc chứng minh hỗn loạn tất định hay loại trừ mọi mô hình ngẫu nhiên có cấu trúc; tỷ lệ bác bỏ trong từng trạng thái không kiểm định chênh lệch Awake--Drowsy ghép cặp.
+
+\begin{table*}[t]
 \centering
-\includegraphics[width=\linewidth,height=.75\textheight,keepaspectratio]{figures/figure_S03.pdf}
-\caption{Hành vi theo chân trời của Simplex trên PPG đã xử lý dài 60-s. (A) CC và (B) NRMSE trên 18 chân trời theo thời gian thực từ 0.04 đến 4.00 s, dùng tái dựng chung và loại trừ theo thời gian 1.0-s. Các đường theo session và trung vị theo trạng thái thể hiện khả năng dự báo trên chân trời hữu hạn; hiệu ứng trạng thái ghép cặp nằm trong Bảng~\ref{tab:supp_primary}.}\label{fig:supp_simplex}
-\end{figure}
-\subsection{Recurrence Quantification Analysis}\label{sec:supp_6}
-RQA sử dụng khoảng cách Euclidean trong không gian trạng thái tái dựng chung. Ngưỡng riêng theo window $\varepsilon$ hướng đến $\mathrm{RR}=0.02$, với tái diễn được xác định bởi khoảng cách $\leq\varepsilon$. Loại đường đồng nhất và các cặp có $|i-j|\leq W$, trong đó $W=(m-1)d$: 28 mẫu ở khoảng 25 Hz và 56 mẫu ở 50 Hz (khoảng 1.12 s). Hiệu chuẩn mật độ đếm mỗi khoảng cách hợp lệ trong tam giác trên một lần. Khi có đồng hạng tại biên, so sánh số lượng khả đạt dưới/tại biên với mục tiêu; chọn RR gần mục tiêu hơn, hoặc RR thấp hơn khi sai số bằng nhau. Các khoảng cách bằng nhau được cùng đưa vào hoặc cùng loại ra.
+\caption{Tóm tắt kết quả bác bỏ PPS của cả bảy chỉ số.}\label{tab:supp_pps}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.05}
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}llrrrrr@{}}
+\toprule
+Chỉ số & Trạng thái & \makecell{Window\\hợp lệ} & \makecell{Bác bỏ\\$n$} & \makecell{Gộp\\(\%)} & \makecell{Trung vị tỷ lệ bác bỏ\\theo session (\%)} & \makecell{Số bác bỏ\\ngược hướng}\\
+\midrule
+Mean CC & Awake & 596 & 374 & $62.75$ & $60.66$ & 0\\
+Mean CC & Drowsy & 305 & 229 & $75.08$ & $71.01$ & 0\\
+Mean NRMSE & Awake & 596 & 542 & $90.94$ & $91.59$ & 0\\
+Mean NRMSE & Drowsy & 305 & 291 & $95.41$ & $100.00$ & 0\\
+DET & Awake & 596 & 595 & $99.83$ & $100.00$ & 0\\
+DET & Drowsy & 305 & 305 & $100.00$ & $100.00$ & 0\\
+$L_{\mathrm{mean}}$ & Awake & 596 & 594 & $99.66$ & $100.00$ & 0\\
+$L_{\mathrm{mean}}$ & Drowsy & 305 & 305 & $100.00$ & $100.00$ & 0\\
+LAM & Awake & 596 & 537 & $90.10$ & $95.50$ & 0\\
+LAM & Drowsy & 305 & 273 & $89.51$ & $92.38$ & 1\\
+TT & Awake & 596 & 580 & $97.32$ & $100.00$ & 0\\
+TT & Drowsy & 305 & 295 & $96.72$ & $100.00$ & 0\\
+LLE & Awake & 579 & 545 & $94.13$ & $96.30$ & 0\\
+LLE & Drowsy & 293 & 287 & $97.95$ & $100.00$ & 0\\
+\bottomrule
+\end{tabular*}
+\par\smallskip
+\raggedright Dấu kỳ vọng của chênh lệch giữa giá trị gốc và trung vị PPS: dương với Mean CC, DET, $L_{\mathrm{mean}}$, LLE; âm với Mean NRMSE, LAM, TT. Trung vị tỷ lệ bác bỏ theo session được tính trên 20 session ghi nhận.
+\end{table*}
+\section{Phân tích tính ổn định của kết quả và độ nhạy}\label{sec:supp_6}
+Bảng~\ref{tab:supp_sensitivity} và~\ref{tab:supp_sensitivity_estimators} bổ sung độ bất định và kết quả kiểm định cho các phân tích độ nhạy trên cùng bộ dữ liệu, không phải các lần nghiên cứu lặp lại độc lập. $\Delta$ là trung vị chênh lệch Drowsy trừ Awake ghép cặp giữa các giá trị tổng hợp theo session và trạng thái. CI phân vị bootstrap 95\% và kiểm định Wilcoxon signed-rank tuân theo bài báo chính. Mỗi phân tích chỉ thay đổi một thiết lập; việc giữ nguyên hướng hiệu ứng được xét riêng với độ lớn, độ bất định và bằng chứng thống kê.
 
-Gọi $C_{\mathrm{upper}}$ là số điểm tái diễn hợp lệ trong tam giác trên và $P_d(l)$ là số chuỗi chéo cực đại dài $l$. Với $l_{\min}=2$, tổ chức đường chéo tái diễn và độ dài chéo trung bình đủ điều kiện là
+\subsection{Độ nhạy theo độ dài window và quy tắc gán nhãn}\label{sec:supp_6_1}
+Hướng hiệu ứng trung vị của cả bốn chỉ số chính không đổi qua các window 30/60/120/180 s, nhưng độ lớn và độ bất định thay đổi; CI của DET chứa giá trị không tại 30/180 s (Phần A). Window dài hơn làm giảm số window sẵn có (Bảng~\ref{tab:supp_retained}); 60 s là cấu hình tham chiếu phù hợp cho thực hành, không phải độ dài tối ưu cho mọi trường hợp. P0 là bộ nhãn gốc dùng trong phân tích chính. T30 và T60 loại các mẫu nằm trong khoảng $\pm30$ và $\pm60$ s quanh mỗi thời điểm chuyển Awake--Drowsy hoặc Drowsy--Awake quan sát được; S3 và S5 chỉ giữ các đoạn cùng trạng thái kéo dài ít nhất 180 và 300 s, tương ứng. P0/T30/T60/S3/S5 lần lượt giữ 901/860/787/900/846 window sau QC chung, với $n=20$ session ghép cặp, ngoại trừ S5 ($n=19$). Các quy tắc thay thế giữ nguyên hướng của cả bốn hiệu ứng và đều đạt ý nghĩa thống kê sau BH4 (Phần B), dù CI của Mean CC theo T60 và LLE theo T30 chứa giá trị không. CI phân vị của hiệu ứng trung vị và kết quả kiểm định dựa trên thứ hạng không nhất thiết trùng khớp hoàn toàn.
 
-\[\begin{gathered}\mathrm{DET}=\frac{\sum_{l\geq2}lP_d(l)}{C_{\mathrm{upper}}},\\ L_{\mathrm{mean}}=\frac{\sum_{l\geq2}lP_d(l)}{\sum_{l\geq2}P_d(l)}.\end{gathered}\]
-Các chuỗi thẳng đứng được đếm theo cột trong ma trận tái diễn đối xứng đầy đủ sau cùng mặt nạ loại trừ. Với số điểm tái diễn $C_{\mathrm{full}}$ và số chuỗi thẳng đứng cực đại $P_v(v)$, khi $v_{\min}=2$, laminarity và trapping time là
+\subsection{Độ nhạy theo tham số nhúng}\label{sec:supp_6_2}
+Mean CC, Mean NRMSE và LLE giữ nguyên hướng hiệu ứng qua các độ trễ và số chiều đã thử (Phần C). DET đổi sang hiệu ứng dương gần không tại $\tau=0.12$ s ($+0.0025$) và 0.20 s ($+0.0015$); cả hai CI đều chứa giá trị không. DET vẫn có hiệu ứng âm trong khoảng $m=7$--9, nhưng không đạt ý nghĩa thống kê sau BH4 tại $m=7$ và 9. Vì vậy, DET nhạy với độ trễ nhúng; hướng hiệu ứng không đổi theo số chiều không có nghĩa là độ lớn bằng nhau hay bằng chứng thống kê đồng đều.
 
-\[\begin{gathered}\mathrm{LAM}=\frac{\sum_{v\geq2}vP_v(v)}{C_{\mathrm{full}}},\\ \mathrm{TT}=\frac{\sum_{v\geq2}vP_v(v)}{\sum_{v\geq2}P_v(v)}.\end{gathered}\]
-Mẫu số DET/LAM gồm mọi điểm tái diễn trong miền đếm tương ứng, kể cả chuỗi ngắn hơn hai. $L_{\mathrm{mean}}$ và TT lấy trung bình các chuỗi đủ điều kiện theo độ dài chỉ số mẫu, không phải giây. Triển khai trả về không nếu không có chuỗi đủ điều kiện, và tỷ lệ bằng không nếu số điểm tái diễn bằng không. DET mô tả tổ chức đường chéo tái diễn; LAM/TT mô tả tổ chức thẳng đứng, không được diễn giải trực tiếp thành tính tất định vật lý hoặc hoạt động thần kinh tự chủ. Hình~\ref{fig:supp_rqa} minh họa hình học tái diễn; hiệu ứng danh định nằm trong Bảng~\ref{tab:supp_primary}, còn độ nhạy bộ ước lượng nằm tại Mục~\ref{sec:supp_12_2}.
+\subsection{Độ nhạy theo thiết lập bộ ước lượng}\label{sec:supp_6_3}
+DET vẫn có hiệu ứng âm ở các thiết lập RR/Theiler đã thử, nhưng bằng chứng thống kê yếu hơn tại RR=0.01 (Phần D). LAM/TT không đạt ý nghĩa thống kê ở các thiết lập này. LLE có hiệu ứng âm ở tất cả các khoảng khớp, ngưỡng $R^2$ và hệ số Theiler đã thử; mọi CI của LLE đều không chứa giá trị không và $p<0.05$ khi chưa hiệu chỉnh. Thiết lập khớp/QC làm thay đổi độ lớn hiệu ứng và số window được chấp nhận. Các so sánh bộ ước lượng chỉ báo cáo p chưa hiệu chỉnh. Hệ số Theiler được nhân với khoảng loại trừ danh định của từng bộ ước lượng.
 
-\begin{figure}[p]
+\begin{table*}[!t]
+% Window/label and reconstruction/estimator panels share Table S4.
+\renewcommand{\thetable}{S\arabic{table}A}
 \centering
-\includegraphics[width=\linewidth,height=.75\textheight,keepaspectratio]{figures/figure_S04.pdf}
-\caption{Ví dụ biểu đồ tái diễn Awake và Drowsy từ session ghi nhận 01, dùng window đã xử lý dài 60-s, cấu hình nhúng chung, $\mathrm{RR}=0.02$ và loại trừ $W=(m-1)d$. Chuỗi chéo đóng góp cho DET và $L_{\mathrm{mean}}$; chuỗi thẳng đứng đóng góp cho LAM và TT. Biểu đồ minh họa hình học tái diễn, không phải hiệu ứng trạng thái suy luận.}\label{fig:supp_rqa}
-\end{figure}
-\subsection{Rosenstein Largest Lyapunov Exponent}\label{sec:supp_7}
-Bộ ước lượng Rosenstein đánh giá sự phân kỳ quỹ đạo cục bộ trong window hữu hạn bằng cấu hình nhúng chung. Loại trừ theo thời gian dựa trên chu kỳ trung bình phổ của dạng sóng đã xử lý sau khi trừ trung bình. Công suất là bình phương biên độ Fourier trong phổ một phía, loại DC và giữ các tần số dương đến Nyquist mà không áp dụng thêm mặt nạ tần số. Với công suất $P_k$ tại $f_k$,
+\caption{Độ nhạy theo độ dài window và quy tắc nhãn.}\label{tab:supp_sensitivity}
+\footnotesize
+\setlength{\tabcolsep}{1.5pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{minipage}[t]{0.49\textwidth}
+\raggedright\textbf{A. Độ dài window}\par\smallskip
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}llrcr@{}}
+\toprule
+Chỉ số & s & $\Delta$ & 95\% CI & $p$ thô\\
+\midrule
+CC & 30 & $-0.0147$ & $[-0.0712,\,-0.0039]$ & $0.03276825$\\
+CC & 60 & $-0.0339$ & $[-0.0595,\,-0.0043]$ & $0.02148438$\\
+CC & 120 & $-0.0271$ & $[-0.0490,\,-0.0156]$ & $0.01361656$\\
+CC & 180 & $-0.0428$ & $[-0.0516,\,-0.0133]$ & $0.00943565$\\
+NRMSE & 30 & $+0.0203$ & $[+0.0009,\,+0.0554]$ & $0.00943565$\\
+NRMSE & 60 & $+0.0294$ & $[0.0047,\,0.0530]$ & $0.00729561$\\
+NRMSE & 120 & $+0.0321$ & $[+0.0196,\,+0.0495]$ & $0.00830841$\\
+NRMSE & 180 & $+0.0321$ & $[+0.0186,\,+0.0465]$ & $0.00729561$\\
+DET & 30 & $-0.0169$ & $[-0.0318,\,+0.0002]$ & $0.01531219$\\
+DET & 60 & $-0.0186$ & $[-0.0364,\,-0.0069]$ & $0.02148438$\\
+DET & 120 & $-0.0201$ & $[-0.0399,\,-0.0134]$ & $0.00638962$\\
+DET & 180 & $-0.0248$ & $[-0.0416,\,+0.0008]$ & $0.05316925$\\
+LLE & 30 & $-0.0325$ & $[-0.0549,\,-0.0066]$ & $0.00315285$\\
+LLE & 60 & $-0.0376$ & $[-0.0537,\,-0.0230]$ & $0.00070763$\\
+LLE & 120 & $-0.0442$ & $[-0.0591,\,-0.0216]$ & $0.00232506$\\
+LLE & 180 & $-0.0498$ & $[-0.0584,\,-0.0213]$ & $0.00058556$\\
+\bottomrule
+\end{tabular*}
+\end{minipage}\hfill\begin{minipage}[t]{0.49\textwidth}
+\raggedright\textbf{B. Quy tắc nhãn}\par\smallskip
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}llrcr@{}}
+\toprule
+Quy tắc & Chỉ số & $\Delta$ & 95\% CI & $q_{\mathrm{BH}}$\\
+\midrule
+\textbf{P0} & CC & $-0.0339$ & $[-0.0595,\,-0.0043]$ & $0.0376$\\
+\textbf{P0} & NRMSE & $+0.0294$ & $[0.0047,\,0.0530]$ & $0.0255$\\
+\textbf{P0} & DET & $-0.0186$ & $[-0.0364,\,-0.0069]$ & $0.0376$\\
+\textbf{P0} & LLE & $-0.0376$ & $[-0.0537,\,-0.0230]$ & $0.0050$\\
+T30 & CC & $-0.0482$ & $[-0.0689,\,-0.0152]$ & $0.0097$\\
+T30 & NRMSE & $+0.0406$ & $[+0.0190,\,+0.0570]$ & $0.0097$\\
+T30 & DET & $-0.0183$ & $[-0.0332,\,-0.0011]$ & $0.0111$\\
+T30 & LLE & $-0.0322$ & $[-0.0535,\,+0.0020]$ & $0.0215$\\
+T60 & CC & $-0.0251$ & $[-0.0561,\,+0.0059]$ & $0.0400$\\
+T60 & NRMSE & $+0.0278$ & $[+0.0027,\,+0.0479]$ & $0.0256$\\
+T60 & DET & $-0.0167$ & $[-0.0294,\,-0.0066]$ & $0.0256$\\
+T60 & LLE & $-0.0393$ & $[-0.0636,\,-0.0075]$ & $0.0093$\\
+S3 & CC & $-0.0361$ & $[-0.0548,\,-0.0033]$ & $0.0136$\\
+S3 & NRMSE & $+0.0357$ & $[+0.0032,\,+0.0457]$ & $0.0128$\\
+S3 & DET & $-0.0189$ & $[-0.0326,\,-0.0069]$ & $0.0136$\\
+S3 & LLE & $-0.0344$ & $[-0.0495,\,-0.0104]$ & $0.0041$\\
+S5 & CC & $-0.0337$ & $[-0.0495,\,-0.0077]$ & $0.0141$\\
+S5 & NRMSE & $+0.0367$ & $[+0.0056,\,+0.0504]$ & $0.0092$\\
+S5 & DET & $-0.0213$ & $[-0.0305,\,-0.0049]$ & $0.0141$\\
+S5 & LLE & $-0.0321$ & $[-0.0499,\,-0.0147]$ & $0.0056$\\
+\bottomrule
+\end{tabular*}
+\end{minipage}
+\par\smallskip
+\raggedright CC/NRMSE là Mean CC/Mean NRMSE. Hiệu ứng và CI của LLE có đơn vị s$^{-1}$; các hiệu ứng chính còn lại không có đơn vị. Các dòng P0 in đậm là giá trị tham chiếu chính của bài báo, dùng BH7; các quy tắc nhãn thay thế dùng BH4 riêng trong từng quy tắc. Phần A chỉ báo cáo p chưa hiệu chỉnh.
 
-\[\begin{gathered}\bar{f}=\frac{\sum_{k:f_k>0}f_kP_k}{\sum_{k:f_k>0}P_k},\\ T=\bar{f}^{-1},\\ W=\max\{1,\mathrm{round}(f_sT)\}.\end{gathered}\]
-Chọn láng giềng Euclidean gần nhất đầu tiên thỏa mãn $|j-i|>W$. Sau đó loại khoảng cách $\leq\delta=10\epsilon_{\mathrm{machine}}\max\{\mathrm{std}(\mathbf{Z}),1\}\sqrt{m}$ mà không thay láng giềng; $\mathrm{std}(\mathbf{Z})$ là độ lệch chuẩn tổng thể trên ma trận trạng thái. Các cặp hợp lệ được theo dõi tối đa 5 s. Cặp có điểm cuối sau tiến hóa vẫn nằm trong window và khoảng cách hữu hạn lớn hơn $\delta$ đóng góp cho đường log-khoảng cách trung bình,
+\end{table*}
 
-\[\begin{gathered}D(t)=\frac{1}{n_t}\sum_{j\in\mathcal{P}_t}\ln\|\mathbf{z}_{j+\ell}-\mathbf{z}_{\nu(j)+\ell}\|,\\ t=\ell/f_s.\end{gathered}\]
-Trong đó, $\nu(j)$ xác định láng giềng đã chọn, $\mathcal{P}_t$ là tập cặp hợp lệ ở độ trễ $\ell$ và $n_t$ là kích thước tập. Hồi quy tuyến tính theo thời gian tính bằng giây trên khoảng đóng 0.80--1.30 s cho hệ số dốc đơn vị s$^{-1}$ (Hình~\ref{fig:supp_lle}). Chấp nhận cần ít nhất 50 cặp ban đầu, 30 cặp mỗi điểm khớp, ba điểm khớp hữu hạn, hệ số dốc hữu hạn và $R^2\geq0.90$.
-
-Điều kiện chấp nhận giữ lại 872/901 window đầu vào (96.78\%): 579 Awake và 293 Drowsy. Trên toàn bộ window đầu vào, số cặp ban đầu nhỏ nhất là 1,471, số cặp nhỏ nhất tại một điểm khớp là 1,366 và trung vị $R^2$ của phép khớp là 0.973. Vì vậy, mức hỗ trợ cặp luôn vượt các ngưỡng vận hành tối thiểu. 29 window bị loại (17 Awake, 12 Drowsy) không đạt $R^2$, thay vì tiêu chí hỗ trợ cặp. Các chẩn đoán này gồm cả phép khớp bị loại; so sánh trạng thái chỉ dùng phép khớp được chấp nhận. LLE là ước lượng phân kỳ từ dữ liệu hữu hạn, không phải bằng chứng xác lập hỗn loạn tất định. Hiệu ứng danh định nằm trong Bảng~\ref{tab:supp_primary}; các thay đổi thiết lập nằm tại Mục~\ref{sec:supp_12_3}.
-
-\begin{figure}[p]
+\begin{table*}[!t]
+\ContinuedFloat
+\renewcommand{\thetable}{S\arabic{table}B}
 \centering
-\includegraphics[width=\linewidth,height=.75\textheight,keepaspectratio]{figures/figure_S05.pdf}
-\caption{Ví dụ đường log-khoảng cách trung bình Rosenstein $D(t)$ và phép khớp tuyến tính từ window Awake đã xử lý dài 60-s trong session ghi nhận 01. Khoảng khớp là 0.80--1.30 s. Tiêu chí chấp nhận được định nghĩa tại Mục~\ref{sec:supp_7}. Hệ số dốc là ước lượng LLE trên window hữu hạn, đơn vị s$^{-1}$.}\label{fig:supp_lle}
-\end{figure}
-\subsection{Kiểm định Pseudoperiodic Surrogate}\label{sec:supp_8}
-Pseudoperiodic surrogates (PPS) kiểm định giả thuyết không giả tuần hoàn có nhiễu. Dạng sóng đã xử lý được nhúng tiến bằng tái dựng chung; chỉ số ban đầu được lấy đều từ các trạng thái nhúng. Với trạng thái hiện tại $\mathbf{s}$, chỉ số ứng viên gồm mọi trạng thái có trạng thái kế tiếp quan sát được, với xác suất
-
-\[\begin{gathered}\Pr(j\mid\mathbf{s})=\frac{\exp[-(\|\mathbf{z}_j-\mathbf{s}\|-D_{\min})/\rho]}{\sum_{r=0}^{N_e-2}\exp[-(\|\mathbf{z}_r-\mathbf{s}\|-D_{\min})/\rho]},\end{gathered}\]
-Trong đó, $N_e$ là số trạng thái nhúng và $D_{\min}$ là khoảng cách ứng viên nhỏ nhất; phép trừ này ổn định hàm mũ mà không thay xác suất chuẩn hóa. Sau khi chọn $j$, surrogate tiếp tục ở trạng thái kế tiếp quan sát được $j+1$. Cho phép ứng viên tự ghép và liền kề theo thời gian; trạng thái nhúng cuối bị loại vì không có trạng thái kế tiếp. Tọa độ đầu tiên của từng trạng thái được xuất đến khi đạt độ dài window gốc, không quay vòng qua biên.
-
-Bán kính riêng theo window $\rho$ tối đa hóa số chuỗi chỉ số nguồn liên tiếp cực đại có độ dài ít nhất hai, lấy trung bình qua ba lần thử tại mỗi trong 21 bán kính ứng viên; khi đồng hạng dùng cực đại đầu tiên. Mỗi window được so với $M=39$ surrogate. Sáu thước đo không phải LLE dùng chung một tập; LLE dùng tập riêng, giữ loại trừ của window gốc nhưng không áp ngưỡng $R^2\geq0.90$ gốc lên phép khớp surrogate. So sánh LLE dùng 579 phép khớp gốc Awake và 293 Drowsy đã được chấp nhận.
-
-Với giá trị gốc $a$ và giá trị surrogate $s_1,\ldots,s_M$, kiểm định hai phía hữu hạn mẫu tính cả đồng hạng trong hai đuôi:
-
-\[\begin{gathered}p=\min\left\{1,\frac{2\min\left(1+\#\{s_b\leq a\},\;1+\#\{s_b\geq a\}\right)}{M+1}\right\}.\end{gathered}\]
-$p$ nhỏ nhất có thể đạt là $2/40=0.05$, với bác bỏ tại $p\leq0.05$ và không hiệu chỉnh ở cấp window. Có 24 đồng hạng chính xác giữa gốc và surrogate trong so sánh sáu thước đo, không trường hợp nào đổi kết quả bác bỏ tại ngưỡng này; các so sánh LLE được đưa vào không có đồng hạng.
-
-Bảng~\ref{tab:supp_pps}A phân biệt phần trăm bác bỏ gộp với trung vị/IQR của 20 tỷ lệ riêng theo session. CC bác bỏ trong 374/596 window Awake (62.75\% gộp; trung vị session 60.66\%) và 229/305 window Drowsy (75.08\%; 71.01\%). Hướng kỳ vọng của gốc trừ PPS là dương với CC, DET, $L_{\mathrm{mean}}$ và LLE, âm với NRMSE, LAM và TT. Một lần bác bỏ LAM ở Drowsy có hướng ngược lại; tất cả trường hợp khác theo hướng kỳ vọng.
-
-Đối với suy luận sai lệch theo session (Bảng~\ref{tab:supp_pps}B), mỗi window đóng góp giá trị gốc trừ trung vị của 39 surrogate. Trung vị sai lệch theo session-trạng thái được tổng hợp và kiểm định trên 20 session, với BH trên 12 kiểm định thước đo--trạng thái. Tỷ lệ bác bỏ là mô tả; họ này không chứa CI, p hoặc q cho sai lệch LLE.
-
-Bác bỏ PPS cho thấy sự khác biệt với giả thuyết không giả tuần hoàn có nhiễu đã được kiểm định. Kết quả không xác lập hỗn loạn tất định và không loại trừ mọi mô hình ngẫu nhiên hoặc giả tuần hoàn có cấu trúc. Tỷ lệ bác bỏ trong từng trạng thái không phải kiểm định Awake--Drowsy ghép cặp. Dạng sóng minh họa và heatmap bác bỏ nằm trong Hình~\ref{fig:supp_pps}.
-
-\begin{landscape}
-\begingroup\small
-\setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.18}
-\stepcounter{supptablepanel}
-\begin{longtable}{L{\dimexpr0.13592\linewidth-2.44660\tabcolsep\relax}L{\dimexpr0.09709\linewidth-1.74757\tabcolsep\relax}L{\dimexpr0.09709\linewidth-1.74757\tabcolsep\relax}L{\dimexpr0.09709\linewidth-1.74757\tabcolsep\relax}L{\dimexpr0.10680\linewidth-1.92233\tabcolsep\relax}L{\dimexpr0.12621\linewidth-2.27184\tabcolsep\relax}L{\dimexpr0.09709\linewidth-1.74757\tabcolsep\relax}L{\dimexpr0.12136\linewidth-2.18447\tabcolsep\relax}L{\dimexpr0.12136\linewidth-2.18447\tabcolsep\relax}}
-\caption{Bằng chứng bác bỏ PPS ở cấp window và sai lệch ở cấp session.}\label{tab:supp_pps}\\
-\multicolumn{9}{l}{\textbf{Panel A. Tóm tắt bác bỏ cấp window}}\\
+\caption{Độ nhạy theo tham số nhúng và thiết lập bộ ước lượng.}\label{tab:supp_sensitivity_estimators}
+\footnotesize
+\setlength{\tabcolsep}{1.5pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{minipage}[t]{0.49\textwidth}
+\raggedright\textbf{C. Độ trễ ($m=8$)}\par\smallskip
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}llrcr@{}}
 \toprule
-Thước đo & Trạng thái & Window hợp lệ & n bác bỏ & Gộp (\%) & Trung vị session (\%) & IQR (pp) & n theo hướng kỳ vọng & n ngược hướng\\
-\midrule\endfirsthead
-\multicolumn{9}{l}{Bảng~\ref{tab:supp_pps} (tiếp theo)}\\
+$\tau$ (s) & Chỉ số & $\Delta$ & 95\% CI & $q_{\mathrm{BH}}$\\
+\midrule
+$0.12$ & CC & $-0.0317$ & $[-0.0522,\,+0.0094]$ & $0.048312$\\
+$0.12$ & NRMSE & $+0.0321$ & $[-0.0042,\,+0.0492]$ & $0.048312$\\
+$0.12$ & DET & $+0.0025$ & $[-0.0078,\,+0.0076]$ & $0.784126$\\
+$0.12$ & LLE & $-0.0361$ & $[-0.0567,\,+0.0042]$ & $0.048312$\\
+\textbf{0.16} & CC & $-0.0339$ & $[-0.0595,\,-0.0043]$ & $0.0376$\\
+\textbf{0.16} & NRMSE & $+0.0294$ & $[0.0047,\,0.0530]$ & $0.0255$\\
+\textbf{0.16} & DET & $-0.0186$ & $[-0.0364,\,-0.0069]$ & $0.0376$\\
+\textbf{0.16} & LLE & $-0.0376$ & $[-0.0537,\,-0.0230]$ & $0.0050$\\
+$0.20$ & CC & $-0.0316$ & $[-0.0529,\,-0.0008]$ & $0.020416$\\
+$0.20$ & NRMSE & $+0.0296$ & $[+0.0056,\,+0.0476]$ & $0.011162$\\
+$0.20$ & DET & $+0.0015$ & $[-0.0099,\,+0.0148]$ & $0.985435$\\
+$0.20$ & LLE & $-0.0464$ & $[-0.0572,\,-0.0240]$ & $0.000145$\\
+\bottomrule
+\end{tabular*}
+\end{minipage}\hfill\begin{minipage}[t]{0.49\textwidth}
+\raggedright\textbf{C. Số chiều ($\tau=0.16$ s)}\par\smallskip
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}llrcr@{}}
 \toprule
-Thước đo & Trạng thái & Window hợp lệ & n bác bỏ & Gộp (\%) & Trung vị session (\%) & IQR (pp) & n theo hướng kỳ vọng & n ngược hướng\\
-\midrule\endhead
-\bottomrule\endfoot
-\bottomrule\endlastfoot
-Mean CC & Awake & 596 & 374 & 62.75 & 60.66 & 16.98 & 374 & 0\\
-Mean CC & Drowsy & 305 & 229 & 75.08 & 71.01 & 23.31 & 229 & 0\\
-Mean NRMSE & Awake & 596 & 542 & 90.94 & 91.59 & 12.57 & 542 & 0\\
-Mean NRMSE & Drowsy & 305 & 291 & 95.41 & 100.00 & 7.27 & 291 & 0\\
-DET & Awake & 596 & 595 & 99.83 & 100.00 & 0.00 & 595 & 0\\
-DET & Drowsy & 305 & 305 & 100.00 & 100.00 & 0.00 & 305 & 0\\
-$L_{\mathrm{mean}}$ & Awake & 596 & 594 & 99.66 & 100.00 & 0.00 & 594 & 0\\
-$L_{\mathrm{mean}}$ & Drowsy & 305 & 305 & 100.00 & 100.00 & 0.00 & 305 & 0\\
-LAM & Awake & 596 & 537 & 90.10 & 95.50 & 16.36 & 537 & 0\\
-LAM & Drowsy & 305 & 273 & 89.51 & 92.38 & 18.59 & 272 & 1\\
-TT & Awake & 596 & 580 & 97.32 & 100.00 & 4.31 & 580 & 0\\
-TT & Drowsy & 305 & 295 & 96.72 & 100.00 & 7.28 & 295 & 0\\
-LLE & Awake & 579 & 545 & 94.13 & 96.30 & 7.28 & 545 & 0\\
-LLE & Drowsy & 293 & 287 & 97.95 & 100.00 & 0.76 & 287 & 0\\
-\end{longtable}
-\clearpage
-\addtocounter{table}{-1}
-\stepcounter{supptablepanel}
-\begin{longtable}{L{\dimexpr0.11200\linewidth-2.01600\tabcolsep\relax}L{\dimexpr0.08000\linewidth-1.44000\tabcolsep\relax}L{\dimexpr0.07200\linewidth-1.29600\tabcolsep\relax}L{\dimexpr0.10400\linewidth-1.87200\tabcolsep\relax}L{\dimexpr0.19200\linewidth-3.45600\tabcolsep\relax}L{\dimexpr0.11200\linewidth-2.01600\tabcolsep\relax}L{\dimexpr0.11200\linewidth-2.01600\tabcolsep\relax}L{\dimexpr0.08800\linewidth-1.58400\tabcolsep\relax}L{\dimexpr0.12800\linewidth-2.30400\tabcolsep\relax}}
-\multicolumn{9}{l}{Bảng~\ref{tab:supp_pps} (tiếp theo)}\\
-\multicolumn{9}{l}{\textbf{Panel B. Sai lệch gốc trừ PPS cấp session}}\\
+$m$ & Chỉ số & $\Delta$ & 95\% CI & $q_{\mathrm{BH}}$\\
+\midrule
+7 & CC & $-0.0307$ & $[-0.0565,\,+0.0045]$ & $0.035522$\\
+7 & NRMSE & $+0.0377$ & $[-0.0023,\,+0.0561]$ & $0.035522$\\
+7 & DET & $-0.0145$ & $[-0.0303,\,-0.0047]$ & $0.053169$\\
+7 & LLE & $-0.0285$ & $[-0.0549,\,-0.0076]$ & $0.019440$\\
+9 & CC & $-0.0251$ & $[-0.0492,\,+0.0055]$ & $0.039434$\\
+9 & NRMSE & $+0.0315$ & $[+0.0043,\,+0.0483]$ & $0.016617$\\
+9 & DET & $-0.0200$ & $[-0.0321,\,-0.0052]$ & $0.058258$\\
+9 & LLE & $-0.0247$ & $[-0.0534,\,-0.0102]$ & $0.002342$\\
+\bottomrule
+\end{tabular*}
+\end{minipage}
+\par\medskip
+\begin{minipage}[t]{0.49\textwidth}
+\raggedright\textbf{D. RQA: DET}\par\smallskip
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrcr@{}}
 \toprule
-Thước đo & Trạng thái & Session & Sai lệch trung vị & CI 95\% & $p$ thô & $q_{\mathrm{BH}}$ & $r_{\mathrm{rb}}$ & Trung vị bác bỏ theo session (\%)\\
-\midrule\endfirsthead
-\multicolumn{9}{l}{Bảng~\ref{tab:supp_pps} (tiếp theo)}\\
+Cấu hình & $\Delta$ & 95\% CI & $p$ thô\\
+\midrule
+RR 0.01 & $-0.015214$ & $[-0.033764,\,+0.002064]$ & $0.082550$\\
+Danh định & $-0.0186$ & $[-0.0364,\,-0.0069]$ & $0.021484$\\
+RR 0.03 & $-0.017813$ & $[-0.033859,\,-0.007863]$ & $0.021484$\\
+Theiler 0.75 & $-0.019191$ & $[-0.036836,\,-0.006809]$ & $0.021484$\\
+Theiler 1.25 & $-0.019033$ & $[-0.037873,\,-0.007730]$ & $0.017181$\\
+\bottomrule
+\end{tabular*}
+\end{minipage}\hfill\begin{minipage}[t]{0.49\textwidth}
+\raggedright\textbf{D. LLE}\par\smallskip
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrcrr@{}}
 \toprule
-Thước đo & Trạng thái & Session & Sai lệch trung vị & CI 95\% & $p$ thô & $q_{\mathrm{BH}}$ & $r_{\mathrm{rb}}$ & Trung vị bác bỏ theo session (\%)\\
-\midrule\endhead
-\bottomrule\endfoot
-\bottomrule\endlastfoot
-Mean CC & Awake & 20 & +0.1192 & [0.1034, 0.1278] & $1.90735\times10^{-6}$ & $1.90735\times10^{-6}$ & +1.000 & 60.66\\
-Mean CC & Drowsy & 20 & +0.1441 & [0.1245, 0.1906] & $1.90735\times10^{-6}$ & $1.90735\times10^{-6}$ & +1.000 & 71.01\\
-Mean NRMSE & Awake & 20 & -0.1321 & [-0.1658, -0.1273] & $1.90735\times10^{-6}$ & $1.90735\times10^{-6}$ & -1.000 & 91.59\\
-Mean NRMSE & Drowsy & 20 & -0.1557 & [-0.1901, -0.1370] & $1.90735\times10^{-6}$ & $1.90735\times10^{-6}$ & -1.000 & 100.00\\
-DET & Awake & 20 & +0.1833 & [0.1727, 0.1939] & $1.90735\times10^{-6}$ & $1.90735\times10^{-6}$ & +1.000 & 100.00\\
-DET & Drowsy & 20 & +0.1885 & [0.1713, 0.1971] & $1.90735\times10^{-6}$ & $1.90735\times10^{-6}$ & +1.000 & 100.00\\
-$L_{\mathrm{mean}}$ & Awake & 20 & +1.1528 & [1.0947, 1.1891] & $1.90735\times10^{-6}$ & $1.90735\times10^{-6}$ & +1.000 & 100.00\\
-$L_{\mathrm{mean}}$ & Drowsy & 20 & +1.1508 & [1.1023, 1.1815] & $1.90735\times10^{-6}$ & $1.90735\times10^{-6}$ & +1.000 & 100.00\\
-LAM & Awake & 20 & -0.1244 & [-0.1411, -0.1130] & $1.90735\times10^{-6}$ & $1.90735\times10^{-6}$ & -1.000 & 95.50\\
-LAM & Drowsy & 20 & -0.1266 & [-0.1282, -0.1091] & $1.90735\times10^{-6}$ & $1.90735\times10^{-6}$ & -1.000 & 92.38\\
-TT & Awake & 20 & -0.1139 & [-0.1367, -0.0855] & $1.90735\times10^{-6}$ & $1.90735\times10^{-6}$ & -1.000 & 100.00\\
-TT & Drowsy & 20 & -0.1188 & [-0.1283, -0.1077] & $1.90735\times10^{-6}$ & $1.90735\times10^{-6}$ & -1.000 & 100.00\\
-\end{longtable}
-\endgroup
-{\small Panel A: CC/NRMSE là trung bình chân trời theo window. Bác bỏ gộp bằng window bác bỏ/hợp lệ $\times100$; trung vị session và IQR tóm tắt 20 tỷ lệ theo session nhân với 100. Hướng kỳ vọng là gốc trừ PPS: dương với CC, DET, $L_{\mathrm{mean}}$, LLE và âm với NRMSE, LAM, TT. LLE dùng 579/293 window gốc được chấp nhận, các thước đo khác dùng 596/305.}\par
-{\small Panel B: CI, p Wilcoxon signed-rank, $r_{\mathrm{rb}}$ và q hiệu chỉnh BH mô tả trung vị sai lệch gốc trừ PPS theo session-trạng thái trên 20 session. BH áp dụng một lần trên 12 kiểm định sáu thước đo--trạng thái. Tỷ lệ bác bỏ là mô tả; họ này không có suy luận sai lệch LLE. Đơn vị sai lệch/CI là mẫu với $L_{\mathrm{mean}}$/TT và không thứ nguyên với các thước đo khác.}\par
-\end{landscape}
-\begin{figure}[p]
+Cấu hình & $\Delta$ & 95\% CI & $p$ thô & Đạt/tổng\\
+\midrule
+Khớp 0.60--1.10 & $-0.034980$ & $[-0.064607,\,-0.019121]$ & $0.000261$ & 802/901\\
+Danh định & $-0.0376$ & $[-0.0537,\,-0.0230]$ & $0.000708$ & 872/901\\
+Khớp 1.00--1.50 & $-0.030357$ & $[-0.045778,\,-0.003941]$ & $0.008308$ & 889/901\\
+$R^2$ 0.95 & $-0.030618$ & $[-0.041701,\,-0.013987]$ & $0.002325$ & 734/901\\
+Theiler 0.75 & $-0.037570$ & $[-0.053698,\,-0.022976]$ & $0.000708$ & 872/901\\
+Theiler 1.25 & $-0.029763$ & $[-0.056095,\,-0.016331]$ & $0.002325$ & 874/901\\
+\bottomrule
+\end{tabular*}
+\end{minipage}
+\par\smallskip
+\raggedright CC/NRMSE là Mean CC/Mean NRMSE. Hiệu ứng và CI của LLE có đơn vị s$^{-1}$; các hiệu ứng chính còn lại không có đơn vị. Các tham số nhúng danh định in đậm là giá trị tham chiếu chính của bài báo, dùng BH7; các thiết lập nhúng thay thế dùng BH4 riêng trong từng thiết lập. Phần D chỉ báo cáo p chưa hiệu chỉnh.
+\par\smallskip
+\raggedright Phần C: $m=8$ dùng giá trị tham chiếu $\tau=0.16$ ở bảng bên trái. Phần D: RQA danh định dùng RR=0.02 và hệ số Theiler 1.00; LLE danh định dùng khoảng khớp 0.80--1.30 s, $R^2\geq0.90$ và hệ số 1.00. Khoảng khớp tính bằng giây. Mọi thiết lập RQA giữ 901 window; LLE ghi số window đạt yêu cầu trên tổng số đầu vào. Các tham số không được thay đổi giữ ở giá trị danh định.
+\end{table*}
+\FloatBarrier
+\section{Phụ thuộc giữa các session khi chưa biết liên kết người tham gia}\label{sec:supp_7}
+Không có thông tin liên kết từng session với người tham gia. Các cách ghép cặp hoàn hảo giả định chia 20 session thành 10 cụm, mỗi cụm gồm hai session: 100,000 lượt lấy mẫu tạo ra 99,990 cách ghép khác nhau. Chênh lệch theo session được lấy trung bình trong từng cụm rồi kiểm định trên các cụm, với hiệu chỉnh BH7 trong mỗi cách ghép. Hướng hiệu ứng trung vị của cả bốn chỉ số chính đều không đổi trong mọi cách ghép giả định đã lấy mẫu (Bảng~\ref{tab:supp_dependence}), nhưng kết quả đạt ý nghĩa thống kê ít nhất quán hơn so với phân tích ở cấp session. Ước lượng tại 50k và 100k lượt rất gần nhau, cho thấy độ ổn định Monte Carlo. Các tần suất này mô tả thiết kế ghép cặp giả định, không phải xác suất kết quả thực có ý nghĩa thống kê. Cách nhóm giả định không khôi phục danh tính người tham gia và không cho phép suy luận ở cấp người tham gia.
+
+\begin{table}[!t]
 \centering
-\includegraphics[width=\linewidth,height=.75\textheight,keepaspectratio]{figures/figure_S06.pdf}
-\caption{Minh họa PPS và mẫu hình bác bỏ. (A) Đoạn 15-s của PPG gốc đã xử lý và một surrogate minh họa từ session ghi nhận 01. (B) Tỷ lệ riêng theo session ở Awake và (C) ở Drowsy bác bỏ giả thuyết không giả tuần hoàn có nhiễu đã kiểm định. Kiểm định dùng 39 surrogate, thứ hạng hai phía có tính đồng hạng và $p\leq0.05$ không hiệu chỉnh. Tỷ lệ LLE dùng phép khớp gốc được chấp nhận. Dạng sóng chỉ minh họa; heatmap mô tả bác bỏ trong từng trạng thái, không phải hiệu ứng trạng thái ghép cặp.}\label{fig:supp_pps}
-\end{figure}
-\subsection{Khung thống kê và hiệu chỉnh đa kiểm định}\label{sec:supp_9}
-Mỗi thước đo được tổng hợp bằng trung vị các window hợp lệ trong từng session ghi nhận và trạng thái. Với Simplex, thước đo theo window được lấy trung bình trên các chân trời trước (Mục~\ref{sec:supp_5}). Mỗi trong 20 session đóng góp một sai khác ghép cặp,
-
-\[\begin{gathered}\Delta_i=\mathrm{Drowsy}_i-\mathrm{Awake}_i,\\ \Delta=\mathrm{median}_i(\Delta_i).\end{gathered}\]
-Kiểm định Wilcoxon signed-rank hai phía loại sai khác bằng không trước khi xếp hạng và gán hạng trung bình cho giá trị tuyệt đối bằng nhau. Simplex xem sai khác tuyệt đối $\leq10^{-12}$ là không và dùng phân bố có điều kiện chính xác; RQA/LLE loại sai khác bằng không chính xác và dùng phương pháp tự động, không hiệu chỉnh liên tục. Không so sánh danh định nào trong bảy so sánh có sai khác bằng không.
-
-Rank-biserial correlation cho cặp ghép là $r_{\mathrm{rb}}=(W_+-W_-)/(W_++W_-)$, với tổng hạng dương/âm sau khi loại sai khác bằng không. CI bootstrap phân vị 95\% của hiệu ứng ghép cặp trung vị dùng 20,000 lần lấy mẫu lại có hoàn lại từ vector sai khác theo session và phân vị 2.5/97.5 của các trung vị lấy mẫu lại. Đơn vị suy luận và bootstrap vẫn là session ghi nhận (Mục~\ref{sec:supp_1}). CI mô tả độ bất định của hiệu ứng trung vị; kiểm định signed-rank phụ thuộc phân bố hạng có dấu, nên kết luận của hai cách không nhất thiết trùng khớp.
-
-BH-FDR chính được áp dụng một lần trên bảy thước đo danh định 60-s, với hỗ trợ thống kê tại $q_{\mathrm{BH}}<0.05$. Các họ khác được giữ riêng (Bảng~\ref{tab:supp_nominal}B). Trong Bảng~\ref{tab:supp_primary}, Mean CC giảm và Mean NRMSE tăng, biểu thị khả năng dự báo trên chân trời hữu hạn thấp hơn ở Drowsy. DET giảm dưới tái dựng danh định và LLE giảm, mô tả tổ chức đường chéo tái diễn và sự phân kỳ quỹ đạo cục bộ ước lượng thấp hơn. Bốn thước đo này đạt tiêu chí BH7. $L_{\mathrm{mean}}$ âm với CI không chứa không nhưng không có hỗ trợ BH; LAM/TT cũng không có hỗ trợ. Đây là các thuộc tính bổ sung trên window hữu hạn, không phải một thang đo hỗn loạn chung. Tất cả phân tích độ nhạy tiếp theo dùng lại cùng bản ghi và mang tính hỗ trợ, không phải lặp lại độc lập.
-
-\begin{landscape}
-\begingroup\small
+\caption{Các hiệu ứng chính khi nhóm session theo cách ghép giả định.}\label{tab:supp_dependence}
+\footnotesize
 \setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.18}
-\stepcounter{supptablepanel}
-\begin{longtable}{L{\dimexpr0.12613\linewidth-2.01802\tabcolsep\relax}L{\dimexpr0.07207\linewidth-1.15315\tabcolsep\relax}L{\dimexpr0.10811\linewidth-1.72973\tabcolsep\relax}L{\dimexpr0.23423\linewidth-3.74775\tabcolsep\relax}L{\dimexpr0.11712\linewidth-1.87387\tabcolsep\relax}L{\dimexpr0.09910\linewidth-1.58559\tabcolsep\relax}L{\dimexpr0.09910\linewidth-1.58559\tabcolsep\relax}L{\dimexpr0.14414\linewidth-2.30631\tabcolsep\relax}}
-\caption{Toàn bộ thống kê chính với window 60-s.}\label{tab:supp_primary}\\
+\renewcommand{\arraystretch}{1.05}
+\begin{tabular}{@{}lrr@{}}
 \toprule
-Thước đo & n ghép cặp & Trung vị $\Delta$ & CI 95\% & $p$ thô & $q_{\mathrm{BH}}$ & $r_{\mathrm{rb}}$ & Số theo hướng\\
-\midrule\endfirsthead
-\multicolumn{8}{l}{Bảng~\ref{tab:supp_primary} (tiếp theo)}\\
-\toprule
-Thước đo & n ghép cặp & Trung vị $\Delta$ & CI 95\% & $p$ thô & $q_{\mathrm{BH}}$ & $r_{\mathrm{rb}}$ & Số theo hướng\\
-\midrule\endhead
-\bottomrule\endfoot
-\bottomrule\endlastfoot
-Mean CC & 20 & -0.0339 & [-0.0595, -0.0043] & 0.02148438 & 0.0376 & -0.581 & 15/\allowbreak 20 thấp hơn\\
-Mean NRMSE & 20 & +0.0294 & [0.0047, 0.0530] & 0.00729561 & 0.0255 & +0.667 & 15/\allowbreak 20 cao hơn\\
-DET & 20 & -0.0186 & [-0.0364, -0.0069] & 0.02148438 & 0.0376 & -0.581 & 15/\allowbreak 20 thấp hơn\\
-$L_{\mathrm{mean}}$ & 20 & -0.0630 & [-0.1247, -0.0139] & 0.05825806 & 0.0816 & -0.486 & 16/\allowbreak 20 thấp hơn\\
-LAM & 20 & +0.0165 & [-0.0044, 0.0635] & 0.14290619 & 0.1667 & +0.381 & 13/\allowbreak 20 cao hơn\\
-TT & 20 & +0.0095 & [-0.0034, 0.0160] & 0.20244980 & 0.2024 & +0.333 & 14/\allowbreak 20 cao hơn\\
-LLE & 20 & -0.0376 & [-0.0537, -0.0230] & 0.00070763 & 0.0050 & -0.810 & 16/\allowbreak 20 thấp hơn\\
-\end{longtable}
-\endgroup
-{\small Mọi so sánh dùng 20 session ghi nhận ghép cặp. QC chung giữ 596 window Awake và 305 Drowsy (tổng 901); LLE dùng 579 và 293 phép khớp được chấp nhận (tổng 872). Số đếm theo hướng tuân theo dấu trung vị báo cáo; không sai khác danh định nào bằng không.}\par
-{\small $\Delta$ là trung vị sai khác ghép cặp, không phải sai khác giữa các trung vị trạng thái biên. Đơn vị hiệu ứng/CI là mẫu với $L_{\mathrm{mean}}$/TT, s$^{-1}$ với LLE và không thứ nguyên với thước đo khác. p thô có tám chữ số thập phân; giữ độ chính xác hiệu ứng, CI, $r_{\mathrm{rb}}$ và q của bản thảo. q thuộc họ BH7 chính.}\par
-\end{landscape}
-\subsection{Độ ổn định theo độ dài window}\label{sec:supp_10}
-Độ nhạy theo độ dài window so sánh bốn thước đo trọng tâm tại 30, 60, 120 và 180 s (Bảng~\ref{tab:supp_window}; Hình~\ref{fig:supp_window}). Mỗi thời lượng có 20 session ghép cặp, với số window hợp lệ riêng theo thước đo. Số lượng theo hướng đếm giảm đối với Mean CC/DET/LLE và tăng đối với Mean NRMSE. Quy ước hiệu ứng ghép cặp và CI theo Mục~\ref{sec:supp_9}; phân tích này chỉ báo cáo p thô.
+Chỉ số & \makecell{Dấu không đổi\\(\%)} & \makecell{$q_{\mathrm{BH}}<0.05$\\tần suất (\%)}\\
+\midrule
+Mean CC & $100.00$ & $19.36$\\
+Mean NRMSE & $100.00$ & $27.82$\\
+DET & $100.00$ & $22.59$\\
+LLE & $100.00$ & $79.69$\\
+\bottomrule
+\end{tabular}
+\end{table}
+\FloatBarrier
+\section{Phân tích động lực học ký hiệu mang tính thăm dò}\label{sec:supp_8}
+Khoảng thời gian giữa các đỉnh liên tiếp (PPI) được trích từ PPG đã xử lý và lượng tử hóa trong từng window được chấp nhận thành sáu mức có độ rộng bằng nhau, từ giá trị nhỏ nhất đến lớn nhất. Các bộ ba ký hiệu chồng lấp được phân vào 0V, 1V hoặc 2V khi không có, có một hoặc có cả hai chênh lệch giữa các ký hiệu liền kề khác không; 2V bao gồm các thay đổi cùng dấu và ngược dấu. Tỷ lệ xuất hiện được tính cho từng window, sau đó lấy trung vị trong mỗi session và trạng thái.
 
-Hướng của cả bốn hiệu ứng trung vị được giữ qua các thời lượng, nhưng độ lớn và độ bất định khác nhau. Ước lượng 30-s nhìn chung có độ bất định cao hơn; window dài hơn thường giảm độ bất định nhưng cũng giảm số window hợp lệ. Khoảng DET ở 180-s vẫn tương đối rộng. CI DET chứa không tại 30 và 180 s; p thô tại 180-s là 0.053169. Vì vậy, giữ hướng không đồng nghĩa với hỗ trợ thống kê đồng đều. Trong bộ dữ liệu này, 60 s cân bằng thực tế giữa thời gian quan sát và độ bất định, thay vì là tối ưu phổ quát.
+Bảng~\ref{tab:supp_symbolic} trình bày trung vị chênh lệch ghép cặp theo điểm phần trăm. Cả chín kiểm định nhóm ký hiệu--thời lượng đều không đạt ý nghĩa thống kê sau BH3 trong từng thời lượng. Các kết quả thăm dò này nằm ngoài kết luận chính dựa trên bốn chỉ số; tỷ lệ ký hiệu không đo trực tiếp hoạt động giao cảm hay phế vị.
 
-\begin{landscape}
-\begingroup\small
-\setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.18}
-\stepcounter{supptablepanel}
-\begin{longtable}{L{\dimexpr0.12903\linewidth-2.58065\tabcolsep\relax}L{\dimexpr0.07258\linewidth-1.45161\tabcolsep\relax}L{\dimexpr0.08065\linewidth-1.61290\tabcolsep\relax}L{\dimexpr0.08065\linewidth-1.61290\tabcolsep\relax}L{\dimexpr0.06452\linewidth-1.29032\tabcolsep\relax}L{\dimexpr0.09677\linewidth-1.93548\tabcolsep\relax}L{\dimexpr0.20161\linewidth-4.03226\tabcolsep\relax}L{\dimexpr0.10484\linewidth-2.09677\tabcolsep\relax}L{\dimexpr0.08065\linewidth-1.61290\tabcolsep\relax}L{\dimexpr0.08871\linewidth-1.77419\tabcolsep\relax}}
-\caption{Độ nhạy theo độ dài window của bốn thước đo trọng tâm.}\label{tab:supp_window}\\
-\toprule
-Thước đo & Thời lượng (s) & Window Awake & Window Drowsy & n ghép cặp & Trung vị $\Delta$ & CI 95\% & $p$ thô & $r_{\mathrm{rb}}$ & Số theo hướng\\
-\midrule\endfirsthead
-\multicolumn{10}{l}{Bảng~\ref{tab:supp_window} (tiếp theo)}\\
-\toprule
-Thước đo & Thời lượng (s) & Window Awake & Window Drowsy & n ghép cặp & Trung vị $\Delta$ & CI 95\% & $p$ thô & $r_{\mathrm{rb}}$ & Số theo hướng\\
-\midrule\endhead
-\bottomrule\endfoot
-\bottomrule\endlastfoot
-Mean CC & 30 & 1192 & 610 & 20 & -0.0147 & [-0.0712, -0.0039] & 0.03276825 & -0.543 & 15/\allowbreak 20\\
-Mean CC & 60 & 596 & 305 & 20 & -0.0339 & [-0.0595, -0.0043] & 0.02148438 & -0.581 & 15/\allowbreak 20\\
-Mean CC & 120 & 269 & 136 & 20 & -0.0271 & [-0.0490, -0.0156] & 0.01361656 & -0.619 & 16/\allowbreak 20\\
-Mean CC & 180 & 161 & 77 & 20 & -0.0428 & [-0.0516, -0.0133] & 0.00943565 & -0.648 & 15/\allowbreak 20\\
-Mean NRMSE & 30 & 1192 & 610 & 20 & +0.0203 & [+0.0009, +0.0554] & 0.00943565 & +0.648 & 14/\allowbreak 20\\
-Mean NRMSE & 60 & 596 & 305 & 20 & +0.0294 & [0.0047, 0.0530] & 0.00729561 & +0.667 & 15/\allowbreak 20\\
-Mean NRMSE & 120 & 269 & 136 & 20 & +0.0321 & [+0.0196, +0.0495] & 0.00830841 & +0.657 & 15/\allowbreak 20\\
-Mean NRMSE & 180 & 161 & 77 & 20 & +0.0321 & [+0.0186, +0.0465] & 0.00729561 & +0.667 & 15/\allowbreak 20\\
-DET & 30 & 1192 & 610 & 20 & -0.0169 & [-0.0318, +0.0002] & 0.01531219 & -0.610 & 14/\allowbreak 20\\
-DET & 60 & 596 & 305 & 20 & -0.0186 & [-0.0364, -0.0069] & 0.02148438 & -0.581 & 15/\allowbreak 20\\
-DET & 120 & 269 & 136 & 20 & -0.0201 & [-0.0399, -0.0134] & 0.00638962 & -0.676 & 15/\allowbreak 20\\
-DET & 180 & 161 & 77 & 20 & -0.0248 & [-0.0416, +0.0008] & 0.05316925 & -0.495 & 14/\allowbreak 20\\
-LLE & 30 & 1089 & 549 & 20 & -0.0325 & [-0.0549, -0.0066] & 0.00315285 & -0.724 & 17/\allowbreak 20\\
-LLE & 60 & 579 & 293 & 20 & -0.0376 & [-0.0537, -0.0230] & 0.00070763 & -0.810 & 16/\allowbreak 20\\
-LLE & 120 & 264 & 135 & 20 & -0.0442 & [-0.0591, -0.0216] & 0.00232506 & -0.743 & 18/\allowbreak 20\\
-LLE & 180 & 160 & 77 & 20 & -0.0498 & [-0.0584, -0.0213] & 0.00058556 & -0.819 & 16/\allowbreak 20\\
-\end{longtable}
-\endgroup
-{\small Số lượng là window hợp lệ riêng theo thước đo; LLE gồm sàng lọc phép khớp (Mục~\ref{sec:supp_7}). Hiệu ứng/CI dùng s$^{-1}$ với LLE và không thứ nguyên với thước đo khác. Số đếm theo hướng tuân theo dấu kỳ vọng danh định. Giá trị hiệu ứng/CI/$r_{\mathrm{rb}}$ danh định 60-s khớp Bảng~\ref{tab:supp_primary}; mọi p theo thời lượng đều không hiệu chỉnh.}\par
-\end{landscape}
-\begin{figure}[p]
+\begin{table}[!t]
 \centering
-\includegraphics[width=\linewidth,height=.75\textheight,keepaspectratio]{figures/figure_S07.pdf}
-\caption{Độ nhạy theo độ dài window. Hiệu ứng ghép cặp trung vị và CI bootstrap phân vị 95\% của Mean CC, Mean NRMSE, DET và LLE tại 30, 60, 120 và 180 s. Hướng trung vị được giữ, còn độ lớn và độ bất định thay đổi; khoảng DET chứa không tại 30 và 180 s. Mỗi thời lượng có 20 session ghép cặp, với ít window hợp lệ hơn khi thời lượng dài hơn và sàng lọc phép khớp bổ sung cho LLE (Bảng~\ref{tab:supp_window}).}\label{fig:supp_window}
-\end{figure}
-\subsection{Độ nhạy đối với quy tắc gán nhãn}\label{sec:supp_11}
-P0 dùng nhãn ghi nhận chính. T30/T60 loại các mẫu trong $\pm$30/$\pm$60 s quanh chuyển trạng thái; S3/S5 giữ chuỗi cùng trạng thái dài ít nhất 180/300 s. Window được tạo và sàng lọc theo từng quy tắc; dữ liệu giữ lại không nhất thiết là các tập con lồng nhau của P0. Số lượng sau QC chung nằm trong Bảng~\ref{tab:supp_label}A. P0/T30/T60/S3 giữ 20 session ghép cặp, S5 giữ 19; LLE áp dụng thêm điều kiện chấp nhận phép khớp.
-
-Cả 16 hiệu ứng trung vị theo quy tắc thay thế giữ hướng của bốn thước đo trọng tâm và có $q_{\mathrm{BH}}<0.05$ trong họ BH4 của từng quy tắc (Bảng~\ref{tab:supp_label}B; Hình~\ref{fig:supp_label}). Độ lớn khác nhau. CI Mean CC theo T60 $[-0.0561,+0.0059]$ và CI LLE theo T30 $[-0.0535,+0.0020]$ chứa không, phù hợp với phân biệt CI/kiểm định tại Mục~\ref{sec:supp_9}. P0 vẫn là tham chiếu chính cố định, với hiệu chỉnh BH7 thay vì BH4 của quy tắc thay thế.
-
-\begingroup\small
+\caption{Trung vị hiệu ứng ký hiệu trong phân tích thăm dò (điểm phần trăm).}\label{tab:supp_symbolic}
+\footnotesize
 \setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.18}
-\stepcounter{supptablepanel}
-\begin{longtable}{L{\dimexpr0.09195\linewidth-1.10345\tabcolsep\relax}L{\dimexpr0.45977\linewidth-5.51724\tabcolsep\relax}L{\dimexpr0.11494\linewidth-1.37931\tabcolsep\relax}L{\dimexpr0.11494\linewidth-1.37931\tabcolsep\relax}L{\dimexpr0.11494\linewidth-1.37931\tabcolsep\relax}L{\dimexpr0.10345\linewidth-1.24138\tabcolsep\relax}}
-\caption{Định nghĩa nhãn, dữ liệu được giữ lại và hiệu ứng của bốn thước đo.}\label{tab:supp_label}\\
-\multicolumn{6}{l}{\textbf{Panel A. Quy tắc và số lượng sau QC chung}}\\
+\renewcommand{\arraystretch}{1.05}
+\begin{tabular}{@{}lrrr@{}}
 \toprule
-Quy tắc & Định nghĩa & Window Awake & Window Drowsy & Tổng window & n ghép cặp\\
-\midrule\endfirsthead
-\multicolumn{6}{l}{Bảng~\ref{tab:supp_label} (tiếp theo)}\\
-\toprule
-Quy tắc & Định nghĩa & Window Awake & Window Drowsy & Tổng window & n ghép cặp\\
-\midrule\endhead
-\bottomrule\endfoot
-\bottomrule\endlastfoot
-P0 & Nhãn ghi nhận chính & 596 & 305 & 901 & 20\\
-T30 & Loại mẫu trong $\pm$30 s quanh chuyển trạng thái & 586 & 274 & 860 & 20\\
-T60 & Loại mẫu trong $\pm$60 s quanh chuyển trạng thái & 551 & 236 & 787 & 20\\
-S3 & Giữ chuỗi cùng trạng thái $\geq$180 s & 609 & 291 & 900 & 20\\
-S5 & Giữ chuỗi cùng trạng thái $\geq$300 s & 581 & 265 & 846 & 19\\
-\end{longtable}
-\endgroup
-\begin{landscape}
-\begingroup\small
-\setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.18}
-\addtocounter{table}{-1}
-\stepcounter{supptablepanel}
-\begin{longtable}{L{\dimexpr0.06154\linewidth-1.23077\tabcolsep\relax}L{\dimexpr0.12308\linewidth-2.46154\tabcolsep\relax}L{\dimexpr0.13077\linewidth-2.61538\tabcolsep\relax}L{\dimexpr0.06154\linewidth-1.23077\tabcolsep\relax}L{\dimexpr0.09231\linewidth-1.84615\tabcolsep\relax}L{\dimexpr0.19231\linewidth-3.84615\tabcolsep\relax}L{\dimexpr0.09231\linewidth-1.84615\tabcolsep\relax}L{\dimexpr0.08462\linewidth-1.69231\tabcolsep\relax}L{\dimexpr0.07692\linewidth-1.53846\tabcolsep\relax}L{\dimexpr0.08462\linewidth-1.69231\tabcolsep\relax}}
-\multicolumn{10}{l}{Bảng~\ref{tab:supp_label} (tiếp theo)}\\
-\multicolumn{10}{l}{\textbf{Panel B. Suy luận bốn thước đo}}\\
-\toprule
-Quy tắc & Họ & Thước đo & n ghép cặp & Trung vị $\Delta$ & CI 95\% & $p$ thô & $q_{\mathrm{BH}}$ & $r_{\mathrm{rb}}$ & Số theo hướng\\
-\midrule\endfirsthead
-\multicolumn{10}{l}{Bảng~\ref{tab:supp_label} (tiếp theo)}\\
-\toprule
-Quy tắc & Họ & Thước đo & n ghép cặp & Trung vị $\Delta$ & CI 95\% & $p$ thô & $q_{\mathrm{BH}}$ & $r_{\mathrm{rb}}$ & Số theo hướng\\
-\midrule\endhead
-\bottomrule\endfoot
-\bottomrule\endlastfoot
-P0 & \textbf{Chính BH7} & Mean CC & 20 & -0.0339 & [-0.0595, -0.0043] & 0.02148438 & 0.0376 & -0.581 & 15/\allowbreak 20\\
-P0 & \textbf{Chính BH7} & Mean NRMSE & 20 & +0.0294 & [0.0047, 0.0530] & 0.00729561 & 0.0255 & +0.667 & 15/\allowbreak 20\\
-P0 & \textbf{Chính BH7} & DET & 20 & -0.0186 & [-0.0364, -0.0069] & 0.02148438 & 0.0376 & -0.581 & 15/\allowbreak 20\\
-P0 & \textbf{Chính BH7} & LLE & 20 & -0.0376 & [-0.0537, -0.0230] & 0.00070763 & 0.0050 & -0.810 & 16/\allowbreak 20\\
-T30 & Độ nhạy BH4 & Mean CC & 20 & -0.0482 & [-0.0689, -0.0152] & 0.0048599 & 0.0097 & -0.695 & 17/\allowbreak 20\\
-T30 & Độ nhạy BH4 & Mean NRMSE & 20 & +0.0406 & [+0.0190, +0.0570] & 0.0031528 & 0.0097 & +0.724 & 16/\allowbreak 20\\
-T30 & Độ nhạy BH4 & DET & 20 & -0.0183 & [-0.0332, -0.0011] & 0.0083084 & 0.0111 & -0.657 & 14/\allowbreak 20\\
-T30 & Độ nhạy BH4 & LLE & 20 & -0.0322 & [-0.0535, +0.0020] & 0.021484 & 0.0215 & -0.581 & 14/\allowbreak 20\\
-T60 & Độ nhạy BH4 & Mean CC & 20 & -0.0251 & [-0.0561, +0.0059] & 0.039989 & 0.0400 & -0.524 & 13/\allowbreak 20\\
-T60 & Độ nhạy BH4 & Mean NRMSE & 20 & +0.0278 & [+0.0027, +0.0479] & 0.013617 & 0.0256 & +0.619 & 14/\allowbreak 20\\
-T60 & Độ nhạy BH4 & DET & 20 & -0.0167 & [-0.0294, -0.0066] & 0.019234 & 0.0256 & -0.590 & 15/\allowbreak 20\\
-T60 & Độ nhạy BH4 & LLE & 20 & -0.0393 & [-0.0636, -0.0075] & 0.0023251 & 0.0093 & -0.743 & 15/\allowbreak 20\\
-S3 & Độ nhạy BH4 & Mean CC & 20 & -0.0361 & [-0.0548, -0.0033] & 0.010689 & 0.0136 & -0.638 & 14/\allowbreak 20\\
-S3 & Độ nhạy BH4 & Mean NRMSE & 20 & +0.0357 & [+0.0032, +0.0457] & 0.0063896 & 0.0128 & +0.676 & 15/\allowbreak 20\\
-S3 & Độ nhạy BH4 & DET & 20 & -0.0189 & [-0.0326, -0.0069] & 0.013617 & 0.0136 & -0.619 & 15/\allowbreak 20\\
-S3 & Độ nhạy BH4 & LLE & 20 & -0.0344 & [-0.0495, -0.0104] & 0.0010166 & 0.0041 & -0.790 & 15/\allowbreak 20\\
-S5 & Độ nhạy BH4 & Mean CC & 19 & -0.0337 & [-0.0495, -0.0077] & 0.01236 & 0.0141 & -0.642 & 14/\allowbreak 19\\
-S5 & Độ nhạy BH4 & Mean NRMSE & 19 & +0.0367 & [+0.0056, +0.0504] & 0.0045776 & 0.0092 & +0.716 & 16/\allowbreak 19\\
-S5 & Độ nhạy BH4 & DET & 19 & -0.0213 & [-0.0305, -0.0049] & 0.014069 & 0.0141 & -0.632 & 15/\allowbreak 19\\
-S5 & Độ nhạy BH4 & LLE & 19 & -0.0321 & [-0.0499, -0.0147] & 0.0014114 & 0.0056 & -0.789 & 14/\allowbreak 19\\
-\end{longtable}
-\endgroup
-{\small Số lượng ở Panel A là trước sàng lọc phép khớp LLE. Trong Panel B, cột Họ phân biệt hàng tham chiếu BH7 chính với hàng độ nhạy BH4; không gộp hiệu chỉnh qua quy tắc.}\par
-{\small Số đếm theo hướng là giảm với Mean CC/DET/LLE và tăng với Mean NRMSE. Đơn vị hiệu ứng/CI là s$^{-1}$ với LLE và không thứ nguyên với thước đo khác. p thô giữ độ chính xác nguồn; q quy tắc thay thế có bốn chữ số thập phân.}\par
-\end{landscape}
-\begin{figure}[p]
-\centering
-\includegraphics[width=\linewidth,height=.75\textheight,keepaspectratio]{figures/figure_S08.pdf}
-\caption{Độ nhạy đối với nhãn. (A) Số window Awake/Drowsy sau QC chung theo P0/T30/T60/S3/S5. (B--E) Hiệu ứng ghép cặp trung vị và CI phân vị 95\% của bốn thước đo, dùng Bảng~\ref{tab:supp_primary} cho P0 và tóm tắt quy tắc thay thế cho độ nhạy. n ghép cặp là 20, ngoại trừ S5 (19). Hướng trung vị được giữ; CI Mean CC theo T60 và LLE theo T30 chứa không. Hỗ trợ theo quy tắc thay thế dùng BH4 trong quy tắc; P0 giữ BH7 chính.}\label{fig:supp_label}
-\end{figure}
-\subsection{Độ nhạy của tái dựng và bộ ước lượng}\label{sec:supp_12}
-Mỗi lần chỉ thay đổi một thiết lập tái dựng hoặc bộ ước lượng, giữ các lựa chọn khác ở danh định. Các phân tích này mô tả sự phụ thuộc trong phạm vi cấu hình đã thử.
-
-\subsubsection{Độ trễ nhúng và số chiều}\label{sec:supp_12_1}
-Độ nhạy độ trễ sử dụng $\tau=0.12,0.16,0.20$ s tại $m=8$; độ nhạy số chiều dùng $m=7,8,9$ tại $\tau=0.16$ s (Bảng~\ref{tab:supp_reconstruction}). Mean CC, Mean NRMSE và LLE giữ hiệu ứng trung vị âm, dương và âm qua các độ trễ. DET nhạy với độ trễ: giá trị danh định $-0.0186$ trở thành gần không và dương tại 0.12 s ($+0.0025$) và 0.20 s ($+0.0015$). Cả hai CI ngoài danh định đều chứa không và không có hỗ trợ BH.
-
-Hướng trung vị của cả bốn thước đo được giữ trên $m=7$--9, nhưng độ lớn thay đổi, kể cả LLE. DET không có hỗ trợ BH4 tại $m=7$ ($q=0.053169$) và $m=9$ ($q=0.058258$), dù hiệu ứng âm và CI không chứa không. Một số CI Mean CC/NRMSE cũng chứa không. Bảng~\ref{tab:supp_reconstruction} phân biệt hàng danh định BH7 chính với hàng thiết lập thay thế BH4; không gộp hiệu chỉnh qua các thiết lập. Vì vậy, DET không ổn định đồng đều theo độ trễ nhúng.
-
-\begin{landscape}
-\begingroup\small
-\setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.18}
-\stepcounter{supptablepanel}
-\begin{longtable}{L{\dimexpr0.07519\linewidth-1.50376\tabcolsep\relax}L{\dimexpr0.12030\linewidth-2.40602\tabcolsep\relax}L{\dimexpr0.12782\linewidth-2.55639\tabcolsep\relax}L{\dimexpr0.06767\linewidth-1.35338\tabcolsep\relax}L{\dimexpr0.09023\linewidth-1.80451\tabcolsep\relax}L{\dimexpr0.18797\linewidth-3.75940\tabcolsep\relax}L{\dimexpr0.09023\linewidth-1.80451\tabcolsep\relax}L{\dimexpr0.08271\linewidth-1.65414\tabcolsep\relax}L{\dimexpr0.07519\linewidth-1.50376\tabcolsep\relax}L{\dimexpr0.08271\linewidth-1.65414\tabcolsep\relax}}
-\caption{Độ nhạy của tái dựng với các họ hiệu chỉnh được phân biệt rõ.}\label{tab:supp_reconstruction}\\
-\multicolumn{10}{l}{\textbf{Panel A. Độ nhạy độ trễ tại m=8}}\\
-\toprule
-Thiết lập & Họ & Thước đo & n ghép cặp & Trung vị $\Delta$ & CI 95\% & $p$ thô & $q_{\mathrm{BH}}$ & $r_{\mathrm{rb}}$ & Số theo hướng\\
-\midrule\endfirsthead
-\multicolumn{10}{l}{Bảng~\ref{tab:supp_reconstruction} (tiếp theo)}\\
-\toprule
-Thiết lập & Họ & Thước đo & n ghép cặp & Trung vị $\Delta$ & CI 95\% & $p$ thô & $q_{\mathrm{BH}}$ & $r_{\mathrm{rb}}$ & Số theo hướng\\
-\midrule\endhead
-\bottomrule\endfoot
-\bottomrule\endlastfoot
-0.12 & Độ nhạy BH4 & Mean CC & 20 & -0.0317 & [-0.0522, +0.0094] & 0.036234 & 0.048312 & -0.533 & 13/\allowbreak 20\\
-0.12 & Độ nhạy BH4 & Mean NRMSE & 20 & +0.0321 & [-0.0042, +0.0492] & 0.029575 & 0.048312 & +0.552 & 13/\allowbreak 20\\
-0.12 & Độ nhạy BH4 & DET & 20 & +0.0025 & [-0.0078, +0.0076] & 0.784126 & 0.784126 & +0.076 & 7/\allowbreak 20\\
-0.12 & Độ nhạy BH4 & LLE & 20 & -0.0361 & [-0.0567, +0.0042] & 0.017181 & 0.048312 & -0.600 & 14/\allowbreak 20\\
-0.16 & \textbf{Chính BH7} & Mean CC & 20 & -0.0339 & [-0.0595, -0.0043] & 0.02148438 & 0.0376 & -0.581 & 15/\allowbreak 20\\
-0.16 & \textbf{Chính BH7} & Mean NRMSE & 20 & +0.0294 & [0.0047, 0.0530] & 0.00729561 & 0.0255 & +0.667 & 15/\allowbreak 20\\
-0.16 & \textbf{Chính BH7} & DET & 20 & -0.0186 & [-0.0364, -0.0069] & 0.02148438 & 0.0376 & -0.581 & 15/\allowbreak 20\\
-0.16 & \textbf{Chính BH7} & LLE & 20 & -0.0376 & [-0.0537, -0.0230] & 0.00070763 & 0.0050 & -0.810 & 16/\allowbreak 20\\
-0.20 & Độ nhạy BH4 & Mean CC & 20 & -0.0316 & [-0.0529, -0.0008] & 0.015312 & 0.020416 & -0.610 & 14/\allowbreak 20\\
-0.20 & Độ nhạy BH4 & Mean NRMSE & 20 & +0.0296 & [+0.0056, +0.0476] & 0.005581 & 0.011162 & +0.686 & 16/\allowbreak 20\\
-0.20 & Độ nhạy BH4 & DET & 20 & +0.0015 & [-0.0099, +0.0148] & 0.985435 & 0.985435 & +0.010 & 10/\allowbreak 20\\
-0.20 & Độ nhạy BH4 & LLE & 20 & -0.0464 & [-0.0572, -0.0240] & 0.000036 & 0.000145 & -0.933 & 17/\allowbreak 20\\
-\end{longtable}
-\clearpage
-\addtocounter{table}{-1}
-\stepcounter{supptablepanel}
-\begin{longtable}{L{\dimexpr0.07519\linewidth-1.50376\tabcolsep\relax}L{\dimexpr0.12030\linewidth-2.40602\tabcolsep\relax}L{\dimexpr0.12782\linewidth-2.55639\tabcolsep\relax}L{\dimexpr0.06767\linewidth-1.35338\tabcolsep\relax}L{\dimexpr0.09023\linewidth-1.80451\tabcolsep\relax}L{\dimexpr0.18797\linewidth-3.75940\tabcolsep\relax}L{\dimexpr0.09023\linewidth-1.80451\tabcolsep\relax}L{\dimexpr0.08271\linewidth-1.65414\tabcolsep\relax}L{\dimexpr0.07519\linewidth-1.50376\tabcolsep\relax}L{\dimexpr0.08271\linewidth-1.65414\tabcolsep\relax}}
-\multicolumn{10}{l}{Bảng~\ref{tab:supp_reconstruction} (tiếp theo)}\\
-\multicolumn{10}{l}{\textbf{Panel B. Độ nhạy số chiều tại độ trễ 0.16 s}}\\
-\toprule
-Thiết lập & Họ & Thước đo & n ghép cặp & Trung vị $\Delta$ & CI 95\% & $p$ thô & $q_{\mathrm{BH}}$ & $r_{\mathrm{rb}}$ & Số theo hướng\\
-\midrule\endfirsthead
-\multicolumn{10}{l}{Bảng~\ref{tab:supp_reconstruction} (tiếp theo)}\\
-\toprule
-Thiết lập & Họ & Thước đo & n ghép cặp & Trung vị $\Delta$ & CI 95\% & $p$ thô & $q_{\mathrm{BH}}$ & $r_{\mathrm{rb}}$ & Số theo hướng\\
-\midrule\endhead
-\bottomrule\endfoot
-\bottomrule\endlastfoot
-7 & Độ nhạy BH4 & Mean CC & 20 & -0.0307 & [-0.0565, +0.0045] & 0.026642 & 0.035522 & -0.562 & 13/\allowbreak 20\\
-7 & Độ nhạy BH4 & Mean NRMSE & 20 & +0.0377 & [-0.0023, +0.0561] & 0.023951 & 0.035522 & +0.571 & 13/\allowbreak 20\\
-7 & Độ nhạy BH4 & DET & 20 & -0.0145 & [-0.0303, -0.0047] & 0.053169 & 0.053169 & -0.495 & 15/\allowbreak 20\\
-7 & Độ nhạy BH4 & LLE & 20 & -0.0285 & [-0.0549, -0.0076] & 0.004860 & 0.019440 & -0.695 & 16/\allowbreak 20\\
-8 & \textbf{Chính BH7} & Mean CC & 20 & -0.0339 & [-0.0595, -0.0043] & 0.02148438 & 0.0376 & -0.581 & 15/\allowbreak 20\\
-8 & \textbf{Chính BH7} & Mean NRMSE & 20 & +0.0294 & [0.0047, 0.0530] & 0.00729561 & 0.0255 & +0.667 & 15/\allowbreak 20\\
-8 & \textbf{Chính BH7} & DET & 20 & -0.0186 & [-0.0364, -0.0069] & 0.02148438 & 0.0376 & -0.581 & 15/\allowbreak 20\\
-8 & \textbf{Chính BH7} & LLE & 20 & -0.0376 & [-0.0537, -0.0230] & 0.00070763 & 0.0050 & -0.810 & 16/\allowbreak 20\\
-9 & Độ nhạy BH4 & Mean CC & 20 & -0.0251 & [-0.0492, +0.0055] & 0.029575 & 0.039434 & -0.552 & 13/\allowbreak 20\\
-9 & Độ nhạy BH4 & Mean NRMSE & 20 & +0.0315 & [+0.0043, +0.0483] & 0.008308 & 0.016617 & +0.657 & 15/\allowbreak 20\\
-9 & Độ nhạy BH4 & DET & 20 & -0.0200 & [-0.0321, -0.0052] & 0.058258 & 0.058258 & -0.486 & 15/\allowbreak 20\\
-9 & Độ nhạy BH4 & LLE & 20 & -0.0247 & [-0.0534, -0.0102] & 0.000586 & 0.002342 & -0.819 & 16/\allowbreak 20\\
-\end{longtable}
-\endgroup
-{\small Thiết lập Panel A là độ trễ tính bằng giây; Panel B là số chiều. Hàng BH7 chính tái hiện Bảng~\ref{tab:supp_primary}, còn hàng BH4 độ nhạy dùng họ bốn thước đo trong từng thiết lập thay thế.}\par
-{\small Số đếm theo hướng dùng dấu kỳ vọng danh định (Mean CC/DET/LLE giảm; Mean NRMSE tăng), kể cả khi DET tổng thể đảo dấu. Hiệu ứng/CI giữ độ chính xác và đơn vị của bản thảo; p/q thay thế giữ sáu chữ số thập phân của nguồn. Đây là phân tích từng yếu tố, không phải lưới tổ hợp đầy đủ.}\par
-\end{landscape}
-\subsubsection{Thiết lập bộ ước lượng RQA}\label{sec:supp_12_2}
-Độ nhạy RQA thử $\mathrm{RR}=0.01,0.02,0.03$ và hệ số Theiler 0.75, 1.00, 1.25 so với $W=(m-1)d$ danh định. Mọi thiết lập giữ 901 window và 20 session ghép cặp. Bảng~\ref{tab:supp_estimator}A báo cáo suy luận DET/LAM/TT hiện có, chỉ với p thô. DET vẫn âm qua các thiết lập này, nhưng tại RR=0.01, CI chứa không và p là 0.082550. Việc giữ hướng dưới những lựa chọn RQA này khác với đảo dấu phụ thuộc độ trễ tại Mục~\ref{sec:supp_12_1}.
-
-LAM/TT vẫn là kết quả thứ cấp: mọi hiệu ứng trung vị đều dương, mọi CI chứa không và mọi p thô vượt 0.05. Không có kết quả độ nhạy bộ ước lượng cho $L_{\mathrm{mean}}$. Diễn giải thước đo theo Mục~\ref{sec:supp_6}.
-
-\subsubsection{Thiết lập bộ ước lượng LLE}\label{sec:supp_12_3}
-Độ nhạy LLE thử khoảng khớp 0.60--1.10, 0.80--1.30 (danh định) và 1.00--1.50 s; ngưỡng $R^2$ 0.90/0.95; hệ số Theiler 0.75/1.00/1.25 so với loại trừ dựa trên chu kỳ trung bình phổ (Mục~\ref{sec:supp_7}). Mọi thiết lập giữ 20 session ghép cặp. Mỗi hiệu ứng trung vị đều âm, mọi CI không chứa không và p thô dưới 0.05 (Bảng~\ref{tab:supp_estimator}B). Không áp dụng BH qua các thiết lập bộ ước lượng.
-
-Các khoảng khớp giữ 802/872/889 trong 901 window đầu vào. Nâng ngưỡng $R^2$ từ 0.90 lên 0.95 giữ 734 thay vì 872 window và giảm mức giảm trung vị. Hệ số Theiler 0.75/1.00 cho cùng hiệu ứng và mức giữ lại; 1.25 giữ 874 window và đổi độ lớn. Vì vậy, việc giữ hướng đồng thời đi kèm thay đổi độ lớn và tập window; bộ ước lượng không độc lập với tham số.
-
-\begin{landscape}
-\begingroup\small
-\setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.18}
-\stepcounter{supptablepanel}
-\begin{longtable}{L{\dimexpr0.13534\linewidth-2.70677\tabcolsep\relax}L{\dimexpr0.06767\linewidth-1.35338\tabcolsep\relax}L{\dimexpr0.07519\linewidth-1.50376\tabcolsep\relax}L{\dimexpr0.07519\linewidth-1.50376\tabcolsep\relax}L{\dimexpr0.06015\linewidth-1.20301\tabcolsep\relax}L{\dimexpr0.10526\linewidth-2.10526\tabcolsep\relax}L{\dimexpr0.20301\linewidth-4.06015\tabcolsep\relax}L{\dimexpr0.09023\linewidth-1.80451\tabcolsep\relax}L{\dimexpr0.09023\linewidth-1.80451\tabcolsep\relax}L{\dimexpr0.09774\linewidth-1.95489\tabcolsep\relax}}
-\caption{Độ nhạy của bộ ước lượng RQA và LLE.}\label{tab:supp_estimator}\\
-\multicolumn{10}{l}{\textbf{Panel A. Thiết lập RR và Theiler của RQA}}\\
-\toprule
-Yếu tố & Thiết lập & Thước đo & Window hợp lệ & n ghép cặp & Trung vị $\Delta$ & CI 95\% & $p$ thô & $r_{\mathrm{rb}}$ & Số theo hướng\\
-\midrule\endfirsthead
-\multicolumn{10}{l}{Bảng~\ref{tab:supp_estimator} (tiếp theo)}\\
-\toprule
-Yếu tố & Thiết lập & Thước đo & Window hợp lệ & n ghép cặp & Trung vị $\Delta$ & CI 95\% & $p$ thô & $r_{\mathrm{rb}}$ & Số theo hướng\\
-\midrule\endhead
-\bottomrule\endfoot
-\bottomrule\endlastfoot
-RR & 0.01 & DET & 901 & 20 & -0.015214 & [-0.033764, +0.002064] & 0.082550 & -0.447619 & 14/\allowbreak 20\\
-RR & 0.01 & LAM & 901 & 20 & 0.014242 & [-0.005819, +0.057725] & 0.132727 & 0.390476 & 13/\allowbreak 20\\
-RR & 0.01 & TT & 901 & 20 & 0.000343 & [-0.000043, +0.004808] & 0.214602 & 0.352941 & 10/\allowbreak 20; 4 bằng không\\
-RR & 0.02 & DET & 901 & 20 & -0.0186 & [-0.0364, -0.0069] & 0.021484 & -0.581 & 15/\allowbreak 20\\
-RR & 0.02 & LAM & 901 & 20 & +0.0165 & [-0.0044, 0.0635] & 0.142906 & +0.381 & 13/\allowbreak 20\\
-RR & 0.02 & TT & 901 & 20 & +0.0095 & [-0.0034, 0.0160] & 0.202450 & +0.333 & 14/\allowbreak 20\\
-RR & 0.03 & DET & 901 & 20 & -0.017813 & [-0.033859, -0.007863] & 0.021484 & -0.580952 & 15/\allowbreak 20\\
-RR & 0.03 & LAM & 901 & 20 & 0.020281 & [-0.005463, +0.051395] & 0.082550 & 0.447619 & 13/\allowbreak 20\\
-RR & 0.03 & TT & 901 & 20 & 0.022063 & [-0.007639, +0.033264] & 0.294252 & 0.276190 & 14/\allowbreak 20\\
-Hệ số Theiler & 0.75 & DET & 901 & 20 & -0.019191 & [-0.036836, -0.006809] & 0.021484 & -0.580952 & 15/\allowbreak 20\\
-Hệ số Theiler & 0.75 & LAM & 901 & 20 & 0.019785 & [-0.003072, +0.062855] & 0.123093 & 0.400000 & 13/\allowbreak 20\\
-Hệ số Theiler & 0.75 & TT & 901 & 20 & 0.009809 & [-0.003114, +0.015962] & 0.189348 & 0.342857 & 14/\allowbreak 20\\
-Hệ số Theiler & 1.00 & DET & 901 & 20 & -0.0186 & [-0.0364, -0.0069] & 0.021484 & -0.581 & 15/\allowbreak 20\\
-Hệ số Theiler & 1.00 & LAM & 901 & 20 & +0.0165 & [-0.0044, 0.0635] & 0.142906 & +0.381 & 13/\allowbreak 20\\
-Hệ số Theiler & 1.00 & TT & 901 & 20 & +0.0095 & [-0.0034, 0.0160] & 0.202450 & +0.333 & 14/\allowbreak 20\\
-Hệ số Theiler & 1.25 & DET & 901 & 20 & -0.019033 & [-0.037873, -0.007730] & 0.017181 & -0.600000 & 15/\allowbreak 20\\
-Hệ số Theiler & 1.25 & LAM & 901 & 20 & 0.019372 & [-0.005161, +0.062616] & 0.132727 & 0.390476 & 12/\allowbreak 20\\
-Hệ số Theiler & 1.25 & TT & 901 & 20 & 0.009844 & [-0.002347, +0.017601] & 0.176853 & 0.352381 & 14/\allowbreak 20\\
-\end{longtable}
-\clearpage
-\addtocounter{table}{-1}
-\stepcounter{supptablepanel}
-\begin{longtable}{L{\dimexpr0.10526\linewidth-2.31579\tabcolsep\relax}L{\dimexpr0.10877\linewidth-2.39298\tabcolsep\relax}L{\dimexpr0.07719\linewidth-1.69825\tabcolsep\relax}L{\dimexpr0.06316\linewidth-1.38947\tabcolsep\relax}L{\dimexpr0.06316\linewidth-1.38947\tabcolsep\relax}L{\dimexpr0.05614\linewidth-1.23509\tabcolsep\relax}L{\dimexpr0.09123\linewidth-2.00702\tabcolsep\relax}L{\dimexpr0.18947\linewidth-4.16842\tabcolsep\relax}L{\dimexpr0.08421\linewidth-1.85263\tabcolsep\relax}L{\dimexpr0.08421\linewidth-1.85263\tabcolsep\relax}L{\dimexpr0.07719\linewidth-1.69825\tabcolsep\relax}}
-\multicolumn{11}{l}{Bảng~\ref{tab:supp_estimator} (tiếp theo)}\\
-\multicolumn{11}{l}{\textbf{Panel B. Thiết lập khớp, chất lượng và Theiler của LLE}}\\
-\toprule
-Yếu tố & Thiết lập & Đạt /\allowbreak  đầu vào & Window Awake & Window Drowsy & n ghép cặp & Trung vị $\Delta$ & CI 95\% & $p$ thô & $r_{\mathrm{rb}}$ & Số giảm\\
-\midrule\endfirsthead
-\multicolumn{11}{l}{Bảng~\ref{tab:supp_estimator} (tiếp theo)}\\
-\toprule
-Yếu tố & Thiết lập & Đạt /\allowbreak  đầu vào & Window Awake & Window Drowsy & n ghép cặp & Trung vị $\Delta$ & CI 95\% & $p$ thô & $r_{\mathrm{rb}}$ & Số giảm\\
-\midrule\endhead
-\bottomrule\endfoot
-\bottomrule\endlastfoot
-Khoảng khớp (s) & 0.60--1.10 & 802/\allowbreak 901 & 542 & 260 & 20 & -0.034980 & [-0.064607, -0.019121] & 0.000261 & -0.857143 & 18/\allowbreak 20\\
-Khoảng khớp (s) & 0.80--1.30 & 872/\allowbreak 901 & 579 & 293 & 20 & -0.0376 & [-0.0537, -0.0230] & 0.000708 & -0.810 & 16/\allowbreak 20\\
-Khoảng khớp (s) & 1.00--1.50 & 889/\allowbreak 901 & 588 & 301 & 20 & -0.030357 & [-0.045778, -0.003941] & 0.008308 & -0.657143 & 15/\allowbreak 20\\
-Ngưỡng $R^2$ & 0.90 & 872/\allowbreak 901 & 579 & 293 & 20 & -0.0376 & [-0.0537, -0.0230] & 0.000708 & -0.810 & 16/\allowbreak 20\\
-Ngưỡng $R^2$ & 0.95 & 734/\allowbreak 901 & 500 & 234 & 20 & -0.030618 & [-0.041701, -0.013987] & 0.002325 & -0.742857 & 16/\allowbreak 20\\
-Hệ số Theiler & 0.75 & 872/\allowbreak 901 & 579 & 293 & 20 & -0.037570 & [-0.053698, -0.022976] & 0.000708 & -0.809524 & 16/\allowbreak 20\\
-Hệ số Theiler & 1.00 & 872/\allowbreak 901 & 579 & 293 & 20 & -0.0376 & [-0.0537, -0.0230] & 0.000708 & -0.810 & 16/\allowbreak 20\\
-Hệ số Theiler & 1.25 & 874/\allowbreak 901 & 580 & 294 & 20 & -0.029763 & [-0.056095, -0.016331] & 0.002325 & -0.742857 & 16/\allowbreak 20\\
-\end{longtable}
-\endgroup
-{\small Cả hai panel chỉ báo cáo p thô, không hiệu chỉnh BH qua thiết lập. n ghép cặp luôn là 20. Panel A đếm giảm với DET và tăng với LAM/TT; TT tại RR=0.01 có bốn sai khác bằng không bị loại trước tính hạng. DET/LAM không thứ nguyên, TT dùng độ dài chỉ số mẫu.}\par
-{\small Số đạt ở Panel B dùng mẫu số 901 window đầu vào; hiệu ứng/CI có đơn vị s$^{-1}$. Hệ số Theiler dùng loại trừ danh định riêng của từng bộ ước lượng. Hiệu ứng/CI/$r_{\mathrm{rb}}$ danh định tái hiện Bảng~\ref{tab:supp_primary} theo độ chính xác bản thảo; giá trị khi thay đổi thiết lập giữ sáu chữ số thập phân.}\par
-\end{landscape}
-\subsection{Sự phụ thuộc giữa các session lặp lại khi chưa biết liên kết}\label{sec:supp_13}
-Để đánh giá hạn chế về liên kết trong Mục~\ref{sec:supp_1}, phân tích sự phụ thuộc giả định nhóm 20 session thành 10 cụm gồm hai session bằng ghép cặp hoàn hảo ngẫu nhiên. Lấy mẫu có hoàn lại ghép các phần tử liền kề trong hoán vị ngẫu nhiên, tạo ra 100,000 ghép cặp được lấy mẫu và 99,990 ghép cặp duy nhất trong 654,729,075 ghép cặp có thể có về lý thuyết. Các cụm này không khôi phục danh tính người tham gia hoặc xác lập tính độc lập thực tế giữa session.
-
-Với mỗi ghép cặp, sai khác cụm là trung bình số học của hai sai khác theo session; hiệu ứng là trung vị của 10 sai khác cụm. Kiểm định signed-rank hai phía có điều kiện loại sai khác trong $10^{-12}$ quanh không và lấy hạng trung bình khi giá trị tuyệt đối đồng hạng. BH bao phủ bảy thước đo trong mỗi ghép cặp, không có bootstrap lồng bên trong. Bảng~\ref{tab:supp_repeated}A đưa ra phân vị của phân bố ghép cặp, không phải CI bootstrap.
-
-Hướng trung vị của cả bốn thước đo trọng tâm được giữ trong mọi ghép cặp đã lấy mẫu. Tỷ lệ có $q_{\mathrm{BH}}<0.05$ là 19.36\% (Mean CC), 27.82\% (Mean NRMSE), 22.59\% (DET) và 79.69\% (LLE). Hướng ổn định hơn hỗ trợ thống kê sau khi giảm đơn vị hiệu dụng xuống 10 cụm giả định; LLE giữ hỗ trợ cao nhất trong phân tích này. Tần suất mô tả thiết kế ghép cặp giả định đã xác định, không phải xác suất kết quả thực có ý nghĩa thống kê. Chúng không cung cấp suy luận ở cấp người tham gia. Tóm tắt tích lũy 50,000/100,000 lượt tương tự nhau (Bảng~\ref{tab:supp_repeated}B; Hình~\ref{fig:supp_repeated}), hỗ trợ sự ổn định Monte Carlo nhưng không giải quyết liên kết.
-
-\begin{landscape}
-\begingroup\small
-\setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.18}
-\stepcounter{supptablepanel}
-\begin{longtable}{L{\dimexpr0.16162\linewidth-1.93939\tabcolsep\relax}L{\dimexpr0.13131\linewidth-1.57576\tabcolsep\relax}L{\dimexpr0.14141\linewidth-1.69697\tabcolsep\relax}L{\dimexpr0.14141\linewidth-1.69697\tabcolsep\relax}L{\dimexpr0.15152\linewidth-1.81818\tabcolsep\relax}L{\dimexpr0.27273\linewidth-3.27273\tabcolsep\relax}}
-\caption{Phân bố ghép cặp giả định và sự hội tụ.}\label{tab:supp_repeated}\\
-\multicolumn{6}{l}{\textbf{Panel A. Phân bố ghép cặp giả định, 100,000 lượt}}\\
-\toprule
-Thước đo & Hướng danh định & Giữ dấu (\%) & $q_{\mathrm{BH}}<0.05$ (\%) & $\Delta$ ghép cặp trung vị & Khoảng phân vị 2.5th--97.5th\\
-\midrule\endfirsthead
-\multicolumn{6}{l}{Bảng~\ref{tab:supp_repeated} (tiếp theo)}\\
-\toprule
-Thước đo & Hướng danh định & Giữ dấu (\%) & $q_{\mathrm{BH}}<0.05$ (\%) & $\Delta$ ghép cặp trung vị & Khoảng phân vị 2.5th--97.5th\\
-\midrule\endhead
-\bottomrule\endfoot
-\bottomrule\endlastfoot
-Mean CC & Giảm & 100.00 & 19.36 & -0.0242 & [-0.0359, -0.0147]\\
-Mean NRMSE & Tăng & 100.00 & 27.82 & +0.0263 & [+0.0185, +0.0343]\\
-DET & Giảm & 100.00 & 22.59 & -0.0181 & [-0.0255, -0.0100]\\
-$L_{\mathrm{mean}}$ & Giảm & 100.00 & 2.41 & -0.0657 & [-0.1000, -0.0333]\\
-LAM & Tăng & 99.63 & 2.94 & +0.0227 & [+0.0063, +0.0402]\\
-TT & Tăng & 99.25 & 0.04 & +0.0076 & [+0.0012, +0.0137]\\
-LLE & Giảm & 100.00 & 79.69 & -0.0356 & [-0.0446, -0.0266]\\
-\end{longtable}
-\addtocounter{table}{-1}
-\stepcounter{supptablepanel}
-\begin{longtable}{L{\dimexpr0.16162\linewidth-1.93939\tabcolsep\relax}L{\dimexpr0.13131\linewidth-1.57576\tabcolsep\relax}L{\dimexpr0.14141\linewidth-1.69697\tabcolsep\relax}L{\dimexpr0.14141\linewidth-1.69697\tabcolsep\relax}L{\dimexpr0.15152\linewidth-1.81818\tabcolsep\relax}L{\dimexpr0.27273\linewidth-3.27273\tabcolsep\relax}}
-\multicolumn{6}{l}{\textbf{Panel B. Tóm tắt Monte Carlo tích lũy}}\\
-\toprule
-Số lượt & Thước đo & Giữ dấu (\%) & $q_{\mathrm{BH}}<0.05$ (\%) & $\Delta$ ghép cặp trung vị & Khoảng phân vị 2.5th--97.5th\\
-\midrule\endfirsthead
-\multicolumn{6}{l}{Bảng~\ref{tab:supp_repeated} (tiếp theo)}\\
-\toprule
-Số lượt & Thước đo & Giữ dấu (\%) & $q_{\mathrm{BH}}<0.05$ (\%) & $\Delta$ ghép cặp trung vị & Khoảng phân vị 2.5th--97.5th\\
-\midrule\endhead
-\bottomrule\endfoot
-\bottomrule\endlastfoot
-50000 & Mean CC & 100.00 & 19.44 & -0.0242 & [-0.0360, -0.0147]\\
-50000 & Mean NRMSE & 100.00 & 27.94 & +0.0263 & [+0.0185, +0.0342]\\
-50000 & DET & 100.00 & 22.69 & -0.0181 & [-0.0256, -0.0100]\\
-50000 & LLE & 100.00 & 79.69 & -0.0356 & [-0.0446, -0.0266]\\
-100000 & Mean CC & 100.00 & 19.36 & -0.0242 & [-0.0359, -0.0147]\\
-100000 & Mean NRMSE & 100.00 & 27.82 & +0.0263 & [+0.0185, +0.0343]\\
-100000 & DET & 100.00 & 22.59 & -0.0181 & [-0.0255, -0.0100]\\
-100000 & LLE & 100.00 & 79.69 & -0.0356 & [-0.0446, -0.0266]\\
-\end{longtable}
-\endgroup
-{\small Giữ dấu so sánh hiệu ứng cụm trung vị của mỗi ghép cặp với hướng danh định. Hỗ trợ q dùng BH7 trong ghép cặp. Khoảng là phân vị 2.5th--97.5th của phân bố ghép cặp giả định, không phải CI bootstrap hoặc khoảng hiệu ứng người tham gia. Đơn vị theo Bảng~\ref{tab:supp_primary}.}\par
-{\small Hàng 50k/100k là các tiền tố tích lũy của cùng chuỗi, không phải lượt chạy độc lập. Không suy ra liên kết người tham gia.}\par
-\end{landscape}
-\begin{landscape}
-\begin{figure}[p]
-\centering
-\includegraphics[width=\linewidth,height=.75\textheight,keepaspectratio]{figures/figure_S09.pdf}
-\caption{Sự phụ thuộc giả định giữa các session lặp lại. (A) Tỷ lệ trong 100,000 ghép cặp có $q_{\mathrm{BH}}<0.05$ cho bốn thước đo trọng tâm, áp dụng BH7 trong mỗi ghép cặp. Hướng trung vị của cả bốn thước đo được giữ trong mọi ghép cặp lấy mẫu. (B) Tần suất hỗ trợ tích lũy tại 1k/10k/50k/100k lượt. Đây là tóm tắt của phân bố ghép cặp giả định, không phải xác suất ý nghĩa thống kê thực hoặc khôi phục người tham gia.}\label{fig:supp_repeated}
-\end{figure}
-\end{landscape}
-\subsection{Động lực học ký hiệu}\label{sec:supp_14}
-Phân tích ký hiệu thăm dò mã hóa khoảng giữa hai đỉnh PPG liên tiếp (PPI) tại 60/120/180 s. Đỉnh được phát hiện không làm trơn bổ sung, với khoảng cách tối thiểu $\lceil0.30f_s\rceil$ mẫu và prominence bằng 0.20 lần chênh lệch phân vị biên độ 95th--5th. PPI bằng sai khác chỉ số đỉnh liên tiếp chia cho $f_s$. Chấp nhận cần PPI hữu hạn, không có khoảng ngoài 0.30--2.00 s, độ bao phủ từ đỉnh đầu đến đỉnh cuối $\geq90\%$ và ít nhất $\max\{3,\lceil T/2\rceil-2\}$ khoảng cho thời lượng $T$ giây. Thay đổi tương đối trên 0.20 chỉ là chẩn đoán, không phải tiêu chí loại.
-
-Trong mỗi window được chấp nhận, PPI được lượng tử hóa thành sáu mức có độ rộng bằng nhau giữa giá trị nhỏ nhất và lớn nhất. Giá trị tại biên trong thuộc bin phía trên; chuỗi hằng dùng mức không. Các từ chồng lấp gồm ba ký hiệu được gán 0V khi cả hai sai khác liền kề bằng không, 1V khi đúng một sai khác bằng không và 2V khi cả hai khác không. 2V gộp thay đổi cùng dấu 2LV và khác dấu 2UV. Phần trăm xuất hiện cộng thành 100\% trong window, dù các trung vị session-trạng thái tổng hợp riêng không nhất thiết như vậy. So sánh ghép cặp sử dụng trung vị session-trạng thái của các window được chấp nhận.
-
-Bảng~\ref{tab:supp_symbolic} giữ cả chín kết quả phân loại--thời lượng, với BH3 trong từng thời lượng. Hiệu ứng trung vị 0V dương và 2V âm ở mọi thời lượng; 1V gần không và đổi dấu tổng thể ở 180 s. Không kết quả nào đạt họ BH tương ứng. CI tại 60-s của 0V và tại 180-s của 2V không chứa không; p thô của kết quả sau là 0.048441 nhưng q là 0.145323. Những đặc điểm CI/kiểm định thô này không thay thế kết quả hiệu chỉnh đa kiểm định mang tính thăm dò.
-
-Hiệu ứng ghép cặp giữ cùng dấu qua cả ba thời lượng ở 17/20 session với 0V, 11/20 với 1V và 14/20 với 2V. Các số đếm gồm session luôn dương hoặc luôn âm, không phụ thuộc hướng tổng thể, và không hàm ý độ lớn bằng nhau. Tỷ lệ ký hiệu cung cấp bối cảnh theo hướng (Hình~\ref{fig:supp_symbolic}) ngoài khẳng định chính của bốn thước đo; không phải thước đo giao cảm/phế vị trực tiếp hoặc thước đo thần kinh tự chủ từ ECG đã được xác nhận.
-
-\begin{landscape}
-\begingroup\small
-\setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.18}
-\stepcounter{supptablepanel}
-\begin{longtable}{L{\dimexpr0.08929\linewidth-1.60714\tabcolsep\relax}L{\dimexpr0.08036\linewidth-1.44643\tabcolsep\relax}L{\dimexpr0.08036\linewidth-1.44643\tabcolsep\relax}L{\dimexpr0.10714\linewidth-1.92857\tabcolsep\relax}L{\dimexpr0.17857\linewidth-3.21429\tabcolsep\relax}L{\dimexpr0.11607\linewidth-2.08929\tabcolsep\relax}L{\dimexpr0.11607\linewidth-2.08929\tabcolsep\relax}L{\dimexpr0.10714\linewidth-1.92857\tabcolsep\relax}L{\dimexpr0.12500\linewidth-2.25000\tabcolsep\relax}}
-\caption{Kết quả ký hiệu hỗ trợ mang tính thăm dò.}\label{tab:supp_symbolic}\\
-\toprule
-Phân loại & Thời lượng (s) & n ghép cặp & $\Delta$ (pp) & CI 95\% (pp) & $p$ thô & $q_{\mathrm{BH}}$ & $r_{\mathrm{rb}}$ & Số theo hướng\\
-\midrule\endfirsthead
-\multicolumn{9}{l}{Bảng~\ref{tab:supp_symbolic} (tiếp theo)}\\
-\toprule
-Phân loại & Thời lượng (s) & n ghép cặp & $\Delta$ (pp) & CI 95\% (pp) & $p$ thô & $q_{\mathrm{BH}}$ & $r_{\mathrm{rb}}$ & Số theo hướng\\
-\midrule\endhead
-\bottomrule\endfoot
-\bottomrule\endlastfoot
-0V & 60 & 20 & +4.04 & [+0.35, +7.18] & 0.053169 & 0.113777 & +0.495 & 14/\allowbreak 20\\
-1V & 60 & 20 & +0.41 & [-1.47, +2.23] & 0.498009 & 0.498009 & +0.181 & 10/\allowbreak 20\\
-2V & 60 & 20 & -0.91 & [-6.40, +0.37] & 0.075851 & 0.113777 & -0.457 & 13/\allowbreak 20\\
-0V & 120 & 20 & +2.32 & [-2.64, +5.63] & 0.474905 & 0.712358 & +0.190 & 13/\allowbreak 20\\
-1V & 120 & 20 & +0.03 & [-1.67, +2.13] & 0.927279 & 0.927279 & +0.029 & 10/\allowbreak 20\\
-2V & 120 & 20 & -2.30 & [-4.68, +1.78] & 0.329983 & 0.712358 & -0.257 & 12/\allowbreak 20\\
-0V & 180 & 20 & +4.58 & [-1.12, +13.94] & 0.164957 & 0.247436 & +0.362 & 13/\allowbreak 20\\
-1V & 180 & 20 & -0.06 & [-4.31, +1.95] & 0.956329 & 0.956329 & -0.019 & 10/\allowbreak 20\\
-2V & 180 & 20 & -2.67 & [-5.37, -0.44] & 0.048441 & 0.145323 & -0.505 & 15/\allowbreak 20\\
-\end{longtable}
-\endgroup
-{\small Cả chín kiểm định đều thăm dò, với BH3 riêng trong thời lượng. pp là điểm phần trăm. Số đếm theo hướng là dương với 0V/1V và âm với 2V; 1V dùng quy ước báo cáo dương ngay cả khi trung vị 180-s hơi âm.}\par
-{\small Số cùng dấu qua thời lượng là 17/20 (0V), 11/20 (1V), 14/20 (2V), gồm session luôn ngược hướng. Hiệu ứng/CI dùng hai chữ số thập phân, p/q thô sáu và hiệu ứng rank-biserial ba.}\par
-\end{landscape}
-\begin{figure}[p]
-\centering
-\includegraphics[width=\linewidth,height=.84\textheight,keepaspectratio]{figures/figure_S10.pdf}
-\caption{Bằng chứng PPI ký hiệu thăm dò tại (A) 60, (B) 120 và (C) 180 s. Tỷ lệ xuất hiện 0V/2V theo session-trạng thái ghép cặp sử dụng lượng tử hóa PPI sáu mức và từ chồng lấp ba ký hiệu. Thay đổi trung vị 0V dương và 2V âm, nhưng không kiểm định nào trong chín kiểm định phân loại--thời lượng, kể cả 1V trong Bảng~\ref{tab:supp_symbolic}, đạt BH3 trong thời lượng. Các tỷ lệ cung cấp bối cảnh hỗ trợ, không phải hoạt động giao cảm/phế vị trực tiếp.}\label{fig:supp_symbolic}
-\end{figure}
-\subsection{Tổng hợp độ ổn định của các kết quả}\label{sec:supp_15}
-Bảng~\ref{tab:supp_summary} phân biệt hiệu ứng danh định, việc giữ hướng, độ bất định và hỗ trợ thống kê. Mean CC giảm và Mean NRMSE tăng qua các thiết lập window, nhãn, độ trễ và số chiều đã thử, với độ lớn/CI thay đổi và hỗ trợ suy giảm dưới nhóm giả định.
-
-DET giữ hướng giảm danh định qua window, nhãn, số chiều và thiết lập RR/Theiler của RQA đã thử, nhưng trở thành gần không và dương ở độ trễ ngoài danh định. Sự phụ thuộc độ trễ nhúng vì vậy là một điều kiện diễn giải rõ ràng. LLE giữ hướng giảm qua mọi nhánh đã thử và hỗ trợ cao nhất dưới nhóm giả định, còn lựa chọn khớp/QC làm thay đổi độ lớn và số window được chấp nhận.
-
-Bằng chứng ký hiệu vẫn mang tính thăm dò. Các phân tích độ nhạy hỗ trợ trên cùng bản ghi, không phải lặp lại độc lập. Liên kết người tham gia--session chưa biết vẫn không được giải quyết bằng nhóm giả định. Ma trận không gán ý nghĩa thống kê gộp, điểm độ ổn định hoặc thứ hạng thước đo.
-
-\begin{landscape}
-\begingroup\small
-\setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.18}
-\stepcounter{supptablepanel}
-\begin{longtable}{L{\dimexpr0.07194\linewidth-1.15108\tabcolsep\relax}L{\dimexpr0.09353\linewidth-1.49640\tabcolsep\relax}L{\dimexpr0.12950\linewidth-2.07194\tabcolsep\relax}L{\dimexpr0.12950\linewidth-2.07194\tabcolsep\relax}L{\dimexpr0.12230\linewidth-1.95683\tabcolsep\relax}L{\dimexpr0.15108\linewidth-2.41727\tabcolsep\relax}L{\dimexpr0.13669\linewidth-2.18705\tabcolsep\relax}L{\dimexpr0.16547\linewidth-2.64748\tabcolsep\relax}}
-\caption{Ma trận bằng chứng về độ ổn định tổng thể.}\label{tab:supp_summary}\\
-\toprule
-Thước đo & Danh định 60-s & Độ dài window & Quy tắc nhãn & $\tau/m$ & Thiết lập bộ ước lượng riêng & Nhóm giả định & Giới hạn diễn giải\\
-\midrule\endfirsthead
-\multicolumn{8}{l}{Bảng~\ref{tab:supp_summary} (tiếp theo)}\\
-\toprule
-Thước đo & Danh định 60-s & Độ dài window & Quy tắc nhãn & $\tau/m$ & Thiết lập bộ ước lượng riêng & Nhóm giả định & Giới hạn diễn giải\\
-\midrule\endhead
-\bottomrule\endfoot
-\bottomrule\endlastfoot
-Mean CC & Giảm; có hỗ trợ BH & Giữ hướng; độ bất định thay đổi & Giữ hướng; CI T60 chứa không & Giữ hướng; một số CI chứa không & Không thử riêng tại đây & Giữ hướng; hỗ trợ suy giảm & Độ lớn/\allowbreak hỗ trợ phụ thuộc thiết lập; khả năng dự báo cấp session\\
-Mean NRMSE & Tăng; có hỗ trợ BH & Giữ hướng; độ lớn thay đổi & Giữ hướng; độ lớn khác nhau & Giữ hướng; một số CI chứa không & Không thử riêng tại đây & Giữ hướng; hỗ trợ suy giảm & Độ lớn/\allowbreak hỗ trợ phụ thuộc thiết lập; khả năng dự báo cấp session\\
-DET & Giảm; có hỗ trợ BH & Giữ hướng; CI 30/\allowbreak 180-s chứa không & Giữ hướng; độ lớn khác nhau & Nhạy độ trễ; giữ hướng theo số chiều & Giữ hướng RR/\allowbreak Theiler; hỗ trợ yếu hơn tại RR=0.01 & Giữ hướng; hỗ trợ suy giảm & Tổ chức đường tái diễn phụ thuộc độ trễ; không phải tất định vật lý\\
-LLE & Giảm; có hỗ trợ BH & Giữ hướng; độ bất định thay đổi & Giữ hướng; CI T30 chứa không & Giữ hướng; độ lớn thay đổi & Giữ hướng; số lượng đạt khớp/\allowbreak QC và độ lớn thay đổi & Giữ hướng; hỗ trợ cao nhất trong phân tích này & Phân kỳ quỹ đạo trong window hữu hạn; QC đổi tập dữ liệu; không suy luận người tham gia\\
-Động lực học ký hiệu & Thăm dò; không có hỗ trợ BH & Bối cảnh hướng 0V/\allowbreak 2V tại 60/\allowbreak 120/\allowbreak 180 s & Chưa thử & Chưa thử & Chưa thử & Chưa thử & Ngoài khẳng định chính; không diễn giải thần kinh tự chủ trực tiếp\\
-\end{longtable}
-\endgroup
-{\small Các mô tả phân biệt hướng trung vị, độ bất định CI và hỗ trợ theo họ hiệu chỉnh trong phạm vi cấu hình đã thử. Ô chưa thử không hàm ý ổn định. Kết quả ký hiệu nằm ngoài khẳng định chính của bốn thước đo; liên kết người tham gia chưa biết vẫn là hạn chế.}\par
-\end{landscape}
+Thời lượng (s) & 0V $\Delta$ & 1V $\Delta$ & 2V $\Delta$\\
+\midrule
+60 & $+4.04$ & $+0.41$ & $-0.91$\\
+120 & $+2.32$ & $+0.03$ & $-2.30$\\
+180 & $+4.58$ & $-0.06$ & $-2.67$\\
+\bottomrule
+\end{tabular}
+\end{table}
+\FloatBarrier
 \end{document}
