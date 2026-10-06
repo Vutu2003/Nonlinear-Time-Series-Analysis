@@ -14,3 +14,4 @@ tests/
 data_processed/
 segmentated_data/
 phase1/submission/
+phase1/review/

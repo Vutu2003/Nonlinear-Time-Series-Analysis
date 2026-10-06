@@ -1,0 +1,523 @@
+\documentclass[conference,a4paper]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+% =========================================================
+% PACKAGES
+% =========================================================
+
+% Pass this option before todonotes/TikZ can load xcolor.
+\PassOptionsToPackage{table}{xcolor}
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\graphicspath{{image/supplementary/}}
+\usepackage{textcomp}
+\usepackage[T5]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{makecell}
+\usepackage[disable,colorinlistoftodos,textsize=tiny]{todonotes}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage{stfloats}
+\usepackage{placeins}
+\usepackage{subcaption}
+\usepackage{tabularx}
+\usepackage{soul}
+\usepackage{tikz}
+\usepackage{adjustbox}
+\usepackage{changes}
+\usepackage{balance}
+\usepackage{needspace}
+\usepackage{color}
+
+\setlength{\marginparwidth}{2cm}
+
+% =========================================================
+% SUPPLEMENTARY NUMBERING
+% =========================================================
+
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+
+\captionsetup{font=footnotesize,labelfont=bf,skip=5pt}
+
+% Allow tables to share pages with their surrounding text without
+% forcing a partially filled column/page at section boundaries.
+\renewcommand{\topfraction}{0.90}
+\renewcommand{\bottomfraction}{0.80}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.80}
+\renewcommand{\dbltopfraction}{0.90}
+\renewcommand{\dblfloatpagefraction}{0.80}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{5}
+\setcounter{dbltopnumber}{2}
+\setlength{\textfloatsep}{12pt plus 2pt minus 2pt}
+\setlength{\dbltextfloatsep}{12pt plus 2pt minus 2pt}
+\setlength{\floatsep}{10pt plus 2pt minus 2pt}
+\setlength{\dblfloatsep}{10pt plus 2pt minus 2pt}
+\setlength{\intextsep}{10pt plus 2pt minus 2pt}
+
+% Keep headings with a useful amount of following text.
+\AddToHook{cmd/section/before}{\Needspace{4\baselineskip}}
+\AddToHook{cmd/subsection/before}{\Needspace{3\baselineskip}}
+
+% On float-only pages, keep tables top-aligned with a modest gap.
+\makeatletter
+\setlength{\@dblfptop}{0pt}
+\setlength{\@dblfpsep}{12pt plus 2pt minus 2pt}
+\setlength{\@dblfpbot}{0pt plus 1fil}
+\makeatother
+
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\setlength{\emergencystretch}{1em}
+
+% =========================================================
+% DOCUMENT
+% =========================================================
+
+\begin{document}
+
+\twocolumn[{
+\begin{center}
+{\Large\bfseries Supplementary Material}\\[4pt]
+{\normalsize
+for ``Ultra-Short PPG Dynamics Across the Wakefulness-to-Drowsiness Transition:
+A Nonlinear Time-Series Analysis''}
+\end{center}
+}]
+
+% =========================================================
+% S1
+% =========================================================
+
+\section{Data Integrity and Retained-Window Summary}
+\label{sec:supp_1}
+
+\subsection{Primary Labeling Procedure}
+\label{sec:supp_labeling}
+
+PPG data were collected from 10 healthy adult volunteers during repeated recording sessions conducted at different times of day, with many sessions scheduled after lunch or dinner to increase the likelihood of drowsiness. All participants were informed about the experimental procedure and voluntarily agreed to participate before data collection. Participants were instructed to minimize movement, and recordings were performed under moderate lighting conditions to reduce optical interference.
+
+Drowsiness labels were assigned manually during data collection using the Karolinska Sleepiness Scale (KSS), supported by concurrent video monitoring. A KSS score of $\geq 6$ was used to indicate drowsiness. A supervisor periodically assessed the participant's level of sleepiness from the video together with the KSS-based criterion and synchronized the resulting labels with the PPG recording over predefined time intervals. These annotations define the primary labeling scheme (P0) used in the main analysis.
+
+More detailed annotation metadata, including the exact annotation interval and conflict-resolution rules between KSS and video observations, were not retained in the available dataset documentation. To assess robustness to transition-boundary uncertainty and sustained-state duration, the analyses were repeated using the T30, T60, S3, and S5 labeling rules described under Window and Label Sensitivity in Section~\ref{sec:supp_6}.
+
+\subsection{Data Integrity and Retained Windows}
+
+The 20 recording sessions contained 1,620,038 samples. Session 01 was sampled at 50 Hz; the others at approximately 25 Hz. No missing, non-numeric or infinite signal/time values, duplicate timestamps or invalid labels were found. There were 69 temporal gaps exceeding $1.5$ times the median sampling interval. Gaps were not interpolated, and analysis windows did not cross them.
+
+Table~\ref{tab:supp_retained} reports the windows retained after the manuscript-defined 5-s artifact and 10-s variance-stability screens. The variance screen assesses variance stability, rather than full stationarity.
+
+\begin{table}[!htbp]
+\centering
+\caption{Retained windows by duration and state.}
+\label{tab:supp_retained}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.05}
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrrr@{}}
+\toprule
+\makecell{Duration\\(s)} & Awake & Drowsy & Total\\
+\midrule
+30  & 1,192 & 610 & 1,802\\
+60  & 596   & 305 & 901\\
+120 & 269   & 136 & 405\\
+180 & 161   & 77  & 238\\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+% =========================================================
+% S2
+% =========================================================
+
+\section{Phase-Space Reconstruction Support}
+\label{sec:supp_2}
+
+AMI used the KSG estimator ($k=3$) and selected the first strict interior local minimum. A delay was identified for all 901/901 processed 60-s windows. The median of session medians supported the common operational delay $\tau=0.16$ s; 14/20 session medians lay within $0.16\pm0.04$ s. FNN remained low around $m=7$--9, supporting $m=8$ as a common operational dimension. These shared choices are neither a unique optimum nor a state-specific optimization; the diagnostics do not establish chaos.
+
+% =========================================================
+% S3
+% =========================================================
+
+\section{Simplex Implementation Details and Calibration}
+\label{sec:supp_3}
+
+Prediction libraries and targets remained within each normalized window, using Euclidean distances, normalized exponential neighbor weights and leave-one-out prediction. Table~\ref{tab:supp_simplex} lists the configuration and all prediction horizons; Mean CC and Mean NRMSE follow the manuscript definitions. Temporal-exclusion calibration tested $W=0$--2 s, with the largest adjacent-setting change at $0.6\to0.8$ s. $W=1.0$ s was selected as the first setting after which calibration results remained stable at all larger tested values. This calibration describes estimator behavior, rather than additional state-effect tests.
+
+\begin{table}[!htbp]
+\centering
+\caption{Simplex configuration and exact prediction horizons.}
+\label{tab:supp_simplex}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.05}
+\begin{tabularx}{\linewidth}{@{}lY@{}}
+\toprule
+Component & Configuration\\
+\midrule
+Embedding & $m=8$, $\tau=0.16$ s\\
+Neighbors & $k=m+1=9$; within-window library\\
+Exclusion & $W=1.0$ s\\
+Horizons &
+\makecell[l]{
+0.04, 0.08, 0.12, 0.16, 0.20, 0.28,\\
+0.40, 0.60, 0.80, 1.00, 1.20, 1.60,\\
+2.00, 2.40, 2.80, 3.20, 3.60, 4.00 s
+}\\
+Metrics & Mean CC; Mean NRMSE\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% =========================================================
+% S4
+% =========================================================
+
+\section{RQA and LLE Estimator Diagnostics}
+\label{sec:supp_4}
+
+RQA used a per-window Euclidean-distance threshold targeting $\mathrm{RR}=0.02$, with exclusion $W=(m-1)\tau_{\mathrm{samples}}$ and $l_{\min}=v_{\min}=2$. Achieved RR was close to target. Diagonal (DET/$L_{\mathrm{mean}}$) and vertical (LAM/TT) line summaries describe recurrence structure, with lengths expressed in sample indices; DET does not measure physical determinism.
+
+Rosenstein LLE used spectral-mean-period exclusion, a maximum follow time of 5 s and a 0.80--1.30 s fit interval. Acceptance required $R^2\geq0.90$, at least 50 initial pairs, 30 pairs per fit point and three finite fit points. Of 901 input windows, 872 were accepted. Minimum initial and fit-point pair counts were 1,471 and 1,366, respectively, and median fit $R^2$ was 0.973. Rejected windows failed the $R^2$ criterion rather than the pair-count requirements. LLE estimates local trajectory divergence over a finite window.
+
+% =========================================================
+% S5
+% =========================================================
+
+\section{Pseudoperiodic Surrogate Evidence}
+\label{sec:supp_5}
+
+Each window was compared with $M=39$ PPS under the tested noisy pseudoperiodic null. The finite-sample two-sided rank test counted ties in both tails. The smallest attainable $p$ was 0.05; rejection used $p\leq0.05$ without window-level adjustment. Six non-LLE metrics shared one surrogate ensemble. LLE used a separate ensemble and was evaluated using the same nominal estimator configuration and acceptance criteria as the original signal, including the $R^2\geq0.90$ fit-quality threshold. The original LLE analysis retained 579 Awake and 293 Drowsy windows.
+
+Table~\ref{tab:supp_pps} distinguishes pooled rejection from the median session rejection fraction and retains opposite-direction rejections. All 12 session-level comparisons of original-minus-median-PPS differences (six non-LLE metrics in both states) retained $q_{\mathrm{BH}}<0.05$ under BH12. PPS rejection indicates departure from the tested noisy pseudoperiodic null. It does not prove deterministic chaos or exclude all structured stochastic alternatives; within-state rejection fractions do not test the paired Awake--Drowsy contrast.
+
+\begin{table*}[!tbp]
+\centering
+\caption{PPS rejection summary for all seven metrics.}
+\label{tab:supp_pps}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.05}
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}llrrrrr@{}}
+\toprule
+Metric &
+State &
+\makecell{Valid\\windows} &
+\makecell{Rejected\\$n$} &
+\makecell{Pooled\\(\%)} &
+\makecell{Median session\\rejection (\%)} &
+\makecell{Opposite-direction\\rejections}\\
+\midrule
+Mean CC    & Awake  & 596 & 374 & $62.75$  & $60.66$  & 0\\
+Mean CC    & Drowsy & 305 & 229 & $75.08$  & $71.01$  & 0\\
+Mean NRMSE & Awake  & 596 & 542 & $90.94$  & $91.59$  & 0\\
+Mean NRMSE & Drowsy & 305 & 291 & $95.41$  & $100.00$ & 0\\
+DET        & Awake  & 596 & 595 & $99.83$  & $100.00$ & 0\\
+DET        & Drowsy & 305 & 305 & $100.00$ & $100.00$ & 0\\
+$L_{\mathrm{mean}}$ & Awake  & 596 & 594 & $99.66$  & $100.00$ & 0\\
+$L_{\mathrm{mean}}$ & Drowsy & 305 & 305 & $100.00$ & $100.00$ & 0\\
+LAM        & Awake  & 596 & 537 & $90.10$  & $95.50$  & 0\\
+LAM        & Drowsy & 305 & 273 & $89.51$  & $92.38$  & 1\\
+TT         & Awake  & 596 & 580 & $97.32$  & $100.00$ & 0\\
+TT         & Drowsy & 305 & 295 & $96.72$  & $100.00$ & 0\\
+LLE        & Awake  & 579 & 545 & $94.13$  & $96.30$  & 0\\
+LLE        & Drowsy & 293 & 287 & $97.95$  & $100.00$ & 0\\
+\bottomrule
+\end{tabular*}
+
+\par\smallskip
+\raggedright
+Expected original-minus-median-PPS signs: positive for Mean CC, DET, $L_{\mathrm{mean}}$, LLE; negative for Mean NRMSE, LAM, TT. Median session rejection fractions use 20 recording sessions.
+\end{table*}
+
+% =========================================================
+% S6
+% =========================================================
+
+\section{Robustness and Sensitivity Analyses}
+\label{sec:supp_6}
+
+Tables~\ref{tab:supp_sensitivity} and~\ref{tab:supp_sensitivity_estimators} add uncertainty estimates and statistical support for sensitivity analyses using the same recordings, rather than independent replications. $\Delta$ is the median paired Drowsy-minus-Awake difference between session-state summaries. The 95\% percentile bootstrap CIs and Wilcoxon signed-rank tests follow the manuscript. Each analysis changed one setting; preserved direction is distinguished from magnitude, uncertainty and statistical support.
+
+\subsection{Window and Label Sensitivity}
+\label{sec:supp_6_1}
+
+All four headline median-effect directions persisted across 30/60/120/180 s, with varying magnitude and uncertainty; DET CIs included zero at 30/180 s (Panel A). Longer windows reduced available counts (Table~\ref{tab:supp_retained}); 60 s remains a practical reference rather than a universal optimum. P0 denotes the primary recorded labels; T30 and T60 exclude samples within $\pm30$ and $\pm60$ s of each observed Awake--Drowsy or Drowsy--Awake transition, whereas S3 and S5 retain same-state episodes lasting at least 180 and 300 s, respectively. P0/T30/T60/S3/S5 retained 901/860/787/900/846 windows after general QC, with paired $n=20$ except S5 ($n=19$). The alternative rules preserved all four directions and BH4 support (Panel B), although T60 Mean CC and T30 LLE CIs included zero. Percentile median-effect CIs and rank-based statistical support need not agree exactly.
+
+\subsection{Reconstruction Sensitivity}
+\label{sec:supp_6_2}
+
+Mean CC, Mean NRMSE and LLE retained their directions across the tested delays and dimensions (Panel C). DET changed to a near-zero positive effect at $\tau=0.12$ s ($+0.0025$) and 0.20 s ($+0.0015$), with both CIs including zero. DET remained negative across $m=7$--9, but did not retain BH4 support at $m=7$ and 9. DET is therefore sensitive to embedding delay; preserved direction across dimensions does not imply equal magnitude or uniform statistical support.
+
+\subsection{Estimator Sensitivity}
+\label{sec:supp_6_3}
+
+DET remained negative under the tested RR/Theiler settings, with weaker support at RR=0.01 (Panel D). LAM/TT did not reach statistical significance under these settings. LLE remained negative across all tested fit intervals, $R^2$ thresholds and Theiler multipliers; all its CIs excluded zero and raw $p<0.05$. Fit/QC settings altered effect magnitude and the number of accepted windows. These estimator comparisons report raw p only. Theiler multipliers scale the nominal exclusion of each estimator.
+
+% =========================================================
+% TABLE S4A
+% =========================================================
+
+\begin{table*}[!tbp]
+\renewcommand{\thetable}{S\arabic{table}A}
+\centering
+\caption{Window and label sensitivity.}
+\label{tab:supp_sensitivity}
+\footnotesize
+\setlength{\tabcolsep}{1.5pt}
+\renewcommand{\arraystretch}{1.12}
+
+\begin{minipage}[t]{0.49\textwidth}
+\raggedright
+\textbf{A. Window length}\par\smallskip
+
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}llrcr@{}}
+\toprule
+Metric & s & $\Delta$ & 95\% CI & Raw $p$\\
+\midrule
+CC    & 30  & $-0.0147$ & $[-0.0712,\,-0.0039]$ & $0.03276825$\\
+CC    & 60  & $-0.0339$ & $[-0.0595,\,-0.0043]$ & $0.02148438$\\
+CC    & 120 & $-0.0271$ & $[-0.0490,\,-0.0156]$ & $0.01361656$\\
+CC    & 180 & $-0.0428$ & $[-0.0516,\,-0.0133]$ & $0.00943565$\\
+NRMSE & 30  & $+0.0203$ & $[+0.0009,\,+0.0554]$ & $0.00943565$\\
+NRMSE & 60  & $+0.0294$ & $[0.0047,\,0.0530]$   & $0.00729561$\\
+NRMSE & 120 & $+0.0321$ & $[+0.0196,\,+0.0495]$ & $0.00830841$\\
+NRMSE & 180 & $+0.0321$ & $[+0.0186,\,+0.0465]$ & $0.00729561$\\
+DET   & 30  & $-0.0169$ & $[-0.0318,\,+0.0002]$ & $0.01531219$\\
+DET   & 60  & $-0.0186$ & $[-0.0364,\,-0.0069]$ & $0.02148438$\\
+DET   & 120 & $-0.0201$ & $[-0.0399,\,-0.0134]$ & $0.00638962$\\
+DET   & 180 & $-0.0248$ & $[-0.0416,\,+0.0008]$ & $0.05316925$\\
+LLE   & 30  & $-0.0325$ & $[-0.0549,\,-0.0066]$ & $0.00315285$\\
+LLE   & 60  & $-0.0376$ & $[-0.0537,\,-0.0230]$ & $0.00070763$\\
+LLE   & 120 & $-0.0442$ & $[-0.0591,\,-0.0216]$ & $0.00232506$\\
+LLE   & 180 & $-0.0498$ & $[-0.0584,\,-0.0213]$ & $0.00058556$\\
+\bottomrule
+\end{tabular*}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.49\textwidth}
+\raggedright
+\textbf{B. Label rules}\par\smallskip
+
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}llrcr@{}}
+\toprule
+Rule & Metric & $\Delta$ & 95\% CI & $q_{\mathrm{BH}}$\\
+\midrule
+\textbf{P0} & CC    & $-0.0339$ & $[-0.0595,\,-0.0043]$ & $0.0376$\\
+\textbf{P0} & NRMSE & $+0.0294$ & $[0.0047,\,0.0530]$   & $0.0255$\\
+\textbf{P0} & DET   & $-0.0186$ & $[-0.0364,\,-0.0069]$ & $0.0376$\\
+\textbf{P0} & LLE   & $-0.0376$ & $[-0.0537,\,-0.0230]$ & $0.0050$\\
+T30 & CC    & $-0.0482$ & $[-0.0689,\,-0.0152]$ & $0.0097$\\
+T30 & NRMSE & $+0.0406$ & $[+0.0190,\,+0.0570]$ & $0.0097$\\
+T30 & DET   & $-0.0183$ & $[-0.0332,\,-0.0011]$ & $0.0111$\\
+T30 & LLE   & $-0.0322$ & $[-0.0535,\,+0.0020]$ & $0.0215$\\
+T60 & CC    & $-0.0251$ & $[-0.0561,\,+0.0059]$ & $0.0400$\\
+T60 & NRMSE & $+0.0278$ & $[+0.0027,\,+0.0479]$ & $0.0256$\\
+T60 & DET   & $-0.0167$ & $[-0.0294,\,-0.0066]$ & $0.0256$\\
+T60 & LLE   & $-0.0393$ & $[-0.0636,\,-0.0075]$ & $0.0093$\\
+S3  & CC    & $-0.0361$ & $[-0.0548,\,-0.0033]$ & $0.0136$\\
+S3  & NRMSE & $+0.0357$ & $[+0.0032,\,+0.0457]$ & $0.0128$\\
+S3  & DET   & $-0.0189$ & $[-0.0326,\,-0.0069]$ & $0.0136$\\
+S3  & LLE   & $-0.0344$ & $[-0.0495,\,-0.0104]$ & $0.0041$\\
+S5  & CC    & $-0.0337$ & $[-0.0495,\,-0.0077]$ & $0.0141$\\
+S5  & NRMSE & $+0.0367$ & $[+0.0056,\,+0.0504]$ & $0.0092$\\
+S5  & DET   & $-0.0213$ & $[-0.0305,\,-0.0049]$ & $0.0141$\\
+S5  & LLE   & $-0.0321$ & $[-0.0499,\,-0.0147]$ & $0.0056$\\
+\bottomrule
+\end{tabular*}
+\end{minipage}
+
+\par\smallskip
+\raggedright
+CC/NRMSE denote Mean CC/Mean NRMSE. LLE effects/CIs use s$^{-1}$; other headline effects are dimensionless. Bold P0 rows are manuscript-primary BH7 references; alternative label rules use BH4 separately within each rule. Panel A reports raw p only.
+
+\end{table*}
+
+% =========================================================
+% TABLE S4B
+% Independent wide float, but intentionally uses the same
+% main table number as S4A.
+% =========================================================
+
+\begin{table*}[!tbp]
+
+% Reuse table number S4 while allowing this float to be
+% placed independently from S4A.
+\addtocounter{table}{-1}
+\renewcommand{\thetable}{S\arabic{table}B}
+
+\centering
+\caption{Reconstruction and estimator sensitivity.}
+\label{tab:supp_sensitivity_estimators}
+\footnotesize
+\setlength{\tabcolsep}{1.5pt}
+\renewcommand{\arraystretch}{1.12}
+
+\begin{minipage}[t]{0.49\textwidth}
+\raggedright
+\textbf{C. Delay ($m=8$)}\par\smallskip
+
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}llrcr@{}}
+\toprule
+$\tau$ (s) & Metric & $\Delta$ & 95\% CI & $q_{\mathrm{BH}}$\\
+\midrule
+$0.12$ & CC    & $-0.0317$ & $[-0.0522,\,+0.0094]$ & $0.048312$\\
+$0.12$ & NRMSE & $+0.0321$ & $[-0.0042,\,+0.0492]$ & $0.048312$\\
+$0.12$ & DET   & $+0.0025$ & $[-0.0078,\,+0.0076]$ & $0.784126$\\
+$0.12$ & LLE   & $-0.0361$ & $[-0.0567,\,+0.0042]$ & $0.048312$\\
+\textbf{0.16} & CC    & $-0.0339$ & $[-0.0595,\,-0.0043]$ & $0.0376$\\
+\textbf{0.16} & NRMSE & $+0.0294$ & $[0.0047,\,0.0530]$   & $0.0255$\\
+\textbf{0.16} & DET   & $-0.0186$ & $[-0.0364,\,-0.0069]$ & $0.0376$\\
+\textbf{0.16} & LLE   & $-0.0376$ & $[-0.0537,\,-0.0230]$ & $0.0050$\\
+$0.20$ & CC    & $-0.0316$ & $[-0.0529,\,-0.0008]$ & $0.020416$\\
+$0.20$ & NRMSE & $+0.0296$ & $[+0.0056,\,+0.0476]$ & $0.011162$\\
+$0.20$ & DET   & $+0.0015$ & $[-0.0099,\,+0.0148]$ & $0.985435$\\
+$0.20$ & LLE   & $-0.0464$ & $[-0.0572,\,-0.0240]$ & $0.000145$\\
+\bottomrule
+\end{tabular*}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.49\textwidth}
+\raggedright
+\textbf{C. Dimension ($\tau=0.16$ s)}\par\smallskip
+
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}llrcr@{}}
+\toprule
+$m$ & Metric & $\Delta$ & 95\% CI & $q_{\mathrm{BH}}$\\
+\midrule
+7 & CC    & $-0.0307$ & $[-0.0565,\,+0.0045]$ & $0.035522$\\
+7 & NRMSE & $+0.0377$ & $[-0.0023,\,+0.0561]$ & $0.035522$\\
+7 & DET   & $-0.0145$ & $[-0.0303,\,-0.0047]$ & $0.053169$\\
+7 & LLE   & $-0.0285$ & $[-0.0549,\,-0.0076]$ & $0.019440$\\
+9 & CC    & $-0.0251$ & $[-0.0492,\,+0.0055]$ & $0.039434$\\
+9 & NRMSE & $+0.0315$ & $[+0.0043,\,+0.0483]$ & $0.016617$\\
+9 & DET   & $-0.0200$ & $[-0.0321,\,-0.0052]$ & $0.058258$\\
+9 & LLE   & $-0.0247$ & $[-0.0534,\,-0.0102]$ & $0.002342$\\
+\bottomrule
+\end{tabular*}
+\end{minipage}
+
+\par\medskip
+
+\begin{minipage}[t]{0.49\textwidth}
+\raggedright
+\textbf{D. RQA: DET}\par\smallskip
+
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrcr@{}}
+\toprule
+Setting & $\Delta$ & 95\% CI & Raw $p$\\
+\midrule
+RR 0.01      & $-0.015214$ & $[-0.033764,\,+0.002064]$ & $0.082550$\\
+Nominal      & $-0.0186$   & $[-0.0364,\,-0.0069]$     & $0.021484$\\
+RR 0.03      & $-0.017813$ & $[-0.033859,\,-0.007863]$ & $0.021484$\\
+Theiler 0.75 & $-0.019191$ & $[-0.036836,\,-0.006809]$ & $0.021484$\\
+Theiler 1.25 & $-0.019033$ & $[-0.037873,\,-0.007730]$ & $0.017181$\\
+\bottomrule
+\end{tabular*}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.49\textwidth}
+\raggedright
+\textbf{D. LLE}\par\smallskip
+\setlength{\tabcolsep}{1pt}
+
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrcrr@{}}
+\toprule
+Setting & $\Delta$ & 95\% CI & Raw $p$ & Passing/input\\
+\midrule
+Fit 0.60--1.10 & $-0.034980$ & $[-0.064607,\,-0.019121]$ & $0.000261$ & 802/901\\
+Nominal        & $-0.0376$   & $[-0.0537,\,-0.0230]$     & $0.000708$ & 872/901\\
+Fit 1.00--1.50 & $-0.030357$ & $[-0.045778,\,-0.003941]$ & $0.008308$ & 889/901\\
+$R^2$ 0.95     & $-0.030618$ & $[-0.041701,\,-0.013987]$ & $0.002325$ & 734/901\\
+Theiler 0.75   & $-0.037570$ & $[-0.053698,\,-0.022976]$ & $0.000708$ & 872/901\\
+Theiler 1.25   & $-0.029763$ & $[-0.056095,\,-0.016331]$ & $0.002325$ & 874/901\\
+\bottomrule
+\end{tabular*}
+\end{minipage}
+
+\par\smallskip
+\raggedright
+CC/NRMSE denote Mean CC/Mean NRMSE. LLE effects/CIs use s$^{-1}$; other headline effects are dimensionless. Bold nominal embedding settings are manuscript-primary BH7 references; alternative reconstruction settings use BH4 separately within each setting. Panel D reports raw p only.
+
+\par\smallskip
+\raggedright
+Panel C: $m=8$ is the $\tau=0.16$ reference at left. Panel D: nominal RQA uses RR=0.02 and Theiler multiplier 1.00; nominal LLE uses fit 0.80--1.30 s, $R^2\geq0.90$ and multiplier 1.00. Fit denotes seconds. All RQA settings retain 901 windows; LLE lists passing/input counts. Unchanged settings remain nominal.
+
+\end{table*}
+
+% Finish the wide sensitivity tables before the later compact tables.
+\FloatBarrier
+\balance
+
+% =========================================================
+% S7
+% =========================================================
+
+\section{Unknown Repeated-Session Dependence}
+\label{sec:supp_7}
+
+Participant--session linkage was unavailable. Hypothetical perfect matchings grouped 20 sessions into 10 two-session clusters: 100,000 draws yielded 99,990 unique matchings. Session differences were averaged within each cluster and tested across clusters, with BH7 within each matching. All four headline median-effect directions were preserved across the sampled hypothetical matchings (Table~\ref{tab:supp_dependence}), but statistical support was less consistent than at the session level. Estimates at 50k and 100k draws were very similar, indicating Monte Carlo stability. These frequencies describe the hypothetical matching design; they are not probabilities that the true result is significant. Hypothetical grouping neither recovers participant identity nor supports participant-level inference.
+
+\begin{table}[!htbp]
+\centering
+\caption{Headline effects under hypothetical session grouping.}
+\label{tab:supp_dependence}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.05}
+
+\begin{tabular}{@{}lrr@{}}
+\toprule
+Metric &
+\makecell{Sign preserved\\(\%)} &
+\makecell{$q_{\mathrm{BH}}<0.05$\\frequency (\%)}\\
+\midrule
+Mean CC    & $100.00$ & $19.36$\\
+Mean NRMSE & $100.00$ & $27.82$\\
+DET        & $100.00$ & $22.59$\\
+LLE        & $100.00$ & $79.69$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% =========================================================
+% S8
+% =========================================================
+
+\section{Exploratory Symbolic Dynamics}
+\label{sec:supp_8}
+
+Peak-to-peak intervals (PPI) were extracted from processed PPG and quantized within each accepted window into six equal-width levels spanning its minimum and maximum. Overlapping three-symbol words were classified as 0V, 1V or 2V when neither, one or both adjacent symbol differences were nonzero; 2V included same- and opposite-sign changes. Window-level occurrence percentages were summarized by the median within each session and state.
+
+Table~\ref{tab:supp_symbolic} reports median paired changes in percentage points. None of the nine category--duration tests passed within-duration BH3. These exploratory results remain outside the primary four-metric claim, and symbolic proportions do not directly measure sympathetic or vagal activity.
+
+\begin{table}[!htbp]
+\centering
+\caption{Exploratory symbolic median effects (percentage points).}
+\label{tab:supp_symbolic}
+\footnotesize
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.05}
+
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Duration (s) & 0V $\Delta$ & 1V $\Delta$ & 2V $\Delta$\\
+\midrule
+60  & $+4.04$ & $+0.41$ & $-0.91$\\
+120 & $+2.32$ & $+0.03$ & $-2.30$\\
+180 & $+4.58$ & $-0.06$ & $-2.67$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\end{document}
