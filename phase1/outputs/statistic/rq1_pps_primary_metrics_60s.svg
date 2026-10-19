@@ -221,7 +221,7 @@ L 146.942692 170.544467
 " style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_9">
-    <text style="font-weight: 700; font-size: 12px; font-family: 'Liberation Serif'; text-anchor: start" x="40.56392" y="15.526875" transform="rotate(-0 40.56392 15.526875)">(A) CC</text>
+    <text style="font-weight: 700; font-size: 12px; font-family: 'Liberation Serif'; text-anchor: start" x="40.56392" y="15.526875" transform="rotate(-0 40.56392 15.526875)">CC</text>
    </g>
   </g>
   <g id="axes_2">
@@ -381,7 +381,7 @@ L 271.769135 170.544467
 " style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_18">
-    <text style="font-weight: 700; font-size: 12px; font-family: 'Liberation Serif'; text-anchor: start" x="165.390363" y="15.526875" transform="rotate(-0 165.390363 15.526875)">(B) NRMSE</text>
+    <text style="font-weight: 700; font-size: 12px; font-family: 'Liberation Serif'; text-anchor: start" x="165.390363" y="15.526875" transform="rotate(-0 165.390363 15.526875)">NRMSE</text>
    </g>
   </g>
   <g id="axes_3">
@@ -531,7 +531,7 @@ L 392.084328 170.544467
 " style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_26">
-    <text style="font-weight: 700; font-size: 12px; font-family: 'Liberation Serif'; text-anchor: start" x="285.705555" y="15.526875" transform="rotate(-0 285.705555 15.526875)">(C) DET</text>
+    <text style="font-weight: 700; font-size: 12px; font-family: 'Liberation Serif'; text-anchor: start" x="285.705555" y="15.526875" transform="rotate(-0 285.705555 15.526875)">DET</text>
    </g>
   </g>
   <g id="axes_4">
@@ -711,7 +711,7 @@ L 512.39952 170.544467
 " style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_37">
-    <text style="font-weight: 700; font-size: 12px; font-family: 'Liberation Serif'; text-anchor: start" x="406.020748" y="15.526875" transform="rotate(-0 406.020748 15.526875)">(D) Lmean</text>
+    <text style="font-weight: 700; font-size: 12px; font-family: 'Liberation Serif'; text-anchor: start" x="406.020748" y="15.526875" transform="rotate(-0 406.020748 15.526875)">Lmean</text>
    </g>
   </g>
   <g id="axes_5">
@@ -881,7 +881,7 @@ L 146.942692 354.144467
 " style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_47">
-    <text style="font-weight: 700; font-size: 12px; font-family: 'Liberation Serif'; text-anchor: start" x="40.56392" y="199.126875" transform="rotate(-0 40.56392 199.126875)">(E) LAM</text>
+    <text style="font-weight: 700; font-size: 12px; font-family: 'Liberation Serif'; text-anchor: start" x="40.56392" y="199.126875" transform="rotate(-0 40.56392 199.126875)">LAM</text>
    </g>
   </g>
   <g id="axes_6">
@@ -1071,7 +1071,7 @@ L 271.769135 354.144467
 " style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_59">
-    <text style="font-weight: 700; font-size: 12px; font-family: 'Liberation Serif'; text-anchor: start" x="165.390363" y="199.126875" transform="rotate(-0 165.390363 199.126875)">(F) TT</text>
+    <text style="font-weight: 700; font-size: 12px; font-family: 'Liberation Serif'; text-anchor: start" x="165.390363" y="199.126875" transform="rotate(-0 165.390363 199.126875)">TT</text>
    </g>
   </g>
   <g id="axes_7">
@@ -1251,7 +1251,7 @@ L 392.084328 354.144467
 " style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_70">
-    <text style="font-weight: 700; font-size: 12px; font-family: 'Liberation Serif'; text-anchor: start" x="285.705555" y="199.126875" transform="rotate(-0 285.705555 199.126875)">(G) LLE</text>
+    <text style="font-weight: 700; font-size: 12px; font-family: 'Liberation Serif'; text-anchor: start" x="285.705555" y="199.126875" transform="rotate(-0 285.705555 199.126875)">LLE</text>
    </g>
   </g>
   <g id="axes_8">
